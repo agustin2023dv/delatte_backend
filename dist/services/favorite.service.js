@@ -1,18 +1,25 @@
-import mongoose from "mongoose";
-import User from "../models/User.model";
-export const getUserFavoritesService = async (userId) => {
-    const user = await User.findById(userId).populate("favoriteRestaurants");
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeFavoriteRestaurantService = exports.addFavoriteRestaurantService = exports.getUserFavoritesService = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
+const User_model_1 = __importDefault(require("../models/User.model"));
+const getUserFavoritesService = async (userId) => {
+    const user = await User_model_1.default.findById(userId).populate("favoriteRestaurants");
     if (!user) {
         throw new Error("Usuario no encontrado");
     }
     return user.favoriteRestaurants; // Devuelve la lista de favoritos
 };
-export const addFavoriteRestaurantService = async (userId, restaurantId) => {
+exports.getUserFavoritesService = getUserFavoritesService;
+const addFavoriteRestaurantService = async (userId, restaurantId) => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
+        if (!mongoose_1.default.Types.ObjectId.isValid(restaurantId)) {
             throw new Error('ID de restaurante no válido');
         }
-        const user = await User.findById(userId);
+        const user = await User_model_1.default.findById(userId);
         if (!user) {
             throw new Error('Usuario no encontrado');
         }
@@ -34,12 +41,13 @@ export const addFavoriteRestaurantService = async (userId, restaurantId) => {
         throw new Error("Error desconocido");
     }
 };
-export const removeFavoriteRestaurantService = async (userId, restaurantId) => {
+exports.addFavoriteRestaurantService = addFavoriteRestaurantService;
+const removeFavoriteRestaurantService = async (userId, restaurantId) => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
+        if (!mongoose_1.default.Types.ObjectId.isValid(restaurantId)) {
             throw new Error('ID de restaurante no válido');
         }
-        const user = await User.findById(userId);
+        const user = await User_model_1.default.findById(userId);
         if (!user) {
             throw new Error('Usuario no encontrado');
         }
@@ -61,3 +69,4 @@ export const removeFavoriteRestaurantService = async (userId, restaurantId) => {
         throw new Error("Error desconocido");
     }
 };
+exports.removeFavoriteRestaurantService = removeFavoriteRestaurantService;

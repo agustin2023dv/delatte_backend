@@ -1,36 +1,46 @@
-import { getCoordinatesFromAddress } from "./distance-matrix.service";
-import Restaurant from "../models/Restaurant.model";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkUserRoleInRestaurantService = exports.removePhotoFromGalleryService = exports.addPhotoToGalleryService = exports.getGalleryPhotosService = exports.getRestaurantsByManagerIdService = exports.getRestaurantDetailsService = exports.registerRestaurantService = exports.updateRestaurantService = exports.getAllRestaurantsService = exports.getRestauranteIdByManagerService = void 0;
+const distance_matrix_service_1 = require("./distance-matrix.service");
+const Restaurant_model_1 = __importDefault(require("../models/Restaurant.model"));
 //* Servicio para obtener el restaurante del manager
-export const getRestauranteIdByManagerService = async (managerId) => {
+const getRestauranteIdByManagerService = async (managerId) => {
     try {
-        const restaurante = await Restaurant.findOne({ managers: managerId });
+        const restaurante = await Restaurant_model_1.default.findOne({ managers: managerId });
         return restaurante?._id;
     }
     catch (error) {
         throw new Error('Error al obtener el restaurante del manager');
     }
 };
+exports.getRestauranteIdByManagerService = getRestauranteIdByManagerService;
 //* Servicio para obtener TODOS los restaurantes
-export const getAllRestaurantsService = async () => {
+const getAllRestaurantsService = async () => {
     try {
-        const restaurantes = await Restaurant.find();
+        const restaurantes = await Restaurant_model_1.default.find().lean();
         return restaurantes;
     }
     catch (error) {
-        throw new Error('Error al obtener restaurantes');
+        console.error("Error al obtener restaurantes:", error);
+        throw new Error("Error al obtener restaurantes");
     }
 };
+exports.getAllRestaurantsService = getAllRestaurantsService;
 //** Servicio para actualizar un restaurante por ID
-export const updateRestaurantService = async (id, newRestaurantData) => {
+const updateRestaurantService = async (id, newRestaurantData) => {
     try {
-        return await Restaurant.findByIdAndUpdate(id, newRestaurantData, { new: true });
+        return await Restaurant_model_1.default.findByIdAndUpdate(id, newRestaurantData, { new: true });
     }
     catch (error) {
         throw new Error('Error al actualizar el restaurante');
     }
 };
+exports.updateRestaurantService = updateRestaurantService;
 //** Servicio para crear restaurante
-export const registerRestaurantService = async (restaurantData) => {
+const registerRestaurantService = async (restaurantData) => {
     try {
         const direccionCompleta = `${restaurantData.direccion}, Montevideo, ${restaurantData.codigoPostal || ''}, Uruguay`;
         console.log("Dirección completa:", direccionCompleta);
@@ -38,7 +48,7 @@ export const registerRestaurantService = async (restaurantData) => {
         let longitude;
         // Obtener coordenadas a partir de la dirección
         try {
-            const coordenadas = await getCoordinatesFromAddress(direccionCompleta);
+            const coordenadas = await (0, distance_matrix_service_1.getCoordinatesFromAddress)(direccionCompleta);
             console.log("Coordenadas obtenidas:", coordenadas);
             if (coordenadas) {
                 latitude = coordenadas.latitude;
@@ -53,7 +63,7 @@ export const registerRestaurantService = async (restaurantData) => {
             throw new Error('Error al obtener coordenadas para el restaurante.');
         }
         // Crear el restaurante con el manager principal asignado y ubicacion en formato GeoJSON
-        const newRestaurant = new Restaurant({
+        const newRestaurant = new Restaurant_model_1.default({
             ...restaurantData,
             ubicacion: {
                 type: "Point",
@@ -69,10 +79,11 @@ export const registerRestaurantService = async (restaurantData) => {
         throw error;
     }
 };
+exports.registerRestaurantService = registerRestaurantService;
 // ** Servicio para obtener todos los detalles de un restaurante por ID
-export const getRestaurantDetailsService = async (restaurantId) => {
+const getRestaurantDetailsService = async (restaurantId) => {
     try {
-        const restaurant = await Restaurant.findById(restaurantId);
+        const restaurant = await Restaurant_model_1.default.findById(restaurantId);
         if (!restaurant) {
             throw new Error('Restaurante no encontrado');
         }
@@ -82,10 +93,11 @@ export const getRestaurantDetailsService = async (restaurantId) => {
         throw new Error('Error al obtener los detalles del restaurante');
     }
 };
+exports.getRestaurantDetailsService = getRestaurantDetailsService;
 //*
-export const getRestaurantsByManagerIdService = async (id) => {
+const getRestaurantsByManagerIdService = async (id) => {
     try {
-        const restaurants = await Restaurant.find({
+        const restaurants = await Restaurant_model_1.default.find({
             managerPrincipal: id
         });
         return restaurants;
@@ -94,10 +106,11 @@ export const getRestaurantsByManagerIdService = async (id) => {
         throw new Error('Error al obtener los restaurantes del manager');
     }
 };
+exports.getRestaurantsByManagerIdService = getRestaurantsByManagerIdService;
 // Obtener las fotos de la galería de un restaurante
-export const getGalleryPhotosService = async (restaurantId) => {
+const getGalleryPhotosService = async (restaurantId) => {
     try {
-        const restaurant = await Restaurant.findById(restaurantId).select("galeriaFotos");
+        const restaurant = await Restaurant_model_1.default.findById(restaurantId).select("galeriaFotos");
         if (!restaurant) {
             throw new Error("Restaurante no encontrado");
         }
@@ -107,10 +120,11 @@ export const getGalleryPhotosService = async (restaurantId) => {
         throw new Error("Error al obtener las fotos de la galería");
     }
 };
+exports.getGalleryPhotosService = getGalleryPhotosService;
 // Agregar una foto a la galería de un restaurante
-export const addPhotoToGalleryService = async (restaurantId, photoUrl) => {
+const addPhotoToGalleryService = async (restaurantId, photoUrl) => {
     try {
-        const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, { $push: { galeriaFotos: photoUrl } }, { new: true });
+        const restaurant = await Restaurant_model_1.default.findByIdAndUpdate(restaurantId, { $push: { galeriaFotos: photoUrl } }, { new: true });
         if (!restaurant) {
             throw new Error("Restaurante no encontrado");
         }
@@ -120,10 +134,11 @@ export const addPhotoToGalleryService = async (restaurantId, photoUrl) => {
         throw new Error("Error al agregar la foto a la galería");
     }
 };
+exports.addPhotoToGalleryService = addPhotoToGalleryService;
 // Eliminar una foto de la galería de un restaurante
-export const removePhotoFromGalleryService = async (restaurantId, photoUrl) => {
+const removePhotoFromGalleryService = async (restaurantId, photoUrl) => {
     try {
-        const restaurant = await Restaurant.findByIdAndUpdate(restaurantId, { $pull: { galeriaFotos: photoUrl } }, { new: true });
+        const restaurant = await Restaurant_model_1.default.findByIdAndUpdate(restaurantId, { $pull: { galeriaFotos: photoUrl } }, { new: true });
         if (!restaurant) {
             throw new Error("Restaurante no encontrado");
         }
@@ -133,10 +148,11 @@ export const removePhotoFromGalleryService = async (restaurantId, photoUrl) => {
         throw new Error("Error al eliminar la foto de la galería");
     }
 };
+exports.removePhotoFromGalleryService = removePhotoFromGalleryService;
 // Servicio para verificar si el usuario es manager o co-manager de un restaurante
-export const checkUserRoleInRestaurantService = async (restaurantId, userId) => {
+const checkUserRoleInRestaurantService = async (restaurantId, userId) => {
     try {
-        const restaurant = await Restaurant.findById(restaurantId);
+        const restaurant = await Restaurant_model_1.default.findById(restaurantId);
         if (!restaurant) {
             throw new Error('Restaurante no encontrado');
         }
@@ -149,3 +165,4 @@ export const checkUserRoleInRestaurantService = async (restaurantId, userId) => 
         throw error;
     }
 };
+exports.checkUserRoleInRestaurantService = checkUserRoleInRestaurantService;

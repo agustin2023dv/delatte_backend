@@ -1,13 +1,16 @@
-import { addFavoriteRestaurantService, getUserFavoritesService, removeFavoriteRestaurantService, } from "../services/favorite.service";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeFavoriteRestaurantController = exports.addFavoriteRestaurantController = exports.getUserFavoritesController = void 0;
+const favorite_service_1 = require("../services/favorite.service");
 // **Controlador para obtener favoritos del usuario**
-export const getUserFavoritesController = async (req, res) => {
+const getUserFavoritesController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
             return;
         }
         const userId = req.user.id;
-        const favorites = await getUserFavoritesService(userId);
+        const favorites = await (0, favorite_service_1.getUserFavoritesService)(userId);
         res.status(200).json({ favorites });
     }
     catch (error) {
@@ -17,8 +20,9 @@ export const getUserFavoritesController = async (req, res) => {
         });
     }
 };
+exports.getUserFavoritesController = getUserFavoritesController;
 // **Controlador para agregar un restaurante a favoritos**
-export const addFavoriteRestaurantController = async (req, res) => {
+const addFavoriteRestaurantController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
@@ -30,7 +34,7 @@ export const addFavoriteRestaurantController = async (req, res) => {
             res.status(400).json({ message: "El ID del restaurante es obligatorio" });
             return;
         }
-        const user = await addFavoriteRestaurantService(userId, restaurantId);
+        const user = await (0, favorite_service_1.addFavoriteRestaurantService)(userId, restaurantId);
         res.status(200).json({
             message: "Restaurante agregado a favoritos con éxito",
             favorites: user.favorites,
@@ -43,8 +47,9 @@ export const addFavoriteRestaurantController = async (req, res) => {
         });
     }
 };
+exports.addFavoriteRestaurantController = addFavoriteRestaurantController;
 // **Controlador para eliminar un restaurante de favoritos**
-export const removeFavoriteRestaurantController = async (req, res) => {
+const removeFavoriteRestaurantController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
@@ -56,7 +61,7 @@ export const removeFavoriteRestaurantController = async (req, res) => {
             res.status(400).json({ message: "El ID del restaurante es obligatorio" });
             return;
         }
-        const user = await removeFavoriteRestaurantService(userId, restaurantId);
+        const user = await (0, favorite_service_1.removeFavoriteRestaurantService)(userId, restaurantId);
         res.status(200).json({
             message: "Restaurante eliminado de favoritos con éxito",
             favorites: user.favorites,
@@ -69,3 +74,4 @@ export const removeFavoriteRestaurantController = async (req, res) => {
         });
     }
 };
+exports.removeFavoriteRestaurantController = removeFavoriteRestaurantController;

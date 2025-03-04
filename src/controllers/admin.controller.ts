@@ -7,7 +7,7 @@ import {
   getUserDetailsService,
   loginAdminService
 } from "../services/admin.service";
-import { AuthRequest } from "@/types";
+import { AuthRequest } from "../../types";
 
 export const loginAdminController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {

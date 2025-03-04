@@ -1,5 +1,5 @@
 
-import cloudinary from "../../configs/cloudinary.config"; 
+import cloudinary from "../configs/cloudinary.config"; 
 import express from "express";
 
 const router = express.Router();

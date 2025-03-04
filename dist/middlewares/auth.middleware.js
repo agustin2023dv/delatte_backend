@@ -1,14 +1,20 @@
-import jwt from 'jsonwebtoken';
-import User from '../models/User.model';
-export const authMiddleware = async (req, res, next) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.extractResetTokenMiddleware = exports.authMiddleware = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const User_model_1 = __importDefault(require("../models/User.model"));
+const authMiddleware = async (req, res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
         res.status(401).json({ message: "No se proporcionó un token de autenticación" });
         return;
     }
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        const user = await User_model_1.default.findById(decoded.id);
         if (!user) {
             res.status(401).json({ message: "Token inválido" });
             return;
@@ -20,7 +26,8 @@ export const authMiddleware = async (req, res, next) => {
         res.status(401).json({ message: "Token inválido o expirado", error: error instanceof Error ? error.message : "Error desconocido" });
     }
 };
-export const extractResetTokenMiddleware = (req, res, next) => {
+exports.authMiddleware = authMiddleware;
+const extractResetTokenMiddleware = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ message: 'Token no proporcionado o inválido' });
@@ -29,3 +36,4 @@ export const extractResetTokenMiddleware = (req, res, next) => {
     req.body.token = token; // Agregar el token al cuerpo para su uso posterior
     next();
 };
+exports.extractResetTokenMiddleware = extractResetTokenMiddleware;

@@ -7,7 +7,7 @@ import {
   addMenuItemService,
   removeMenuItemService
 } from "../services/menu.service";
-import { AuthRequest } from "@/types";
+import { AuthRequest } from "../../types";
 
 // Obtener menús por restaurante
 export const getMenusByRestaurantController = async (

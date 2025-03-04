@@ -1,12 +1,15 @@
-import { createReviewService, getReviewsByRestaurantService, getAllReviewsService, getReviewsByUserService, updateReviewService, deleteReviewService } from "../services/review.service";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteReviewController = exports.updateReviewController = exports.getReviewsByUserController = exports.getReviewsByRestaurantController = exports.getAllReviewsController = exports.createReviewController = void 0;
+const review_service_1 = require("../services/review.service");
 // 🔹 CREAR una reseña
-export const createReviewController = async (req, res) => {
+const createReviewController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado." });
             return;
         }
-        const newReview = await createReviewService(req.user._id, req.body);
+        const newReview = await (0, review_service_1.createReviewService)(req.user._id, req.body);
         res.status(201).json({ message: "Reseña creada con éxito", review: newReview });
     }
     catch (error) {
@@ -14,40 +17,44 @@ export const createReviewController = async (req, res) => {
         res.status(500).json({ message: error instanceof Error ? error.message : "Error interno del servidor" });
     }
 };
+exports.createReviewController = createReviewController;
 // 🔹 OBTENER todas las reseñas (para administración)
-export const getAllReviewsController = async (req, res) => {
+const getAllReviewsController = async (req, res) => {
     try {
-        const reviews = await getAllReviewsService();
+        const reviews = await (0, review_service_1.getAllReviewsService)();
         res.status(200).json(reviews);
     }
     catch (error) {
         res.status(500).json({ message: "Error al obtener todas las reseñas." });
     }
 };
+exports.getAllReviewsController = getAllReviewsController;
 // 🔹 OBTENER reseñas de un restaurante
-export const getReviewsByRestaurantController = async (req, res) => {
+const getReviewsByRestaurantController = async (req, res) => {
     try {
-        const reviews = await getReviewsByRestaurantService(req.params.restaurantId);
+        const reviews = await (0, review_service_1.getReviewsByRestaurantService)(req.params.id);
         res.status(200).json(reviews);
     }
     catch (error) {
         res.status(500).json({ message: "Error al obtener las reseñas del restaurante." });
     }
 };
+exports.getReviewsByRestaurantController = getReviewsByRestaurantController;
 // 🔹 OBTENER reseñas por usuario
-export const getReviewsByUserController = async (req, res) => {
+const getReviewsByUserController = async (req, res) => {
     try {
-        const reviews = await getReviewsByUserService(req.params.userId);
+        const reviews = await (0, review_service_1.getReviewsByUserService)(req.params.userId);
         res.status(200).json(reviews);
     }
     catch (error) {
         res.status(500).json({ message: "Error al obtener las reseñas del usuario." });
     }
 };
+exports.getReviewsByUserController = getReviewsByUserController;
 // 🔹 ACTUALIZAR una reseña
-export const updateReviewController = async (req, res) => {
+const updateReviewController = async (req, res) => {
     try {
-        const updatedReview = await updateReviewService(req.params.reviewId, req.body);
+        const updatedReview = await (0, review_service_1.updateReviewService)(req.params.reviewId, req.body);
         if (!updatedReview) {
             res.status(404).json({ message: "Reseña no encontrada." });
             return;
@@ -58,13 +65,15 @@ export const updateReviewController = async (req, res) => {
         res.status(500).json({ message: "Error interno del servidor." });
     }
 };
+exports.updateReviewController = updateReviewController;
 // 🔹 ELIMINAR una reseña
-export const deleteReviewController = async (req, res) => {
+const deleteReviewController = async (req, res) => {
     try {
-        await deleteReviewService(req.params.reviewId);
+        await (0, review_service_1.deleteReviewService)(req.params.reviewId);
         res.status(204).send();
     }
     catch (error) {
         res.status(500).json({ message: "Error al eliminar la reseña." });
     }
 };
+exports.deleteReviewController = deleteReviewController;

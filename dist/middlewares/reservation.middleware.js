@@ -1,13 +1,19 @@
-import Restaurant from "../models/Restaurant.model";
-import Reservation from "../models/Reservation.model";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateReservationData = exports.checkDisponibilidadMiddleware = void 0;
+const Restaurant_model_1 = __importDefault(require("../models/Restaurant.model"));
+const Reservation_model_1 = __importDefault(require("../models/Reservation.model"));
 /**
  * Middleware para verificar disponibilidad de reservas en base a la capacidad del restaurante
  */
-export const checkDisponibilidadMiddleware = async (req, res, next) => {
+const checkDisponibilidadMiddleware = async (req, res, next) => {
     try {
         const { restaurante, fecha, horario, numAdultos, numNinos } = req.body;
         // Verificar si el restaurante existe
-        const restauranteData = await Restaurant.findById(restaurante);
+        const restauranteData = await Restaurant_model_1.default.findById(restaurante);
         if (!restauranteData) {
             return next(new Error("El restaurante no existe.")); // ← Usar next() en lugar de return res.json()
         }
@@ -17,7 +23,7 @@ export const checkDisponibilidadMiddleware = async (req, res, next) => {
             totalPersonas: acc.totalPersonas + mesa.cantidad * mesa.personasPorMesa,
         }), { totalMesas: 0, totalPersonas: 0 });
         // Consultar reservas existentes en el mismo horario
-        const reservasExistentes = await Reservation.find({
+        const reservasExistentes = await Reservation_model_1.default.find({
             restaurante,
             fecha,
             horario,
@@ -41,10 +47,11 @@ export const checkDisponibilidadMiddleware = async (req, res, next) => {
         next(error); // ← Usar next(error) para manejar errores
     }
 };
+exports.checkDisponibilidadMiddleware = checkDisponibilidadMiddleware;
 /**
  * Middleware para validar los datos de la reserva antes de procesarla
  */
-export const validateReservationData = (req, res, next) => {
+const validateReservationData = (req, res, next) => {
     try {
         const { dia, horario, numAdultos, numNinos } = req.body;
         if (!dia || !horario || numAdultos === undefined || numNinos === undefined) {
@@ -82,3 +89,4 @@ export const validateReservationData = (req, res, next) => {
         res.status(500).json({ message: "Error en la validación de la reserva.", error });
     }
 };
+exports.validateReservationData = validateReservationData;

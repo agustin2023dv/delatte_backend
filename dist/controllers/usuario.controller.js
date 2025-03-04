@@ -1,15 +1,21 @@
-import { getUserDataService, loginCustomerService, loginManagerService, registerUserService, updateUserDataService } from "../services/user.service";
-import { changePasswordService, hashPasswordService, requestPasswordResetService, resetPasswordService } from "../services/auth.service";
-import { sendEmailService } from "../services/email.service";
-import User from "../models/User.model";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUserByIDController = exports.resetPasswordController = exports.requestPasswordResetController = exports.cambiarContrasenaController = exports.updateUserDataController = exports.getUserProfileController = exports.verificarEmailController = exports.loginManagerController = exports.loginCustomerController = exports.registrarUsuarioController = void 0;
+const user_service_1 = require("../services/user.service");
+const auth_service_1 = require("../services/auth.service");
+const email_service_1 = require("../services/email.service");
+const User_model_1 = __importDefault(require("../models/User.model"));
 //** Controlador para registrar un nuevo usuario **
-export const registrarUsuarioController = async (req, res) => {
+const registrarUsuarioController = async (req, res) => {
     try {
         const { nombre, apellido, email, password } = req.body;
-        const hashedPassword = await hashPasswordService(password);
-        const newUser = await registerUserService(nombre, apellido, email, hashedPassword);
+        const hashedPassword = await (0, auth_service_1.hashPasswordService)(password);
+        const newUser = await (0, user_service_1.registerUserService)(nombre, apellido, email, hashedPassword);
         const verificationLink = `http://localhost:8081/api/auth/verify-email?token=${newUser.emailToken}`;
-        await sendEmailService({
+        await (0, email_service_1.sendEmailService)({
             to: email,
             subject: "Verifica tu email",
             text: `Hola ${nombre}, por favor verifica tu cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
@@ -22,36 +28,39 @@ export const registrarUsuarioController = async (req, res) => {
         res.status(400).json({ message: error instanceof Error ? error.message : "Error al registrar el usuario" });
     }
 };
+exports.registrarUsuarioController = registrarUsuarioController;
 //** Controladores para iniciar sesión **
-export const loginCustomerController = async (req, res) => {
+const loginCustomerController = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { token, user } = await loginCustomerService(email, password);
+        const { token, user } = await (0, user_service_1.loginCustomerService)(email, password);
         res.status(200).json({ token, user });
     }
     catch (error) {
         res.status(400).json({ message: error instanceof Error ? error.message : "Error al iniciar sesión" });
     }
 };
-export const loginManagerController = async (req, res) => {
+exports.loginCustomerController = loginCustomerController;
+const loginManagerController = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { token, user } = await loginManagerService(email, password);
+        const { token, user } = await (0, user_service_1.loginManagerService)(email, password);
         res.status(200).json({ token, user });
     }
     catch (error) {
         res.status(400).json({ message: error instanceof Error ? error.message : "Error al iniciar sesión" });
     }
 };
+exports.loginManagerController = loginManagerController;
 //** Controlador para verificar el email **
-export const verificarEmailController = async (req, res) => {
+const verificarEmailController = async (req, res) => {
     try {
         const emailToken = req.query.token;
         if (!emailToken) {
             res.redirect(`http://localhost:8082/(auth)/VerifyEmail?status=error&message=TokenNoProporcionado`);
             return;
         }
-        const user = await User.findOne({ emailToken });
+        const user = await User_model_1.default.findOne({ emailToken });
         if (user) {
             user.emailToken = null;
             user.isVerified = true;
@@ -66,14 +75,15 @@ export const verificarEmailController = async (req, res) => {
         res.redirect(`http://localhost:8082/(auth)/VerifyEmail?status=error&message=ServerError`);
     }
 };
+exports.verificarEmailController = verificarEmailController;
 //** Controlador para obtener el perfil del usuario **
-export const getUserProfileController = async (req, res) => {
+const getUserProfileController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
             return;
         }
-        const user = await getUserDataService(req.user.id);
+        const user = await (0, user_service_1.getUserDataService)(req.user.id);
         if (!user) {
             res.status(404).json({ message: "Usuario no encontrado" });
             return;
@@ -84,22 +94,24 @@ export const getUserProfileController = async (req, res) => {
         res.status(500).json({ message: "Error en el servidor", error });
     }
 };
+exports.getUserProfileController = getUserProfileController;
 //** Controlador para actualizar el perfil del usuario **
-export const updateUserDataController = async (req, res) => {
+const updateUserDataController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
             return;
         }
-        const updatedUser = await updateUserDataService(req.body);
+        const updatedUser = await (0, user_service_1.updateUserDataService)(req.body);
         res.status(200).json({ message: "Datos del usuario actualizados con éxito", user: updatedUser });
     }
     catch (error) {
         res.status(500).json({ message: "Error al actualizar los datos del usuario", error: error instanceof Error ? error.message : "Error desconocido" });
     }
 };
+exports.updateUserDataController = updateUserDataController;
 //** Controlador para cambiar contraseña **
-export const cambiarContrasenaController = async (req, res) => {
+const cambiarContrasenaController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
@@ -110,7 +122,7 @@ export const cambiarContrasenaController = async (req, res) => {
             res.status(400).json({ message: "Todos los campos son obligatorios" });
             return;
         }
-        const result = await changePasswordService(req.user.id, oldPassword, newPassword, confirmNewPassword);
+        const result = await (0, auth_service_1.changePasswordService)(req.user.id, oldPassword, newPassword, confirmNewPassword);
         res.status(200).json({ message: result.message });
     }
     catch (error) {
@@ -118,15 +130,16 @@ export const cambiarContrasenaController = async (req, res) => {
         res.status(500).json({ message: "Error interno del servidor" });
     }
 };
+exports.cambiarContrasenaController = cambiarContrasenaController;
 //** Controlador para solicitar restablecimiento de contraseña **
-export const requestPasswordResetController = async (req, res) => {
+const requestPasswordResetController = async (req, res) => {
     try {
         const { email } = req.body;
         if (!email) {
             res.status(400).json({ message: "El correo es obligatorio." });
             return;
         }
-        await requestPasswordResetService(email);
+        await (0, auth_service_1.requestPasswordResetService)(email);
         res.status(200).json({ message: "Se ha enviado un enlace de restablecimiento a tu correo electrónico." });
     }
     catch (error) {
@@ -134,8 +147,9 @@ export const requestPasswordResetController = async (req, res) => {
         res.status(500).json({ message: "Error al solicitar el restablecimiento de contraseña." });
     }
 };
+exports.requestPasswordResetController = requestPasswordResetController;
 //** Controlador para restablecer la contraseña con el token **
-export const resetPasswordController = async (req, res) => {
+const resetPasswordController = async (req, res) => {
     try {
         const { token, userId, newPassword } = req.body;
         if (!token || !userId || !newPassword) {
@@ -147,7 +161,7 @@ export const resetPasswordController = async (req, res) => {
             res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo." });
             return;
         }
-        await resetPasswordService(token, userId, newPassword);
+        await (0, auth_service_1.resetPasswordService)(token, userId, newPassword);
         res.status(200).json({ message: "Contraseña restablecida exitosamente." });
     }
     catch (error) {
@@ -155,3 +169,21 @@ export const resetPasswordController = async (req, res) => {
         res.status(500).json({ message: "Error al restablecer la contraseña." });
     }
 };
+exports.resetPasswordController = resetPasswordController;
+const getUserByIDController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            res.status(404).json({ message: "Usuario no encontrado" });
+            return;
+        }
+        const user = (0, user_service_1.getUserByIDService)(id);
+        res.status(200).json(user);
+    }
+    catch (error) {
+        console.error("Error en getUserByIDController:", error);
+        res.status(500).json({ message: "Error interno del servidor" });
+        return;
+    }
+};
+exports.getUserByIDController = getUserByIDController;

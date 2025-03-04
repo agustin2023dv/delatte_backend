@@ -1,19 +1,23 @@
-import { getUserAddressesService, addAddressService, removeAddressService, } from "../services/address.service";
-export const getUserAddressesController = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeAddressController = exports.addAddressController = exports.getUserAddressesController = void 0;
+const address_service_1 = require("../services/address.service");
+const getUserAddressesController = async (req, res) => {
     try {
-        if (!req.user) {
+        if (!req.userId) {
             res.status(401).json({ message: "Usuario no autenticado" });
             return;
         }
-        const userId = req.user.id;
-        const addresses = await getUserAddressesService(userId);
+        const addresses = await (0, address_service_1.getUserAddressesService)(req.userId);
         res.json(addresses);
     }
     catch (error) {
+        console.error("Error en getUserAddressesController:", error);
         res.status(500).json({ message: error.message });
     }
 };
-export const addAddressController = async (req, res) => {
+exports.getUserAddressesController = getUserAddressesController;
+const addAddressController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
@@ -25,14 +29,15 @@ export const addAddressController = async (req, res) => {
             res.status(400).json({ message: "La dirección es requerida" });
             return;
         }
-        const updatedAddresses = await addAddressService(userId, address);
+        const updatedAddresses = await (0, address_service_1.addAddressService)(userId, address);
         res.status(201).json(updatedAddresses);
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
-export const removeAddressController = async (req, res) => {
+exports.addAddressController = addAddressController;
+const removeAddressController = async (req, res) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
@@ -44,10 +49,11 @@ export const removeAddressController = async (req, res) => {
             res.status(400).json({ message: "La dirección es requerida" });
             return;
         }
-        const updatedAddresses = await removeAddressService(userId, address);
+        const updatedAddresses = await (0, address_service_1.removeAddressService)(userId, address);
         res.status(200).json(updatedAddresses);
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
+exports.removeAddressController = removeAddressController;

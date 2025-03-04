@@ -4,7 +4,7 @@ import {
   getUserFavoritesService,
   removeFavoriteRestaurantService,
 } from "../services/favorite.service";
-import { AuthRequest } from "@/types";
+import { AuthRequest } from "../../types";
 
 
 // **Controlador para obtener favoritos del usuario**

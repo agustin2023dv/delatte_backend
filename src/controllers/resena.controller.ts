@@ -7,7 +7,7 @@ import {
   updateReviewService, 
   deleteReviewService 
 } from "../services/review.service";
-import { AuthRequest } from "@/types";
+import { AuthRequest } from "../../types";
 
 // 🔹 CREAR una reseña
 export const createReviewController = async (req: AuthRequest, res: Response): Promise<void> => {

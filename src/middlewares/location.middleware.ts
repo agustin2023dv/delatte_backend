@@ -1,4 +1,4 @@
-import { AuthRequest } from "@/types";
+import { AuthRequest } from '../../types';
 import { Response, NextFunction } from "express";
 
 // Middleware para validar los parámetros de ubicación

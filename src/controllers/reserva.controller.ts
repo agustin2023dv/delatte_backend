@@ -12,7 +12,7 @@ import {
   createSuperadminReservationService
 } from '../services/reservation.service';
 import { IReservation } from '@delatte/shared/interfaces';
-import { AuthRequest } from '@/types';
+import { AuthRequest } from '../../types';
 
 
 /**

@@ -1,12 +1,18 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-dotenv.config();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendVerificationEmailService = exports.sendEmailService = exports.transporter = void 0;
+const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 console.log('SMTP_HOST:', process.env.SMTP_HOST);
 console.log('SMTP_PORT:', process.env.SMTP_PORT);
 console.log('SMTP_USER:', process.env.SMTP_USER);
 console.log('SMTP_PASSWORD:', process.env.SMTP_PASSWORD);
 // Configurar el transporter de Nodemailer con contraseña de aplicación
-export const transporter = nodemailer.createTransport({
+exports.transporter = nodemailer_1.default.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.SMTP_PORT || '587'),
     secure: false,
@@ -16,7 +22,7 @@ export const transporter = nodemailer.createTransport({
     },
 });
 // Verificar si la configuración del transporter es correcta
-transporter.verify((error, success) => {
+exports.transporter.verify((error, success) => {
     if (error) {
         console.error('Error al configurar el transporter de Nodemailer:', error);
     }
@@ -24,7 +30,7 @@ transporter.verify((error, success) => {
         console.log('El transporter de Nodemailer está listo para enviar correos', success);
     }
 });
-export const sendEmailService = async (options) => {
+const sendEmailService = async (options) => {
     const mailOptions = {
         from: options.from || `"Soporte" <${process.env.SMTP_USER}>`,
         to: options.to,
@@ -33,7 +39,7 @@ export const sendEmailService = async (options) => {
         html: options.html,
     };
     try {
-        const info = await transporter.sendMail(mailOptions);
+        const info = await exports.transporter.sendMail(mailOptions);
         console.log('Correo enviado: %s', info.messageId);
         return info;
     }
@@ -42,10 +48,11 @@ export const sendEmailService = async (options) => {
         throw error;
     }
 };
-export const sendVerificationEmailService = async (nombre, email, emailToken) => {
+exports.sendEmailService = sendEmailService;
+const sendVerificationEmailService = async (nombre, email, emailToken) => {
     const verificationLink = `http://localhost:8081/api/users/verify-email?token=${emailToken}`;
     try {
-        await sendEmailService({
+        await (0, exports.sendEmailService)({
             to: email,
             subject: 'Verifica tu email',
             text: `Hola ${nombre},\n\nPor favor verifica tu cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
@@ -57,3 +64,4 @@ export const sendVerificationEmailService = async (nombre, email, emailToken) =>
         throw new Error('Error al enviar el correo de verificación');
     }
 };
+exports.sendVerificationEmailService = sendVerificationEmailService;

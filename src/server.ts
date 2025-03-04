@@ -1,18 +1,18 @@
 import 'module-alias/register';
 import express, { Request, Response, NextFunction } from 'express';
-import profileRoutes from './src/routes/profile.routes';
-import restaurantRoutes from './src/routes/restaurante.routes';
-import reservationRoutes from './src/routes/reserva.routes';
-import favoritesRoutes from './src/routes/favorites.routes';
-import addressesRoutes from './src/routes/addresses.routes';
-import reviewRoutes from './src/routes/resena.routes';
-import authRoutes from './src/routes/auth.routes';
-import adminRoutes from './src/routes/admin.routes';
-import cloudinaryRoutes from "./src/routes/cloudinary.routes";
+import profileRoutes from './routes/profile.routes';
+import restaurantRoutes from './routes/restaurante.routes';
+import reservationRoutes from './routes/reserva.routes';
+import favoritesRoutes from './routes/favorites.routes';
+import addressesRoutes from './routes/addresses.routes';
+import reviewRoutes from './routes/resena.routes';
+import authRoutes from './routes/auth.routes';
+import adminRoutes from './routes/admin.routes';
+import cloudinaryRoutes from "./routes/cloudinary.routes";
 import { connectDB } from './db';
 import cors from 'cors';
 import path from 'path';
-import menuRoutes from './src/routes/menu.routes';
+import menuRoutes from './routes/menu.routes';
 
 const app = express();
 const port = process.env.SERVER_PORT || 8081; // Usa un puerto dinámico si está disponible

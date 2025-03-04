@@ -1,19 +1,26 @@
-import User from '../models/User.model';
-import crypto from 'crypto';
-import { comparePasswordService } from './auth.service';
-import jwt from 'jsonwebtoken';
-import { sendEmailService } from './email.service';
-import mongoose from 'mongoose';
-//* Servicio para OBTENER usuario por email
-export const findUserByEmailService = async (email) => {
-    return await User.findOne({ email }); // Buscar usuario por email en la base de datos
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-export const findUserByIdService = async (userId) => {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUserByIDService = exports.updateUserDataService = exports.getUserDataService = exports.loginManagerService = exports.loginCustomerService = exports.registerManagerService = exports.registerUserService = exports.findUserByIdService = exports.findUserByEmailService = void 0;
+const User_model_1 = __importDefault(require("../models/User.model"));
+const crypto_1 = __importDefault(require("crypto"));
+const auth_service_1 = require("./auth.service");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const email_service_1 = require("./email.service");
+const mongoose_1 = __importDefault(require("mongoose"));
+//* Servicio para OBTENER usuario por email
+const findUserByEmailService = async (email) => {
+    return await User_model_1.default.findOne({ email }); // Buscar usuario por email en la base de datos
+};
+exports.findUserByEmailService = findUserByEmailService;
+const findUserByIdService = async (userId) => {
     try {
         // Convertir el ID de string a ObjectId
-        const objectId = new mongoose.Types.ObjectId(userId);
+        const objectId = new mongoose_1.default.Types.ObjectId(userId);
         // Buscar el usuario por su _id
-        const user = await User.findOne({ _id: objectId });
+        const user = await User_model_1.default.findOne({ _id: objectId });
         return user;
     }
     catch (error) {
@@ -21,20 +28,21 @@ export const findUserByIdService = async (userId) => {
         throw error;
     }
 };
+exports.findUserByIdService = findUserByIdService;
 //* Servicio para CREAR usuario
-export const registerUserService = async (nombre, apellido, email, hashedPassword) => {
+const registerUserService = async (nombre, apellido, email, hashedPassword) => {
     // Verificar si el usuario ya existe en la base de datos
-    const existingUser = await findUserByEmailService(email);
+    const existingUser = await (0, exports.findUserByEmailService)(email);
     if (existingUser) {
         throw new Error('El correo ya está en uso.'); // Lanzar error si el email ya está registrado
     }
     // Crear un nuevo usuario con el token de verificación de email
-    const newUser = new User({
+    const newUser = new User_model_1.default({
         nombre,
         apellido,
         email,
         password: hashedPassword,
-        emailToken: crypto.randomBytes(64).toString('hex'), // Generar un token único para la verificación del email
+        emailToken: crypto_1.default.randomBytes(64).toString('hex'), // Generar un token único para la verificación del email
         isVerified: false
     });
     console.log('Guardando nuevo usuario:', newUser);
@@ -49,21 +57,22 @@ export const registerUserService = async (nombre, apellido, email, hashedPasswor
         throw error;
     }
 };
+exports.registerUserService = registerUserService;
 //* Servicio para crear MANAGER
-export const registerManagerService = async (managerData) => {
+const registerManagerService = async (managerData) => {
     try {
         if (!managerData.email || !managerData.nombre || !managerData.apellido || !managerData.password) {
             throw new Error('Faltan campos obligatorios para registrar al manager');
         }
         ;
         // Crear un nuevo usuario con el token de verificación de email
-        const newUserManager = new User({
+        const newUserManager = new User_model_1.default({
             ...managerData,
             email: managerData.email,
             nombre: managerData.nombre,
             apellido: managerData.apellido,
             password: managerData.password,
-            emailToken: crypto.randomBytes(64).toString("hex"),
+            emailToken: crypto_1.default.randomBytes(64).toString("hex"),
             role: 'manager',
         });
         console.log('Guardando nuevo usuario:', newUserManager);
@@ -72,7 +81,7 @@ export const registerManagerService = async (managerData) => {
         // Generar el link de verificación de email
         const verificationLink = `http://localhost:8081/api/auth/verify-email?token=${newUserManager.emailToken}`;
         // Enviar el correo de verificación al usuario
-        await sendEmailService({
+        await (0, email_service_1.sendEmailService)({
             to: managerData.email,
             subject: 'Verifica tu email',
             text: `Hola ${managerData.nombre},\n\nPor favor verifica tu cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
@@ -86,9 +95,10 @@ export const registerManagerService = async (managerData) => {
         throw error;
     }
 };
+exports.registerManagerService = registerManagerService;
 //* Servicio para login de CUSTOMER
-export const loginCustomerService = async (email, password) => {
-    const user = await User.findOne({ email });
+const loginCustomerService = async (email, password) => {
+    const user = await User_model_1.default.findOne({ email });
     // Verificar si el usuario existe
     if (!user) {
         throw new Error('Usuario no encontrado');
@@ -98,17 +108,18 @@ export const loginCustomerService = async (email, password) => {
         throw new Error('El usuario no tiene permisos para iniciar sesión como cliente');
     }
     // Verificar la contraseña
-    const isMatch = await comparePasswordService(password, user.password);
+    const isMatch = await (0, auth_service_1.comparePasswordService)(password, user.password);
     if (!isMatch) {
         throw new Error('Contraseña incorrecta');
     }
     // Generar token JWT si la autenticación es correcta
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '48h' });
+    const token = jsonwebtoken_1.default.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '48h' });
     return { token, user };
 };
+exports.loginCustomerService = loginCustomerService;
 //* Servicio para login de MANAGER
-export const loginManagerService = async (email, password) => {
-    const user = await User.findOne({ email });
+const loginManagerService = async (email, password) => {
+    const user = await User_model_1.default.findOne({ email });
     // Verificar si el usuario existe
     if (!user) {
         throw new Error('Usuario no encontrado');
@@ -118,19 +129,20 @@ export const loginManagerService = async (email, password) => {
         throw new Error('El usuario no tiene permisos para iniciar sesión como manager');
     }
     // Verificar la contraseña
-    const isMatch = await comparePasswordService(password, user.password);
+    const isMatch = await (0, auth_service_1.comparePasswordService)(password, user.password);
     if (!isMatch) {
         throw new Error('Contraseña incorrecta');
     }
     // Generar token JWT si la autenticación es correcta
-    const token = jwt.sign({ id: user._id, role: user.role, emailp: user.email }, process.env.JWT_SECRET, { expiresIn: '10h' });
+    const token = jsonwebtoken_1.default.sign({ id: user._id, role: user.role, emailp: user.email }, process.env.JWT_SECRET, { expiresIn: '10h' });
     return { token, user };
 };
+exports.loginManagerService = loginManagerService;
 //**Servicio para obtener los datos del usuario**
-export const getUserDataService = async (userId) => {
+const getUserDataService = async (userId) => {
     try {
         // Buscar el usuario excluyendo información sensible y optimizar con `.lean()`
-        const user = await User.findById(userId)
+        const user = await User_model_1.default.findById(userId)
             .select("-password -emailToken -isVerified")
             .lean();
         if (!user) {
@@ -143,11 +155,12 @@ export const getUserDataService = async (userId) => {
         throw new Error("Error al obtener los datos del usuario");
     }
 };
+exports.getUserDataService = getUserDataService;
 // Servicio para actualizar los datos del usuario
-export const updateUserDataService = async (userData) => {
+const updateUserDataService = async (userData) => {
     try {
         // Buscar el usuario por su email 
-        const user = await User.findOne({ email: userData.email });
+        const user = await User_model_1.default.findOne({ email: userData.email });
         if (!user) {
             throw new Error('Usuario no encontrado');
         }
@@ -168,3 +181,15 @@ export const updateUserDataService = async (userData) => {
         throw error;
     }
 };
+exports.updateUserDataService = updateUserDataService;
+const getUserByIDService = async (userId) => {
+    try {
+        const user = await User_model_1.default.findById(userId);
+        return user;
+    }
+    catch (error) {
+        console.error("Error al obtener usuario por ID:", error);
+        throw new Error("Error interno del servidor");
+    }
+};
+exports.getUserByIDService = getUserByIDService;

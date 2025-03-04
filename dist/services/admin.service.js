@@ -1,66 +1,81 @@
-import User from "../models/User.model";
-import mongoose from "mongoose";
-import { comparePasswordService } from "./auth.service";
-import jwt from 'jsonwebtoken';
-export const getUsersService = async (role) => {
-    const query = role ? { role } : {};
-    return await User.find(query).select("-password").sort({ apellido: 1 });
-    ;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginAdminService = exports.updateUserService = exports.getUserDetailsService = exports.deleteUserService = exports.suspendUserService = exports.getUsersService = void 0;
+const User_model_1 = __importDefault(require("../models/User.model"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const auth_service_1 = require("./auth.service");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const getUsersService = async (role) => {
+    try {
+        const query = role ? { role } : {};
+        return await User_model_1.default.find(query)
+            .select("-password")
+            .sort({ apellido: 1, nombre: 1 });
+    }
+    catch (error) {
+        throw new Error("Error al obtener usuarios de la base de datos");
+    }
+};
+exports.getUsersService = getUsersService;
 // Suspender usuario (validación de ID y manejo de `isActive`)
-export const suspendUserService = async (userId) => {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
+const suspendUserService = async (userId) => {
+    if (!mongoose_1.default.Types.ObjectId.isValid(userId)) {
         throw new Error("ID de usuario no válido");
     }
-    const user = await User.findById(userId);
+    const user = await User_model_1.default.findById(userId);
     if (!user) {
         throw new Error("Usuario no encontrado");
     }
     if (!user.isActive) {
         throw new Error("El usuario ya está suspendido");
     }
-    return await User.findByIdAndUpdate(userId, { isActive: false }, { new: true });
+    return await User_model_1.default.findByIdAndUpdate(userId, { isActive: false }, { new: true });
 };
+exports.suspendUserService = suspendUserService;
 // Eliminar usuario (validación de ID y evitar eliminar superadmins)
-export const deleteUserService = async (userId) => {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
+const deleteUserService = async (userId) => {
+    if (!mongoose_1.default.Types.ObjectId.isValid(userId)) {
         throw new Error("ID de usuario no válido");
     }
-    const user = await User.findById(userId);
+    const user = await User_model_1.default.findById(userId);
     if (!user) {
         throw new Error("Usuario no encontrado");
     }
     if (user.role === "superadmin") {
         throw new Error("No se puede eliminar un superadmin");
     }
-    return await User.findByIdAndDelete(userId);
+    return await User_model_1.default.findByIdAndDelete(userId);
 };
-export const getUserDetailsService = async (userId) => {
-    return await User.findById(userId)
-        .populate("favoriteRestaurants", "nombre") // Solo el nombre del restaurante favorito
-        .populate({
-        path: "reservations",
-        select: "-_id", // Trae todo excepto `_id`
-        populate: { path: "restaurante", select: "nombre direccion telefono emailContacto" }, // Muestra datos clave del restaurante
-    })
-        .populate({
-        path: "reviews",
-        select: "-_id -ultimaActualizacion", // Excluye `ultimaActualizacion`
-        populate: { path: "restaurante", select: "nombre" }, // Muestra solo el nombre del restaurante en la review
-    });
+exports.deleteUserService = deleteUserService;
+const getUserDetailsService = async (userId) => {
+    try {
+        const user = await User_model_1.default.findById(userId);
+        if (!user) {
+            throw new Error('fkn user no encontrado');
+        }
+        return user;
+    }
+    catch (error) {
+        throw new Error('Error al obtener los detalles del user');
+    }
 };
+exports.getUserDetailsService = getUserDetailsService;
 // Actualizar usuario (validación de ID)
-export const updateUserService = async (userId, updateData) => {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
+const updateUserService = async (userId, updateData) => {
+    if (!mongoose_1.default.Types.ObjectId.isValid(userId)) {
         throw new Error("ID de usuario no válido");
     }
     // Evitar que `emailToken` sea modificado
-    const { emailToken, ...filteredUpdateData } = updateData;
-    return await User.findByIdAndUpdate(userId, filteredUpdateData, { new: true }).select("-emailToken");
+    const { emailToken, password, ...filteredUpdateData } = updateData;
+    return await User_model_1.default.findByIdAndUpdate(userId, filteredUpdateData, { new: true }).select("-emailToken");
 };
+exports.updateUserService = updateUserService;
 //* Servicio para login de CUSTOMER
-export const loginAdminService = async (email, password) => {
-    const user = await User.findOne({ email });
+const loginAdminService = async (email, password) => {
+    const user = await User_model_1.default.findOne({ email });
     // Verificar si el usuario existe
     if (!user) {
         throw new Error('Usuario no encontrado');
@@ -70,11 +85,12 @@ export const loginAdminService = async (email, password) => {
         throw new Error('El usuario no tiene permisos para iniciar sesión como cliente');
     }
     // Verificar la contraseña
-    const isMatch = await comparePasswordService(password, user.password);
+    const isMatch = await (0, auth_service_1.comparePasswordService)(password, user.password);
     if (!isMatch) {
         throw new Error('Contraseña incorrecta');
     }
     // Generar token JWT si la autenticación es correcta
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '48h' });
+    const token = jsonwebtoken_1.default.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '48h' });
     return { token, user };
 };
+exports.loginAdminService = loginAdminService;

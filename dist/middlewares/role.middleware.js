@@ -1,4 +1,7 @@
-export const roleMiddleware = (roles) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.roleMiddleware = void 0;
+const roleMiddleware = (roles) => {
     return async (req, res, next) => {
         try {
             if (!req.user) {
@@ -20,3 +23,4 @@ export const roleMiddleware = (roles) => {
         }
     };
 };
+exports.roleMiddleware = roleMiddleware;

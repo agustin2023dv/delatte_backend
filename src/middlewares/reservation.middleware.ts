@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AuthRequest } from "@/types";
+import { AuthRequest } from '../../types';
 import Restaurant from "../models/Restaurant.model";
 import Reservation from "../models/Reservation.model";
 

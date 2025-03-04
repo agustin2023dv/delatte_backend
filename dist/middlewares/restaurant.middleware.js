@@ -1,12 +1,18 @@
-import Restaurant from '../models/Restaurant.model';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateSearchParams = exports.managerOfRestaurantMiddleware = void 0;
+const Restaurant_model_1 = __importDefault(require("../models/Restaurant.model"));
 /* Middleware para verificar si el usuario es el manager del restaurante*/
-export const managerOfRestaurantMiddleware = async (req, res, next) => {
+const managerOfRestaurantMiddleware = async (req, res, next) => {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Usuario no autenticado" });
             return;
         }
-        const restaurant = await Restaurant.findById(req.params.id);
+        const restaurant = await Restaurant_model_1.default.findById(req.params.id);
         if (!restaurant) {
             res.status(404).json({ message: "Restaurante no encontrado" });
             return;
@@ -25,11 +31,13 @@ export const managerOfRestaurantMiddleware = async (req, res, next) => {
         res.status(500).json({ message: "Error al verificar el manager del restaurante", error });
     }
 };
+exports.managerOfRestaurantMiddleware = managerOfRestaurantMiddleware;
 //*
-export const validateSearchParams = (req, res, next) => {
+const validateSearchParams = (req, res, next) => {
     const { ubicacion, tipoComida } = req.query;
     if (!ubicacion && !tipoComida) {
         return res.status(400).json({ message: 'Debe proporcionar al menos un parámetro de búsqueda (ubicacion o tipo de comida)' });
     }
     next();
 };
+exports.validateSearchParams = validateSearchParams;

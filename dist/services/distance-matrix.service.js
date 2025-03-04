@@ -1,9 +1,15 @@
-import axios from 'axios';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getCoordinatesFromAddress = void 0;
+const axios_1 = __importDefault(require("axios"));
 const API_KEY = 'RY04slFBRNkONTJKGjDGHhtrtTSOWnvIUI1pVhdbIohUwxdA3z1O76d0OCgMzQ4Z';
 const BASE_URL = 'https://api.distancematrix.ai/maps/api/geocode/json';
-export const getCoordinatesFromAddress = async (address) => {
+const getCoordinatesFromAddress = async (address) => {
     try {
-        const response = await axios.get(BASE_URL, {
+        const response = await axios_1.default.get(BASE_URL, {
             params: {
                 address,
                 key: API_KEY
@@ -27,3 +33,4 @@ export const getCoordinatesFromAddress = async (address) => {
         throw error;
     }
 };
+exports.getCoordinatesFromAddress = getCoordinatesFromAddress;

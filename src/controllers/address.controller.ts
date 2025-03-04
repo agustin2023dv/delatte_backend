@@ -1,26 +1,27 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import {
   getUserAddressesService,
   addAddressService,
   removeAddressService,
 } from "../services/address.service";
-import { AuthRequest } from "@/types";
+import {AuthRequest} from '../../types';
 
 export const getUserAddressesController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    if (!req.user) {
+    if (!req.userId) {
       res.status(401).json({ message: "Usuario no autenticado" });
       return;
     }
 
-    const userId = req.user.id;
-    const addresses = await getUserAddressesService(userId);
-
+    const addresses = await getUserAddressesService(req.userId);
     res.json(addresses);
+    
   } catch (error: unknown) {
+    console.error("Error en getUserAddressesController:", error);
     res.status(500).json({ message: (error as Error).message });
   }
 };
+
 
 export const addAddressController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {

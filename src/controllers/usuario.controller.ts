@@ -15,7 +15,7 @@ import {
 } from "../services/auth.service";
 import { sendEmailService } from "../services/email.service";
 import User from "../models/User.model";
-import { AuthRequest } from "@/types";
+import { AuthRequest } from "../../types";
 
 //** Controlador para registrar un nuevo usuario **
 export const registrarUsuarioController = async (req: AuthRequest, res: Response): Promise<void> => {

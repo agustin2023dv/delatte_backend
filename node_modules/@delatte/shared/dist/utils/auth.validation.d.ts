@@ -1,0 +1,9 @@
+export declare const validateNombre: (nombre: string) => string | null;
+export declare const validateApellido: (apellido: string) => string | null;
+export declare const validateEmail: (email: string) => string | null;
+export declare const validatePassword: (password: string) => string | null;
+export declare const validateConfirmPassword: (password: string, cPassword: string) => string | null;
+export declare const validateRestaurantName: (restaurantName: string) => string | null;
+export declare const validateRestaurantAddress: (address: string) => string | null;
+export declare const validateRestaurantPostCode: (address: string) => string | null;
+//# sourceMappingURL=auth.validation.d.ts.map

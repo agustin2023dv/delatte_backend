@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateLocationParams = void 0;
 // Middleware para validar los parámetros de ubicación
-export const validateLocationParams = (req, res, next) => {
+const validateLocationParams = (req, res, next) => {
     try {
         const { lat, lng, radius } = req.query;
         if (!lat || !lng || !radius) {
@@ -22,3 +25,4 @@ export const validateLocationParams = (req, res, next) => {
         res.status(500).json({ message: "Error interno del servidor", error });
     }
 };
+exports.validateLocationParams = validateLocationParams;

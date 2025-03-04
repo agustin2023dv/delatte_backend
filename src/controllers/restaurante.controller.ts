@@ -13,7 +13,7 @@ import {
 import { registerManagerService } from '../services/user.service';
 import { hashPasswordService } from '../services/auth.service';
 import { getPlacesNearbyService, getRestaurantByNameService } from '../services/search.service';
-import { AuthRequest } from '@/types';
+import { AuthRequest } from '../../types';
 
 //* Controlador para crear un nuevo restaurante y manager
 export const registerRestaurantAndManagerController = async (req: AuthRequest, res: Response): Promise<void> => {

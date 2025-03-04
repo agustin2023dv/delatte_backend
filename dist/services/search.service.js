@@ -1,8 +1,14 @@
-import Restaurant from "../models/Restaurant.model";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getRestaurantByNameService = exports.getPlacesNearbyService = void 0;
+const Restaurant_model_1 = __importDefault(require("../models/Restaurant.model"));
 // Obtener lugares cercanos usando coordenadas y un radio
-export const getPlacesNearbyService = async (lat, lng, radius) => {
+const getPlacesNearbyService = async (lat, lng, radius) => {
     try {
-        const nearbyRestaurants = await Restaurant.find({
+        const nearbyRestaurants = await Restaurant_model_1.default.find({
             ubicacion: {
                 $near: {
                     $geometry: {
@@ -22,10 +28,12 @@ export const getPlacesNearbyService = async (lat, lng, radius) => {
         throw new Error("No se pudo obtener la lista de restaurantes cercanos.");
     }
 };
-export const getRestaurantByNameService = async (query) => {
-    return Restaurant.find({ nombre: { $regex: query, $options: 'i' } })
+exports.getPlacesNearbyService = getPlacesNearbyService;
+const getRestaurantByNameService = async (query) => {
+    return Restaurant_model_1.default.find({ nombre: { $regex: query, $options: 'i' } })
         .catch(error => {
         console.error('Error en la búsqueda:', error);
         throw error;
     });
 };
+exports.getRestaurantByNameService = getRestaurantByNameService;
