@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import  Restaurant  from '../models/Restaurant.model';
+import  Restaurant  from '../modules/restaurantes/models/Restaurant.model';
 import { AuthRequest } from '../../types';
 
 /* Middleware para verificar si el usuario es el manager del restaurante*/

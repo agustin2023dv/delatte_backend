@@ -5,19 +5,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("module-alias/register");
 const express_1 = __importDefault(require("express"));
-const profile_routes_1 = __importDefault(require("./routes/profile.routes"));
-const restaurante_routes_1 = __importDefault(require("./routes/restaurante.routes"));
-const reserva_routes_1 = __importDefault(require("./routes/reserva.routes"));
-const favorites_routes_1 = __importDefault(require("./routes/favorites.routes"));
-const addresses_routes_1 = __importDefault(require("./routes/addresses.routes"));
-const resena_routes_1 = __importDefault(require("./routes/resena.routes"));
-const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
-const admin_routes_1 = __importDefault(require("./routes/admin.routes"));
-const cloudinary_routes_1 = __importDefault(require("./routes/cloudinary.routes"));
+const cloudinary_routes_1 = __importDefault(require("./modules/integrations/routes/cloudinary.routes"));
 const db_1 = require("./db");
 const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
-const menu_routes_1 = __importDefault(require("./routes/menu.routes"));
+const menu_routes_1 = __importDefault(require("./modules/menus/routes/menu.routes"));
+const restaurante_routes_1 = __importDefault(require("./modules/restaurantes/routes/restaurante.routes"));
+const resena_routes_1 = __importDefault(require("./modules/resenas/routes/resena.routes"));
+const reserva_routes_1 = __importDefault(require("./modules/reservas/routes/reserva.routes"));
+const profile_routes_1 = __importDefault(require("./modules/usuarios/routes/profile.routes"));
+const auth_routes_1 = __importDefault(require("./modules/usuarios/routes/auth.routes"));
+const admin_routes_1 = __importDefault(require("./modules/usuarios/routes/admin.routes"));
+const favorites_routes_1 = __importDefault(require("./modules/usuarios/routes/favorites.routes"));
+const addresses_routes_1 = __importDefault(require("./modules/usuarios/routes/addresses.routes"));
 const app = (0, express_1.default)();
 const port = process.env.SERVER_PORT || 8081; // Usa un puerto dinámico si está disponible
 // Conectar a la base de datos

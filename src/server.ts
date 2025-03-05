@@ -1,18 +1,19 @@
 import 'module-alias/register';
 import express, { Request, Response, NextFunction } from 'express';
-import profileRoutes from './routes/profile.routes';
-import restaurantRoutes from './routes/restaurante.routes';
-import reservationRoutes from './routes/reserva.routes';
-import favoritesRoutes from './routes/favorites.routes';
-import addressesRoutes from './routes/addresses.routes';
-import reviewRoutes from './routes/resena.routes';
-import authRoutes from './routes/auth.routes';
-import adminRoutes from './routes/admin.routes';
-import cloudinaryRoutes from "./routes/cloudinary.routes";
+
+import cloudinaryRoutes from "./modules/integrations/routes/cloudinary.routes";
 import { connectDB } from './db';
 import cors from 'cors';
 import path from 'path';
-import menuRoutes from './routes/menu.routes';
+import menuRoutes from './modules/menus/routes/menu.routes';
+import restaurantRoutes from './modules/restaurantes/routes/restaurante.routes';
+import reviewRoutes from './modules/resenas/routes/resena.routes';
+import reservationRoutes from './modules/reservas/routes/reserva.routes';
+import profileRoutes from './modules/usuarios/routes/profile.routes';
+import authRoutes from './modules/usuarios/routes/auth.routes';
+import adminRoutes from './modules/usuarios/routes/admin.routes';
+import favoritesRoutes from './modules/usuarios/routes/favorites.routes';
+import addressesRoutes from './modules/usuarios/routes/addresses.routes';
 
 const app = express();
 const port = process.env.SERVER_PORT || 8081; // Usa un puerto dinámico si está disponible

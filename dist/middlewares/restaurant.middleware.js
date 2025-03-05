@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateSearchParams = exports.managerOfRestaurantMiddleware = void 0;
-const Restaurant_model_1 = __importDefault(require("../models/Restaurant.model"));
+const Restaurant_model_1 = __importDefault(require("../modules/restaurantes/models/Restaurant.model"));
 /* Middleware para verificar si el usuario es el manager del restaurante*/
 const managerOfRestaurantMiddleware = async (req, res, next) => {
     try {

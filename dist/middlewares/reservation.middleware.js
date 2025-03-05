@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateReservationData = exports.checkDisponibilidadMiddleware = void 0;
-const Restaurant_model_1 = __importDefault(require("../models/Restaurant.model"));
-const Reservation_model_1 = __importDefault(require("../models/Reservation.model"));
+const Restaurant_model_1 = __importDefault(require("../modules/restaurantes/models/Restaurant.model"));
+const Reservation_model_1 = __importDefault(require("../modules/reservas/models/Reservation.model"));
 /**
  * Middleware para verificar disponibilidad de reservas en base a la capacidad del restaurante
  */
