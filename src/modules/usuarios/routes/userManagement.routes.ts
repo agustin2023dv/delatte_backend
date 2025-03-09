@@ -4,59 +4,14 @@ import {
   suspendUserController, 
   deleteUserController, 
   updateUserController, 
-  getUserDetailsController,
-  loginAdminController
-} from "../controllers/admin.controller";
+  getUserDetailsController
+} from "../controllers/userManagement.controller";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { roleMiddleware } from "../../../middlewares/role.middleware";
-import { loginRateLimiter } from "../../../middlewares/rateLimiter.middlware";
 
 const router = express.Router();
 
-/**
- * @swagger
- * /api/v1/admin/auth:
- *   post:
- *     summary: Inicio de sesión para administradores
- *     description: Permite a los superadmins iniciar sesión en el panel de administración.
- *     tags:
- *       - Admin
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 example: "admin@example.com"
- *               password:
- *                 type: string
- *                 example: "securepassword"
- *     responses:
- *       200:
- *         description: Inicio de sesión exitoso
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     nombre:
- *                       type: string
- *                     rol:
- *                       type: string
- *       401:
- *         description: Credenciales inválidas
- */
-router.post('/auth', loginRateLimiter, loginAdminController);
+
 
 /**
  * @swagger

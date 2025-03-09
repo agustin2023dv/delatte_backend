@@ -4,7 +4,7 @@ import {
   addFavoriteRestaurantController,
   getUserFavoritesController,
   removeFavoriteRestaurantController
-} from '../controllers/favorite.controller';
+} from '../controllers/userFavorites.controller';
 
 const router = express.Router();
 

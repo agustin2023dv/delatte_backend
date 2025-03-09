@@ -1,4 +1,4 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
 export interface IUser extends Document {
     _id: ObjectId | string;
     nombre: string;
@@ -12,7 +12,7 @@ export interface IUser extends Document {
     isActive: boolean;
     addresses?: string[];
     profileImage?: string;
-    favoriteRestaurants?: ObjectId[];
+    favoriteRestaurants?: Types.ObjectId[];
     reviews?: ObjectId[];
     role: 'customer' | 'manager' | 'superadmin';
 }

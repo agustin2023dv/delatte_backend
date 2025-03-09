@@ -7,8 +7,8 @@ import {
   updateRestaurantService
 } from '../services/restaurant.service';
 import { AuthRequest } from '../../../../types';
-import { hashPasswordService } from '../../usuarios/services/auth.service';
-import { registerManagerService } from '../../usuarios/services/user.service';
+import { hashPasswordService } from '../../usuarios/services/userAuth.service';
+import { registerManagerService } from '../../usuarios/services/userRegister.service';
 
 //* Controlador para crear un nuevo restaurante y manager
 export const registerRestaurantAndManagerController = async (req: AuthRequest, res: Response): Promise<void> => {

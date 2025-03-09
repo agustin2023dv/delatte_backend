@@ -1,4 +1,4 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document, ObjectId, Types } from 'mongoose';
 
 export interface IUser extends Document {
   _id: ObjectId | string; // ID del usuario
@@ -13,7 +13,7 @@ export interface IUser extends Document {
   isActive:boolean;
   addresses?: string[]; // Lista opcional de direcciones
   profileImage?: string; // URL opcional de la imagen de perfil
-  favoriteRestaurants?: ObjectId[] ; // Lista de IDs de restaurantes favoritos
+  favoriteRestaurants?: Types.ObjectId[] ; // Lista de IDs de restaurantes favoritos
   reviews?:ObjectId[];
   role: 'customer' | 'manager' | 'superadmin'; // Rol del usuario en el sistema
 }

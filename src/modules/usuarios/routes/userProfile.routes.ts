@@ -3,7 +3,7 @@ import {
   getUserByIDController,
   getUserProfileController,
   updateUserDataController,
-} from '../controllers/usuario.controller';
+} from '../controllers/userProfile.controller';
 import { authMiddleware } from '../../../middlewares/auth.middleware';
 
 const router = express.Router();

@@ -3,7 +3,7 @@ import {
   addFavoriteRestaurantService,
   getUserFavoritesService,
   removeFavoriteRestaurantService,
-} from "../services/favorite.service";
+} from "../services/userFavorites.service";
 import { AuthRequest } from "../../../../types";
 
 

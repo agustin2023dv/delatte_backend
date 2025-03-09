@@ -5,16 +5,17 @@ import cloudinaryRoutes from "./modules/integrations/routes/cloudinary.routes";
 import { connectDB } from './db';
 import cors from 'cors';
 import path from 'path';
+import userAccessRoutes from './modules/usuarios/routes/userAccess.routes';
 import menuRoutes from './modules/menus/routes/menu.routes';
 import restaurantRoutes from './modules/restaurantes/routes/restaurante.routes';
 import reviewRoutes from './modules/resenas/routes/resena.routes';
 import reservationRoutes from './modules/reservas/routes/reserva.routes';
-import profileRoutes from './modules/usuarios/routes/profile.routes';
-import authRoutes from './modules/usuarios/routes/auth.routes';
-import adminRoutes from './modules/usuarios/routes/admin.routes';
+import profileRoutes from './modules/usuarios/routes/userProfile.routes';
+import authRoutes from './modules/usuarios/routes/userAuth.routes';
+import adminRoutes from './modules/usuarios/routes/userManagement.routes';
 import searchRestaurantRoutes from './modules/busqueda/routes/restauranteBusqueda.routes';
-import favoritesRoutes from './modules/usuarios/routes/favorites.routes';
-import addressesRoutes from './modules/usuarios/routes/addresses.routes';
+import favoritesRoutes from './modules/usuarios/routes/userFavorites.routes';
+import addressesRoutes from './modules/usuarios/routes/userAddresses.routes';
 import reservasAnaliticasRoutes from './modules/reservas/routes/reservasAnaliticas.routes';
 import promocionRoutes from './modules/promociones/routes/promocion.routes';
 import { setupSwagger } from './configs/swagger.config';
@@ -62,7 +63,10 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/cloudinary', cloudinaryRoutes);
 app.use('/api/v1/promotions', promocionRoutes);
+
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/auth', userAccessRoutes);
+
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/restaurants', restaurantRoutes);
 app.use('/api/v1/reservations', reservationRoutes);
@@ -72,6 +76,7 @@ app.use('/api/v1/favorites', favoritesRoutes);
 app.use('/api/v1/addresses', addressesRoutes);
 app.use("/api/v1/menus", menuRoutes);
 app.use("/api/v1/search/restaurants", searchRestaurantRoutes);
+
 // Middleware para manejar errores globales con tipado
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);

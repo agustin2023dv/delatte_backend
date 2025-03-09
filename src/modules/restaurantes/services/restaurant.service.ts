@@ -1,105 +1,47 @@
+import { RestaurantRepository } from "../repositories/restaurant.repository";
 import { IRestaurant } from "@delatte/shared/interfaces";
 import { getCoordinatesFromAddress } from "../../integrations/services/geolocation.service";
-import Restaurant from "../models/Restaurant.model";
 
+const restaurantRepo = new RestaurantRepository();
 
-//* Servicio para obtener el restaurante del manager
-export const getRestauranteIdByManagerService = async (managerId: string) => {
-  try {
-    const restaurante = await Restaurant.findOne({ managers: managerId });
-    return restaurante?._id;
-  } catch (error) {
-    throw new Error('Error al obtener el restaurante del manager');
-  }
-};
-
-//* Servicio para obtener TODOS los restaurantes
+//* Servicio para obtener todos los restaurantes
 export const getAllRestaurantsService = async () => {
-  try {
-    const restaurantes = await Restaurant.find().lean(); 
-    return restaurantes;
-  } catch (error) {
-    console.error("Error al obtener restaurantes:", error);
-    throw new Error("Error al obtener restaurantes");
-  }
-};
-//** Servicio para actualizar un restaurante por ID
-export const updateRestaurantService = async (id: string, newRestaurantData: Partial<IRestaurant>) => {
-  try {
-    return await Restaurant.findByIdAndUpdate(id, newRestaurantData, { new: true });
-  } catch (error) {
-    throw new Error('Error al actualizar el restaurante');
-  }
+  return await restaurantRepo.getAll();
 };
 
-//** Servicio para crear restaurante
+//* Servicio para obtener los detalles de un restaurante por ID
+export const getRestaurantDetailsService = async (restaurantId: string) => {
+  return await restaurantRepo.findById(restaurantId);
+};
+
+//* Servicio para obtener restaurantes de un manager
+export const getRestaurantsByManagerIdService = async (managerId: string) => {
+  return await restaurantRepo.findByManagerId(managerId);
+};
+
+//* Servicio para actualizar un restaurante
+export const updateRestaurantService = async (id: string, newRestaurantData: Partial<IRestaurant>) => {
+  return await restaurantRepo.update(id, newRestaurantData);
+};
+
+//* Servicio para registrar un nuevo restaurante
 export const registerRestaurantService = async (restaurantData: Partial<IRestaurant>) => {
   try {
-    const direccionCompleta = `${restaurantData.direccion}, Montevideo, ${restaurantData.codigoPostal || ''}, Uruguay`;
-    console.log("Dirección completa:", direccionCompleta);
+    // Obtener coordenadas de la dirección
+    const direccionCompleta = `${restaurantData.direccion}, Montevideo, ${restaurantData.codigoPostal || ""}, Uruguay`;
+    const coordenadas = await getCoordinatesFromAddress(direccionCompleta);
 
-    let latitude: number | undefined;
-    let longitude: number | undefined;
+    if (!coordenadas) throw new Error("No se encontraron coordenadas para la dirección proporcionada.");
 
-    // Obtener coordenadas a partir de la dirección
-    try {
-      const coordenadas = await getCoordinatesFromAddress(direccionCompleta);
-      console.log("Coordenadas obtenidas:", coordenadas);
-      if (coordenadas) {
-        latitude = coordenadas.latitude;
-        longitude = coordenadas.longitude;
-      } else {
-        throw new Error("No se encontraron coordenadas para la dirección proporcionada.");
-      }
-    } catch (error) {
-      console.error('Error al obtener coordenadas:', error);
-      throw new Error('Error al obtener coordenadas para el restaurante.');
-    }
+    // Crear restaurante con coordenadas en GeoJSON
+    restaurantData.ubicacion = {
+      type: "Point",
+      coordinates: [coordenadas.longitude, coordenadas.latitude],
+    };
 
-    // Crear el restaurante con el manager principal asignado y ubicacion en formato GeoJSON
-    const newRestaurant = new Restaurant({
-      ...restaurantData,
-      ubicacion: {
-        type: "Point",
-        coordinates: [longitude!, latitude!], // [longitud, latitud] formato GeoJSON
-      },
-    });
-
-    const savedRestaurant = await newRestaurant.save();
-    console.log('Restaurante guardado:', savedRestaurant);
-    return savedRestaurant;
+    return await restaurantRepo.create(restaurantData);
   } catch (error) {
-    console.error('Error al guardar el restaurante:', error);
+    console.error("Error al registrar restaurante:", error);
     throw error;
   }
 };
-
-
-// ** Servicio para obtener todos los detalles de un restaurante por ID
-export const getRestaurantDetailsService = async (restaurantId: string) => {
-  try {
-    const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant) {
-      throw new Error('Restaurante no encontrado');
-    }
-
-    return restaurant;
-  } catch (error) {
-    throw new Error('Error al obtener los detalles del restaurante');
-  }
-};
-
-
-//*
-export const getRestaurantsByManagerIdService = async (id: string) => {
-  try {
-    const restaurants = await Restaurant.find({
-         managerPrincipal: id
-    });
-    return restaurants;
-  } catch (error) {
-    throw new Error('Error al obtener los restaurantes del manager');
-  }
-};
-
-

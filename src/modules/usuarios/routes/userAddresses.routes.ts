@@ -1,5 +1,5 @@
 import express from "express";
-import { addAddressController, getUserAddressesController, removeAddressController } from "../controllers/address.controller";
+import { addAddressController, getUserAddressesController, removeAddressController } from "../controllers/userAddresses.controller";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 
 const router = express.Router();

@@ -3,7 +3,7 @@ import {
   getUserAddressesService,
   addAddressService,
   removeAddressService,
-} from "../services/address.service";
+} from "../services/userAddresses.service";
 import {AuthRequest} from '../../../../types';
 
 export const getUserAddressesController = async (req: AuthRequest, res: Response): Promise<void> => {
