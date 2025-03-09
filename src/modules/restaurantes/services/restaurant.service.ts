@@ -1,7 +1,7 @@
 import { IRestaurant } from "@delatte/shared/interfaces";
 import { getCoordinatesFromAddress } from "../../integrations/services/geolocation.service";
 import Restaurant from "../models/Restaurant.model";
-import { ObjectId } from "mongoose";
+
 
 //* Servicio para obtener el restaurante del manager
 export const getRestauranteIdByManagerService = async (managerId: string) => {
@@ -103,73 +103,3 @@ export const getRestaurantsByManagerIdService = async (id: string) => {
 };
 
 
-
-// Obtener las fotos de la galería de un restaurante
-export const getGalleryPhotosService = async (restaurantId: string) => {
-  try {
-    const restaurant = await Restaurant.findById(restaurantId).select("galeriaFotos");
-    if (!restaurant) {
-      throw new Error("Restaurante no encontrado");
-    }
-    return restaurant.galeriaFotos;
-  } catch (error) {
-    throw new Error("Error al obtener las fotos de la galería");
-  }
-};
-
-// Agregar una foto a la galería de un restaurante
-export const addPhotoToGalleryService = async (restaurantId: string, photoUrl: string) => {
-  try {
-    const restaurant = await Restaurant.findByIdAndUpdate(
-      restaurantId,
-      { $push: { galeriaFotos: photoUrl } },
-      { new: true }
-    );
-
-    if (!restaurant) {
-      throw new Error("Restaurante no encontrado");
-    }
-
-    return restaurant.galeriaFotos;
-  } catch (error) {
-    throw new Error("Error al agregar la foto a la galería");
-  }
-};
-
-// Eliminar una foto de la galería de un restaurante
-export const removePhotoFromGalleryService = async (restaurantId: string, photoUrl: string) => {
-  try {
-    const restaurant = await Restaurant.findByIdAndUpdate(
-      restaurantId,
-      { $pull: { galeriaFotos: photoUrl } },
-      { new: true }
-    );
-    if (!restaurant) {
-      throw new Error("Restaurante no encontrado");
-    }
-    return restaurant.galeriaFotos;
-  } catch (error) {
-    throw new Error("Error al eliminar la foto de la galería");
-  }
-};
-
-
-// Servicio para verificar si el usuario es manager o co-manager de un restaurante
-export const checkUserRoleInRestaurantService = async (restaurantId: string, userId: string): Promise<boolean> => {
-  try {
-    const restaurant = await Restaurant.findById(restaurantId);
-
-    if (!restaurant) {
-      throw new Error('Restaurante no encontrado');
-    }
-
-    // Verificar si el usuario es manager principal o co-manager
-    return (
-      restaurant.managerPrincipal?.toString() === userId ||
-      restaurant.coManagers.some((manager: ObjectId | string) => manager.toString() === userId)
-    );
-  } catch (error) {
-    console.error('Error en el servicio checkUserRoleInRestaurant:', error);
-    throw error;
-  }
-};
