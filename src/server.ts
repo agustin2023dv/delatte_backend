@@ -12,11 +12,16 @@ import reservationRoutes from './modules/reservas/routes/reserva.routes';
 import profileRoutes from './modules/usuarios/routes/profile.routes';
 import authRoutes from './modules/usuarios/routes/auth.routes';
 import adminRoutes from './modules/usuarios/routes/admin.routes';
+import searchRestaurantRoutes from './modules/busqueda/routes/restauranteBusqueda.routes';
 import favoritesRoutes from './modules/usuarios/routes/favorites.routes';
 import addressesRoutes from './modules/usuarios/routes/addresses.routes';
+import reservasAnaliticasRoutes from './modules/reservas/routes/reservasAnaliticas.routes';
+import promocionRoutes from './modules/promociones/routes/promocion.routes';
+import { setupSwagger } from './configs/swagger.config';
 
 const app = express();
-const port = process.env.SERVER_PORT || 8081; // Usa un puerto dinámico si está disponible
+setupSwagger(app);
+const port = process.env.SERVER_PORT || 8081; 
 
 // Conectar a la base de datos
 connectDB();
@@ -44,6 +49,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Servidor funcionando correctamente.');
 });
 
+const apiV1  = "/api/v1";
 // Middlewares globales
 app.use(cors(corsOptions)); // Habilitar CORS para aceptar solicitudes desde otros dominios
 
@@ -53,16 +59,19 @@ app.use(express.json()); // Permitir recibir solicitudes en formato JSON
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Definir las rutas
-app.use('/api/profile', profileRoutes);
-app.use("/api/cloudinary", cloudinaryRoutes);
-app.use('/api/auth',authRoutes);
-app.use('/api/admin',adminRoutes);
-app.use('/api/restaurantes', restaurantRoutes);
-app.use('/api/reservas', reservationRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/favorites', favoritesRoutes);
-app.use('/api/addresses', addressesRoutes);
-app.use("/api/menus", menuRoutes);
+app.use('/api/v1/profile', profileRoutes);
+app.use('/api/v1/cloudinary', cloudinaryRoutes);
+app.use('/api/v1/promotions', promocionRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/restaurants', restaurantRoutes);
+app.use('/api/v1/reservations', reservationRoutes);
+app.use("/api/v1/reservations-analytics", reservasAnaliticasRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
+app.use('/api/v1/favorites', favoritesRoutes);
+app.use('/api/v1/addresses', addressesRoutes);
+app.use("/api/v1/menus", menuRoutes);
+app.use("/api/v1/search/restaurants", searchRestaurantRoutes);
 // Middleware para manejar errores globales con tipado
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);

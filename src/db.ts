@@ -3,7 +3,9 @@ import * as dotenv from 'dotenv';
 import path from 'path';
 
 // Configurar dotenv con el path correcto
-dotenv.config({ path: path.resolve(__dirname, '../backend/.env') });
+//dotenv.config({ path: path.resolve(__dirname, '../backend/.env') });}
+
+dotenv.config();
 
 console.log('MONGODB_URI desde .env:', process.env.MONGODB_URI);
 

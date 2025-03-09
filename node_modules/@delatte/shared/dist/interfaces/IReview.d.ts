@@ -1,4 +1,5 @@
 import { Document, ObjectId } from 'mongoose';
+export type ReviewStatus = "publicada" | "reported" | "borrada";
 export interface IReview extends Document {
     _id: ObjectId;
     restaurante: ObjectId | {
@@ -16,9 +17,19 @@ export interface IReview extends Document {
     comentario: string;
     fecha: Date;
     ultimaActualizacion?: Date;
-}
-export interface IReviewProps {
-    restaurantId: string;
-    isManager: boolean;
+    status: ReviewStatus;
+    reportes?: {
+        userId: ObjectId;
+        motivo: string;
+        fecha: Date;
+    }[];
+    respuestas?: {
+        usuario: ObjectId | {
+            _id: ObjectId | string;
+            nombre: string;
+        };
+        mensaje: string;
+        fecha: Date;
+    }[];
 }
 //# sourceMappingURL=IReview.d.ts.map
