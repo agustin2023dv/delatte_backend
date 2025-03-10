@@ -1,22 +1,25 @@
 import { PromotionRepository } from "../repositories/promotion.repository";
 import { IPromotion } from "@delatte/shared/interfaces/IPromotion";
 
-// ✅ Crear una promoción
-export const createPromotionService = async (promotionData: Partial<IPromotion>) => {
-  return await PromotionRepository.createPromotion(promotionData);
-};
+export class PromotionService {
 
-// ✅ Obtener todas las promociones activas de un restaurante
-export const getPromotionsByRestaurantService = async (restaurantId: string) => {
-  return await PromotionRepository.getPromotionsByRestaurant(restaurantId);
-};
+  //* ✅ Crear una promoción
+  static async createPromotion(promotionData: Partial<IPromotion>) {
+    return await PromotionRepository.createPromotion(promotionData);
+  }
 
-// ✅ Actualizar una promoción específica
-export const updatePromotionService = async (promoId: string, updateData: Partial<IPromotion>) => {
-  return await PromotionRepository.updatePromotion(promoId, updateData);
-};
+  //* ✅ Obtener todas las promociones activas de un restaurante
+  static async getPromotionsByRestaurant(restaurantId: string) {
+    return await PromotionRepository.getPromotionsByRestaurant(restaurantId);
+  }
 
-// ✅ Eliminar una promoción específica
-export const deletePromotionService = async (promoId: string) => {
-  return await PromotionRepository.deletePromotion(promoId);
-};
+  //* ✅ Actualizar una promoción específica
+  static async updatePromotion(promoId: string, updateData: Partial<IPromotion>) {
+    return await PromotionRepository.updatePromotion(promoId, updateData);
+  }
+
+  //* ✅ Eliminar una promoción específica
+  static async deletePromotion(promoId: string) {
+    return await PromotionRepository.deletePromotion(promoId);
+  }
+}

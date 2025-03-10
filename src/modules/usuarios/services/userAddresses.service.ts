@@ -1,16 +1,26 @@
 import { UserAddressRepository } from "../repositories/userAddress.repository";
 
-// 📌 Obtener todas las direcciones de un usuario
-export const getUserAddressesService = async (userId: string) => {
-  return await UserAddressRepository.getUserAddresses(userId);
-};
+export class UserAddressService {
+  // 📌 Obtener todas las direcciones de un usuario
+  static async getUserAddresses(userId: string) {
+    return await UserAddressRepository.getUserAddresses(userId);
+  }
 
-// 📌 Agregar una dirección a un usuario
-export const addAddressService = async (userId: string, newAddress: string) => {
-  return await UserAddressRepository.addUserAddress(userId, newAddress);
-};
+  // 📌 Agregar una dirección a un usuario
+  static async addAddress(userId: string, newAddress: string) {
+    if (!newAddress) {
+      throw new Error("La dirección es requerida.");
+    }
 
-// 📌 Eliminar una dirección de un usuario
-export const removeAddressService = async (userId: string, address: string) => {
-  return await UserAddressRepository.removeUserAddress(userId, address);
-};
+    return await UserAddressRepository.addUserAddress(userId, newAddress);
+  }
+
+  // 📌 Eliminar una dirección de un usuario
+  static async removeAddress(userId: string, address: string) {
+    if (!address) {
+      throw new Error("La dirección es requerida.");
+    }
+
+    return await UserAddressRepository.removeUserAddress(userId, address);
+  }
+}

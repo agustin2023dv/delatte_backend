@@ -1,20 +1,20 @@
-import mongoose, { Schema, Model } from 'mongoose';
-import { IRestaurant } from '@delatte/shared/interfaces';
+import mongoose, { Schema, Model, Types } from 'mongoose';
+import { DiasSemana, IRestaurant } from '@delatte/shared/interfaces';
 
 const RestaurantSchema: Schema = new Schema({
   nombre: { type: String, required: true },
   direccion: { type: String, required: true },
   pais: { type: String, required: true },
   localidad: { type: String, required: true },
-  codigoPostal: { type: String }, 
+  codigoPostal: { type: String },
   telefono: { type: String },
   emailContacto: { type: String },
   logo: { type: String },
   descripcion: { type: String },
   galeriaFotos: [{ type: String }],
   calificacion: { type: Number },
-  totalReservas: { type: Number, default: 0 }, 
-  totalReviews: { type: Number, default: 0 }, 
+  totalReservas: { type: Number, default: 0 },
+  totalReviews: { type: Number, default: 0 },
   promociones: [
     {
       titulo: String,
@@ -24,10 +24,10 @@ const RestaurantSchema: Schema = new Schema({
       descuento: Number,
     },
   ],
-  estaTemporalmenteCerrado: { type: Boolean, default: false }, 
+  estaTemporalmenteCerrado: { type: Boolean, default: false },
   horarios: [
     {
-      dia: { type: String, enum: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"] },
+      dia: { type: String, enum: Object.values(DiasSemana) },
       horaApertura: { type: String },
       horaCierre: { type: String },
     },
@@ -38,9 +38,10 @@ const RestaurantSchema: Schema = new Schema({
       personasPorMesa: { type: Number },
     },
   ],
-  menus: [{ type: Schema.Types.ObjectId, ref: 'Menu' }],
-  managerPrincipal: { type: Schema.Types.ObjectId, ref: 'User' },
-  coManagers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  menus: [{ type: Types.ObjectId, ref: 'Menu' }], 
+  managerPrincipal: { type: Types.ObjectId, ref: 'User', required: true }, 
+  coManagers: [{ type: Types.ObjectId, ref: 'User' }], 
+
   estaAbierto: { type: Boolean },
   ultimaActualizacion: { type: Date },
   ubicacion: {

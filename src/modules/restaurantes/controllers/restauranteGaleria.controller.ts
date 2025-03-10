@@ -1,18 +1,15 @@
 import { Response } from "express"; 
 import { AuthRequest } from "../../../../types";
-import { addPhotoToGalleryService, getGalleryPhotosService, 
-    removePhotoFromGalleryService } from "../services/restauranteGaleria.service";
-
+import { RestaurantGalleryService } from "../services/restauranteGaleria.service";
 
 // Obtener las fotos de la galería de un restaurante
 export const getGalleryPhotosController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id: restaurantId } = req.params;
-    const photos = await getGalleryPhotosService(restaurantId);
-
+    const photos = await RestaurantGalleryService.getGalleryPhotos(restaurantId);
     res.status(200).json({ success: true, photos });
   } catch (error) {
-    res.status(500).json({ success: false, message: error });
+    res.status(500).json({ success: false, message: "Error al obtener las fotos de la galería" });
   }
 };
 
@@ -27,7 +24,7 @@ export const addPhotoToGalleryController = async (req: AuthRequest, res: Respons
     }
 
     const photoUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-    const updatedGallery = await addPhotoToGalleryService(restaurantId, photoUrl);
+    const updatedGallery = await RestaurantGalleryService.addPhotoToGallery(restaurantId, photoUrl);
 
     res.status(200).json({ success: true, gallery: updatedGallery });
   } catch (error) {
@@ -47,9 +44,9 @@ export const removePhotoFromGalleryController = async (req: AuthRequest, res: Re
       return;
     }
 
-    const updatedGallery = await removePhotoFromGalleryService(restaurantId, photoUrl);
+    const updatedGallery = await RestaurantGalleryService.removePhotoFromGallery(restaurantId, photoUrl);
     res.status(200).json({ success: true, gallery: updatedGallery });
   } catch (error) {
-    res.status(500).json({ success: false, message: error });
+    res.status(500).json({ success: false, message: "Error al eliminar la foto de la galería" });
   }
 };

@@ -1,15 +1,10 @@
 import { Request, Response } from "express";
-import {
-  getTopRestaurantsService,
-  getWorstPerformingRestaurantsService,
-  getNewRestaurantsService,
-  getSaturatedRestaurantsService,
-} from "../services/restauranteAnaliticas.service";
+import { RestaurantAnalyticsService } from "../services/restauranteAnaliticas.service";
 
 // 📊 Restaurantes con más reservas y mejores calificaciones
 export const getTopRestaurantsController = async (req: Request, res: Response) => {
   try {
-    const data = await getTopRestaurantsService();
+    const data = await RestaurantAnalyticsService.getTopRestaurants();
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener los mejores restaurantes", error });
@@ -19,7 +14,7 @@ export const getTopRestaurantsController = async (req: Request, res: Response) =
 // 📊 Restaurantes con menos reservas y peores calificaciones
 export const getWorstPerformingRestaurantsController = async (req: Request, res: Response) => {
   try {
-    const data = await getWorstPerformingRestaurantsService();
+    const data = await RestaurantAnalyticsService.getWorstPerformingRestaurants();
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener los restaurantes con peor desempeño", error });
@@ -29,7 +24,7 @@ export const getWorstPerformingRestaurantsController = async (req: Request, res:
 // 📊 Restaurantes recién agregados
 export const getNewRestaurantsController = async (req: Request, res: Response) => {
   try {
-    const data = await getNewRestaurantsService();
+    const data = await RestaurantAnalyticsService.getNewRestaurants();
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener los restaurantes nuevos", error });
@@ -39,7 +34,7 @@ export const getNewRestaurantsController = async (req: Request, res: Response) =
 // 📊 Restaurantes con alta ocupación y baja disponibilidad
 export const getSaturatedRestaurantsController = async (req: Request, res: Response) => {
   try {
-    const data = await getSaturatedRestaurantsService();
+    const data = await RestaurantAnalyticsService.getSaturatedRestaurants();
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener restaurantes saturados", error });

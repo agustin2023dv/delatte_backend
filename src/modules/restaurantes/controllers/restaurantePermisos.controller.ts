@@ -1,7 +1,6 @@
 import { Response } from "express"; 
 import { AuthRequest } from "../../../../types";
-import { checkUserRoleInRestaurantService } from "../services/restaurantePermisos.service";
-
+import { RestaurantPermissionsService } from "../services/restaurantePermisos.service";
 
 export const isManagerController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -12,7 +11,7 @@ export const isManagerController = async (req: AuthRequest, res: Response): Prom
 
     const { restaurantId } = req.params;
     const userId = req.user.id;
-    const isManager = await checkUserRoleInRestaurantService(restaurantId, userId);
+    const isManager = await RestaurantPermissionsService.checkUserRoleInRestaurant(restaurantId, userId);
 
     res.status(200).json({ isManager });
   } catch (error) {

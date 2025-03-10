@@ -1,4 +1,4 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { IPromotion } from './IPromotion';
 
 export enum DiasSemana {
@@ -11,26 +11,25 @@ export enum DiasSemana {
   Domingo = "Domingo",
 }
 
-
 export interface IRestaurant extends Document {
-  _id: ObjectId | string;
+  _id: Types.ObjectId; 
   nombre: string;
   direccion: string;
   pais: string;
   localidad: string;
-  codigoPostal?: string; // Opcional
-  telefono?: string; // Opcional
-  emailContacto?: string; // Opcional
-  logo?: string; // Opcional
-  descripcion?: string; // Opcional
-  galeriaFotos?: string[]; // Opcional
+  codigoPostal?: string;
+  telefono?: string;
+  emailContacto?: string;
+  logo?: string;
+  descripcion?: string;
+  galeriaFotos?: string[];
 
   calificacion: number;
-  totalReservas: number; // Total de reservas históricas
-  totalReviews: number; // Total de reviews recibidas
+  totalReservas: number;
+  totalReviews: number;
 
   promociones?: IPromotion[];
-  estaTemporalmenteCerrado: boolean; // Para cierres temporales
+  estaTemporalmenteCerrado: boolean;
 
   horarios: {
     dia: DiasSemana;
@@ -43,10 +42,9 @@ export interface IRestaurant extends Document {
     personasPorMesa: number;
   }[];
 
-  menus: ObjectId[];
-  managerPrincipal: ObjectId;
-  coManagers: ObjectId[];
-
+  menus: Types.ObjectId[]; 
+  managerPrincipal: Types.ObjectId; 
+  coManagers: Types.ObjectId[];
   estaAbierto: boolean;
   ultimaActualizacion: Date;
 

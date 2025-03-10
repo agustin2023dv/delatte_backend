@@ -1,14 +1,8 @@
 import { Response } from "express";
-import {
-  addFavoriteRestaurantService,
-  getUserFavoritesService,
-  removeFavoriteRestaurantService,
-} from "../services/userFavorites.service";
+import { UserFavoritesService } from "../services/userFavorites.service";
 import { AuthRequest } from "../../../../types";
 
-
 // **Controlador para obtener favoritos del usuario**
-
 export const getUserFavoritesController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -17,7 +11,7 @@ export const getUserFavoritesController = async (req: AuthRequest, res: Response
     }
 
     const userId = req.user.id;
-    const favorites = await getUserFavoritesService(userId);
+    const favorites = await UserFavoritesService.getUserFavorites(userId);
 
     res.status(200).json({ favorites });
   } catch (error) {
@@ -44,7 +38,7 @@ export const addFavoriteRestaurantController = async (req: AuthRequest, res: Res
       return;
     }
 
-    const user = await addFavoriteRestaurantService(userId, restaurantId);
+    const user = await UserFavoritesService.addFavoriteRestaurant(userId, restaurantId);
 
     res.status(200).json({
       message: "Restaurante agregado a favoritos con éxito",
@@ -57,32 +51,33 @@ export const addFavoriteRestaurantController = async (req: AuthRequest, res: Res
     });
   }
 };
-  // **Controlador para eliminar un restaurante de favoritos**
-  export const removeFavoriteRestaurantController = async (req: AuthRequest, res: Response): Promise<void> => {
-    try {
-      if (!req.user) {
-        res.status(401).json({ message: "Usuario no autenticado" });
-        return;
-      }
-  
-      const userId = req.user.id;
-      const { restaurantId } = req.body;
-  
-      if (!restaurantId) {
-        res.status(400).json({ message: "El ID del restaurante es obligatorio" });
-        return;
-      }
-  
-      const user = await removeFavoriteRestaurantService(userId, restaurantId);
-  
-      res.status(200).json({
-        message: "Restaurante eliminado de favoritos con éxito",
-        favorites: user.favorites,
-      });
-    } catch (error) {
-      console.error("Error en removeFavoriteRestaurantController:", error);
-      res.status(500).json({
-        message: error instanceof Error ? error.message : "Error interno del servidor",
-      });
+
+// **Controlador para eliminar un restaurante de favoritos**
+export const removeFavoriteRestaurantController = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: "Usuario no autenticado" });
+      return;
     }
-  };
+
+    const userId = req.user.id;
+    const { restaurantId } = req.body;
+
+    if (!restaurantId) {
+      res.status(400).json({ message: "El ID del restaurante es obligatorio" });
+      return;
+    }
+
+    const user = await UserFavoritesService.removeFavoriteRestaurant(userId, restaurantId);
+
+    res.status(200).json({
+      message: "Restaurante eliminado de favoritos con éxito",
+      favorites: user.favorites,
+    });
+  } catch (error) {
+    console.error("Error en removeFavoriteRestaurantController:", error);
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Error interno del servidor",
+    });
+  }
+};

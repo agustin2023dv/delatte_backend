@@ -1,13 +1,8 @@
 import { Response } from "express";
 import { AuthRequest } from "../../../../types";
-import {  changePasswordService, requestPasswordResetService, 
-    resetPasswordService } from "../services/userAuth.service";
-import User from "../models/User.model";
+import { UserAuthService } from "../services/userAuth.service";
 import { UserAuthRepository } from "../repositories/userAuth.repository";
 
-
-
-//** Controlador para verificar el email **
 export const verificarEmailController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const emailToken = req.query.token as string;
@@ -32,11 +27,6 @@ export const verificarEmailController = async (req: AuthRequest, res: Response):
   }
 };
 
-
-
-
-
-//** Controlador para cambiar contraseña **
 export const cambiarContrasenaController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -50,7 +40,7 @@ export const cambiarContrasenaController = async (req: AuthRequest, res: Respons
       return;
     }
 
-    const result = await changePasswordService(req.user.id, oldPassword, newPassword, confirmNewPassword);
+    const result = await UserAuthService.changePassword(req.user.id, oldPassword, newPassword, confirmNewPassword);
     res.status(200).json({ message: result.message });
   } catch (error) {
     console.error("Error al cambiar la contraseña:", error);
@@ -58,7 +48,6 @@ export const cambiarContrasenaController = async (req: AuthRequest, res: Respons
   }
 };
 
-//** Controlador para solicitar restablecimiento de contraseña **
 export const requestPasswordResetController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { email } = req.body;
@@ -67,7 +56,7 @@ export const requestPasswordResetController = async (req: AuthRequest, res: Resp
       return;
     }
 
-    await requestPasswordResetService(email);
+    await UserAuthService.requestPasswordReset(email);
     res.status(200).json({ message: "Se ha enviado un enlace de restablecimiento a tu correo electrónico." });
   } catch (error) {
     console.error("Error en requestPasswordResetController:", error);
@@ -75,7 +64,6 @@ export const requestPasswordResetController = async (req: AuthRequest, res: Resp
   }
 };
 
-//** Controlador para restablecer la contraseña con el token **
 export const resetPasswordController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { token, userId, newPassword } = req.body;
@@ -91,11 +79,10 @@ export const resetPasswordController = async (req: AuthRequest, res: Response): 
       return;
     }
 
-    await resetPasswordService(token, userId, newPassword);
+    await UserAuthService.resetPassword(token, userId, newPassword);
     res.status(200).json({ message: "Contraseña restablecida exitosamente." });
   } catch (error) {
     console.error("Error en resetPasswordController:", error);
     res.status(500).json({ message: "Error al restablecer la contraseña." });
   }
 };
-

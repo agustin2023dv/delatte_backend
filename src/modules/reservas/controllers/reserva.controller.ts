@@ -1,18 +1,49 @@
-import { Request, Response } from 'express';
-import { 
-  getReservationByIdService, 
-  getAllReservationsService, 
-  updateReservationService, 
-  cancelReservationService, 
-  getReservationsByIdService,
-  getReservationsByRestaurantService,
-  getReservationsByUserService,
-  createCustomerReservationService,
-  createManagerReservationService,
-  createSuperadminReservationService
-} from '../services/reservation.service';
-import { IReservation } from '@delatte/shared/interfaces';
-import { AuthRequest } from '../../../../types';
+import { Request, Response } from "express";
+import { ReservationService } from "../services/reservation.service";
+import { AuthRequest } from "../../../../types";
+
+
+
+// 📌 Obtener reservas de un restaurante
+export const getReservationsByRestaurantController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id: restaurantId } = req.params;
+    const reservations = await ReservationService.getReservationsByRestaurant(restaurantId);
+
+    res.status(200).json(reservations);
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo reservas del restaurante", error });
+  }
+};
+
+// 📌 Obtener reservas de un usuario
+export const getReservationsByUserController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id: userId } = req.params;
+    const reservations = await ReservationService.getReservationsByUser(userId);
+
+    res.status(200).json(reservations);
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo reservas del usuario", error });
+  }
+};
+
+// 📌 Obtener detalles de una reserva por ID
+export const getReservationByIdController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id: reservationId } = req.params;
+    const reservation = await ReservationService.getReservationById(reservationId);
+
+    if (!reservation) {
+      res.status(404).json({ message: "Reserva no encontrada" });
+      return;
+    }
+
+    res.status(200).json(reservation);
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo la reserva", error });
+  }
+};
 
 
 /**
@@ -22,7 +53,7 @@ export const createReservationController = async (req: AuthRequest, res: Respons
   try {
     const userId = req.user.id; // ID del usuario autenticado
     const { restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales, clienteId } = req.body;
-    const userRole = req.user.role; // customer, manager o superadmin
+    const userRole = req.user.role; 
 
     if (!restauranteId || !fecha || !horario || numAdultos < 1) {
       res.status(400).json({ message: "Datos insuficientes para crear la reserva" });
@@ -35,11 +66,11 @@ export const createReservationController = async (req: AuthRequest, res: Respons
         res.status(403).json({ message: "No puedes reservar en nombre de otro usuario" });
         return;
       }
-      reserva = await createCustomerReservationService(userId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
+      reserva = await ReservationService.createCustomerReservation(userId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
     } else if (userRole === "manager") {
-      reserva = await createManagerReservationService(userId, clienteId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
+      reserva = await ReservationService.createManagerReservation(userId, clienteId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
     } else if (userRole === "superadmin") {
-      reserva = await createSuperadminReservationService(clienteId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
+      reserva = await ReservationService.createSuperadminReservation(clienteId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
     } else {
       res.status(403).json({ message: "No tienes permisos para crear una reserva" });
       return;
@@ -52,116 +83,42 @@ export const createReservationController = async (req: AuthRequest, res: Respons
   }
 };
 
-//* Controlador para ver las reservas del usuario (cliente o manager)
+// 📌 Obtener reservas de un usuario autenticado
 export const getUserReservationsController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    if (!req.user) {
-      res.status(401).json({ message: "Usuario no autenticado." });
-      return;
-    }
-
-    const result = await getReservationsByIdService(req.user._id.toString(), req.user.role);
-
-    if (Array.isArray(result) && result.length === 0) {
-      res.status(200).json({ message: "No hay reservas disponibles." });
-      return;
-    }
-
-    res.status(200).json(result);
+    const result = await ReservationService.getReservationsById(req.user.id, req.user.role);
+    res.status(200).json(result.length ? result : { message: "No hay reservas disponibles." });
   } catch (error) {
-    console.error("Error al obtener reservas:", error);
     res.status(500).json({ message: "Error interno del servidor", error });
   }
 };
 
-
-
-//*Controlador para CANCELAR una reserva
+// 📌 Cancelar una reserva
 export const cancelReservationController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const reservationId = req.params.id;
-
-    const reservation = await cancelReservationService(reservationId);
-    if (!reservation) {
-      res.status(404).json({ message: "Reserva no encontrada." });
-      return;
-    }
-
+    const reservation = await ReservationService.cancelReservation(req.params.id);
     res.status(200).json({ message: "Reserva cancelada con éxito.", reservation });
   } catch (error) {
-    console.error("Error cancelando la reserva:", error);
     res.status(500).json({ message: "Error cancelando la reserva", error });
   }
 };
 
-//*Controlador para MODIFICAR una reserva
+// 📌 Modificar una reserva
 export const updateReservationController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const reservationId = req.params.id;
-    const updateData: Partial<IReservation> = req.body;
-
-    const updatedReservation = await updateReservationService(reservationId, updateData);
-    if (!updatedReservation) {
-      res.status(404).json({ message: "Reserva no encontrada." });
-      return;
-    }
-
+    const updatedReservation = await ReservationService.updateReservation(req.params.id, req.body);
     res.status(200).json({ message: "Reserva actualizada con éxito.", updatedReservation });
   } catch (error) {
-    console.error("Error actualizando la reserva:", error);
     res.status(500).json({ message: "Error actualizando la reserva", error });
   }
 };
 
-//*Controlador para TRAER TODAS las reservas
-export const getAllReservationsController = async (req: AuthRequest, res: Response): Promise<void> => {
+// 📌 Obtener todas las reservas (solo superadmins)
+export const getAllReservationsController = async (req: Request, res: Response): Promise<void> => {
   try {
-    const reservations = await getAllReservationsService();
+    const reservations = await ReservationService.getAllReservations();
     res.status(200).json(reservations);
   } catch (error) {
-    console.error("Error obteniendo todas las reservas:", error);
     res.status(500).json({ message: "Error obteniendo todas las reservas", error });
-  }
-};
-
-
-//*Controlador para BUSCAR una reserva por ID
-export const getReservationByIdController = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const reservationId = req.params.id;
-
-    const reservation = await getReservationByIdService(reservationId);
-    if (!reservation) {
-      res.status(404).json({ message: "Reserva no encontrada." });
-      return;
-    }
-
-    res.status(200).json(reservation);
-  } catch (error) {
-    console.error("Error obteniendo la reserva:", error);
-    res.status(500).json({ message: "Error obteniendo la reserva", error });
-  }
-};
-
-
-// ✅ Obtener reservas de un restaurante
-export const getReservationsByRestaurantController = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { restaurantId } = req.params;
-    const reservations = await getReservationsByRestaurantService(restaurantId);
-    res.status(200).json(reservations);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener reservas del restaurante." });
-  }
-};
-
-// ✅ Obtener reservas de un usuario
-export const getReservationsByUserController = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { userId } = req.params;
-    const reservations = await getReservationsByUserService(userId);
-    res.status(200).json(reservations);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener reservas del usuario." });
   }
 };

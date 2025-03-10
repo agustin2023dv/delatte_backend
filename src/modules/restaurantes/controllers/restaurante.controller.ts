@@ -1,39 +1,14 @@
-import {Response } from 'express';
-import {
-  getAllRestaurantsService,
-  getRestaurantDetailsService,
-  getRestaurantsByManagerIdService,
-  registerRestaurantService,
-  updateRestaurantService
-} from '../services/restaurant.service';
-import { AuthRequest } from '../../../../types';
-import { hashPasswordService } from '../../usuarios/services/userAuth.service';
-import { registerManagerService } from '../../usuarios/services/userRegister.service';
+import { Response } from "express";
+import { RestaurantService } from "../services/restaurant.service";
+import { AuthRequest } from "../../../../types";
 
-//* Controlador para crear un nuevo restaurante y manager
+//* Controlador para registrar un nuevo restaurante y manager
 export const registerRestaurantAndManagerController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    console.log("Datos recibidos en el controlador:", req.body);
-
     const { restaurant: restaurantData, manager: managerData } = req.body;
 
-    // Hashear la contraseña del usuario
-    const hashedPassword = await hashPasswordService(managerData.password);
-    managerData.password = hashedPassword;
-
-    console.log("Restaurant details: ", restaurantData);
-    console.log("Manager: ", managerData);
-
-    // Guardar el manager
-    const savedManager = await registerManagerService(managerData);
-
-    // Asociar el manager principal al restaurante
-    restaurantData.managerPrincipal = savedManager._id;
-
-    // Guardar el restaurante
-    const savedRestaurant = await registerRestaurantService(restaurantData);
-
-    res.status(201).json({ savedRestaurant, savedManager });
+    const result = await RestaurantService.registerRestaurantAndManager(restaurantData, managerData);
+    res.status(201).json(result);
   } catch (error) {
     console.error("Error en el controlador:", error);
     res.status(500).json({
@@ -46,7 +21,7 @@ export const registerRestaurantAndManagerController = async (req: AuthRequest, r
 //* Controlador para obtener TODOS los restaurantes
 export const getAllRestaurantsController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const restaurants = await getAllRestaurantsService();
+    const restaurants = await RestaurantService.getAllRestaurants();
 
     if (!restaurants || restaurants.length === 0) {
       res.status(404).json({ message: "No se encontraron restaurantes" });
@@ -60,10 +35,9 @@ export const getAllRestaurantsController = async (req: AuthRequest, res: Respons
 };
 
 //* Controlador para obtener los detalles de un restaurante
-
 export const getRestaurantByIdController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const restaurant = await getRestaurantDetailsService(req.params.id);
+    const restaurant = await RestaurantService.getRestaurantById(req.params.id);
 
     if (!restaurant) {
       res.status(404).json({ message: "Restaurante no encontrado" });
@@ -79,7 +53,7 @@ export const getRestaurantByIdController = async (req: AuthRequest, res: Respons
 //* Controlador para actualizar un restaurante
 export const updateRestaurantController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const updatedRestaurant = await updateRestaurantService(req.params.id, req.body);
+    const updatedRestaurant = await RestaurantService.updateRestaurant(req.params.id, req.body);
 
     if (!updatedRestaurant) {
       res.status(404).json({ message: "Restaurante no encontrado" });
@@ -95,7 +69,7 @@ export const updateRestaurantController = async (req: AuthRequest, res: Response
 //*Controlador para obtener restaurantes a cargo de un manager
 export const getRestaurantsByManagerIdController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const restaurants = await getRestaurantsByManagerIdService(req.params.id);
+    const restaurants = await RestaurantService.getRestaurantsByManagerId(req.params.id);
 
     if (!restaurants) {
       res.status(404).json({ message: "No se encontraron restaurantes para este manager" });
@@ -107,6 +81,3 @@ export const getRestaurantsByManagerIdController = async (req: AuthRequest, res:
     res.status(500).json({ message: "Error al obtener los restaurantes", error });
   }
 };
-
-
-

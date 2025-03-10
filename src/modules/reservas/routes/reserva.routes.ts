@@ -3,11 +3,11 @@ import {
   cancelReservationController, 
   updateReservationController, 
   getAllReservationsController, 
-  getReservationByIdController, 
   getUserReservationsController,
-  getReservationsByRestaurantController, 
-  getReservationsByUserController, 
-  createReservationController
+  createReservationController,
+  getReservationsByRestaurantController,
+  getReservationsByUserController,
+  getReservationByIdController
 } from "../controllers/reserva.controller";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { roleMiddleware } from "../../../middlewares/role.middleware";

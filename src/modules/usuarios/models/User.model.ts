@@ -19,7 +19,7 @@ const UserSchema: Schema = new Schema({
 });
 
 
-UserSchema.index({ email: 1 }, { unique: true });
+
 UserSchema.index({ role: 1 });
 UserSchema.index({ favoriteRestaurants: 1 });
 

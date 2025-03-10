@@ -1,23 +1,25 @@
 import { RestaurantStatsRepository } from "../repositories/restaurantStats.repository";
 
-const restaurantStatsRepo = new RestaurantStatsRepository();
+export class RestaurantAnalyticsService {
+  private static restaurantStatsRepo = new RestaurantStatsRepository();
 
-//* 📊 Servicio para obtener los mejores restaurantes
-export const getTopRestaurantsService = async () => {
-  return await restaurantStatsRepo.getTopRestaurants();
-};
+  //* 📊 Obtener los mejores restaurantes
+  static async getTopRestaurants() {
+    return await this.restaurantStatsRepo.getTopRestaurants();
+  }
 
-//* 📊 Servicio para obtener los peores restaurantes
-export const getWorstPerformingRestaurantsService = async () => {
-  return await restaurantStatsRepo.getWorstPerformingRestaurants();
-};
+  //* 📊 Obtener los peores restaurantes
+  static async getWorstPerformingRestaurants() {
+    return await this.restaurantStatsRepo.getWorstPerformingRestaurants();
+  }
 
-//* 📊 Servicio para obtener los restaurantes más nuevos
-export const getNewRestaurantsService = async () => {
-  return await restaurantStatsRepo.getNewRestaurants();
-};
+  //* 📊 Obtener los restaurantes más nuevos
+  static async getNewRestaurants() {
+    return await this.restaurantStatsRepo.getNewRestaurants();
+  }
 
-//* 📊 Servicio para obtener los restaurantes más saturados
-export const getSaturatedRestaurantsService = async () => {
-  return await restaurantStatsRepo.getSaturatedRestaurants();
-};
+  //* 📊 Obtener los restaurantes más saturados
+  static async getSaturatedRestaurants() {
+    return await this.restaurantStatsRepo.getSaturatedRestaurants();
+  }
+}

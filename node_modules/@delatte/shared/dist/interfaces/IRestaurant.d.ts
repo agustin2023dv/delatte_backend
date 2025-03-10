@@ -1,4 +1,4 @@
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { IPromotion } from './IPromotion';
 export declare enum DiasSemana {
     Lunes = "Lunes",
@@ -10,7 +10,7 @@ export declare enum DiasSemana {
     Domingo = "Domingo"
 }
 export interface IRestaurant extends Document {
-    _id: ObjectId | string;
+    _id: Types.ObjectId;
     nombre: string;
     direccion: string;
     pais: string;
@@ -35,9 +35,9 @@ export interface IRestaurant extends Document {
         cantidad: number;
         personasPorMesa: number;
     }[];
-    menus: ObjectId[];
-    managerPrincipal: ObjectId;
-    coManagers: ObjectId[];
+    menus: Types.ObjectId[];
+    managerPrincipal: Types.ObjectId;
+    coManagers: Types.ObjectId[];
     estaAbierto: boolean;
     ultimaActualizacion: Date;
     ubicacion: {

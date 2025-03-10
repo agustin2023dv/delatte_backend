@@ -1,10 +1,6 @@
 import { Response } from "express";
-import {
-  getUserAddressesService,
-  addAddressService,
-  removeAddressService,
-} from "../services/userAddresses.service";
-import {AuthRequest} from '../../../../types';
+import { AuthRequest } from "../../../../types";
+import { UserAddressService } from "../services/userAddresses.service";
 
 export const getUserAddressesController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -13,15 +9,13 @@ export const getUserAddressesController = async (req: AuthRequest, res: Response
       return;
     }
 
-    const addresses = await getUserAddressesService(req.userId);
+    const addresses = await UserAddressService.getUserAddresses(req.userId);
     res.json(addresses);
-    
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Error en getUserAddressesController:", error);
     res.status(500).json({ message: (error as Error).message });
   }
 };
-
 
 export const addAddressController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -33,18 +27,12 @@ export const addAddressController = async (req: AuthRequest, res: Response): Pro
     const userId = req.user.id;
     const { address } = req.body;
 
-    if (!address) {
-      res.status(400).json({ message: "La dirección es requerida" });
-      return;
-    }
-
-    const updatedAddresses = await addAddressService(userId, address);
+    const updatedAddresses = await UserAddressService.addAddress(userId, address);
     res.status(201).json(updatedAddresses);
-  } catch (error: unknown) {
+  } catch (error) {
     res.status(500).json({ message: (error as Error).message });
   }
 };
-
 
 export const removeAddressController = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -56,14 +44,9 @@ export const removeAddressController = async (req: AuthRequest, res: Response): 
     const userId = req.user.id;
     const { address } = req.body;
 
-    if (!address) {
-      res.status(400).json({ message: "La dirección es requerida" });
-      return;
-    }
-
-    const updatedAddresses = await removeAddressService(userId, address);
+    const updatedAddresses = await UserAddressService.removeAddress(userId, address);
     res.status(200).json(updatedAddresses);
-  } catch (error: unknown) {
+  } catch (error) {
     res.status(500).json({ message: (error as Error).message });
   }
 };

@@ -1,43 +1,45 @@
 import { ReservationStatsRepository } from "../repositories/reservationStats.repository";
 
-const reservationStatsRepo = new ReservationStatsRepository();
+export class ReservasAnaliticasService {
+  private static reservationStatsRepo = new ReservationStatsRepository();
 
-//* 📊 Servicio para obtener reservas por día
-export const getReservasDiariasService = async () => {
-  return await reservationStatsRepo.getReservasDiarias();
-};
+  //* 📊 Obtener reservas por día
+  static async getReservasDiarias() {
+    return await this.reservationStatsRepo.getReservasDiarias();
+  }
 
-//* 📊 Servicio para obtener reservas por semana
-export const getReservasSemanalesService = async () => {
-  return await reservationStatsRepo.getReservasSemanales();
-};
+  //* 📊 Obtener reservas por semana
+  static async getReservasSemanales() {
+    return await this.reservationStatsRepo.getReservasSemanales();
+  }
 
-//* 📊 Servicio para obtener reservas por mes
-export const getReservasMensualesService = async () => {
-  return await reservationStatsRepo.getReservasMensuales();
-};
+  //* 📊 Obtener reservas por mes
+  static async getReservasMensuales() {
+    return await this.reservationStatsRepo.getReservasMensuales();
+  }
 
-//* 📊 Servicio para obtener reservas por localidad
-export const getReservasPorLocalidadService = async () => {
-  return await reservationStatsRepo.getReservasPorLocalidad();
-};
+  //* 📊 Obtener reservas por localidad
+  static async getReservasPorLocalidad() {
+    return await this.reservationStatsRepo.getReservasPorLocalidad();
+  }
 
-//* 📊 Servicio para obtener reservas por restaurante
-export const getReservasPorRestauranteService = async () => {
-  return await reservationStatsRepo.getReservasPorRestaurante();
-};
+  //* 📊 Obtener reservas por restaurante
+  static async getReservasPorRestaurante() {
+    return await this.reservationStatsRepo.getReservasPorRestaurante();
+  }
 
-//* 📊 Servicio para obtener reservas canceladas con motivo
-export const getReservasCanceladasService = async () => {
-  return await reservationStatsRepo.getReservasCanceladas();
-};
+  //* 📊 Obtener reservas canceladas con motivo
+  static async getReservasCanceladas() {
+    return await this.reservationStatsRepo.getReservasCanceladas();
+  }
 
-//* 📊 Servicio para obtener los horarios con más reservas
-export const getTopHorariosService = async () => {
-  return await reservationStatsRepo.getTopHorarios();
-};
+  //* 📊 Obtener los horarios con más reservas
+  static async getTopHorarios() {
+    return await this.reservationStatsRepo.getTopHorarios();
+  }
 
-//* 📊 Servicio para predecir la demanda de reservas
-export const getPronosticoReservasService = async () => {
-  return await reservationStatsRepo.getPronosticoReservas();
-};
+  //* 📊 Predecir la demanda de reservas
+  static async getPronosticoReservas() {
+    return await this.reservationStatsRepo.getPronosticoReservas();
+  }
+}
