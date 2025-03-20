@@ -22,8 +22,8 @@ export const managerOfRestaurantMiddleware = async (
     }
 
     const userId = req.user._id.toString();
-    const isManagerPrincipal = restaurant.managerPrincipal?.toString() === userId;
-    const isCoManager = restaurant.coManagers?.some((coManagerId) => coManagerId.toString() === userId);
+    const isManagerPrincipal = restaurant.management.managerPrincipal?.toString() === userId;
+    const isCoManager = restaurant.management.coManagers?.some((coManagerId) => coManagerId.toString() === userId);
 
     if (!isManagerPrincipal && !isCoManager && req.user.role !== "superadmin") {
       res.status(403).json({ message: "No tienes permiso para realizar esta acción" });

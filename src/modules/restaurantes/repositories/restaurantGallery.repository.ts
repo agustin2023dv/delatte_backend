@@ -1,32 +1,37 @@
+import { injectable } from "inversify";
 import Restaurant from "../models/Restaurant.model";
+import { IRestaurantGalleryRepository } from "../interfaces/IRestaurantGalleryRepository";
 
-export class RestaurantGalleryRepository {
-  //* 📷 Obtener las fotos de la galería de un restaurante
-  async getGalleryPhotos(restaurantId: string) {
-    const restaurant = await Restaurant.findById(restaurantId).select("galeriaFotos");
+@injectable()
+export class RestaurantGalleryRepository implements IRestaurantGalleryRepository {
+  
+  async getGalleryPhotos(restaurantId: string): Promise<string[]> {
+    const restaurant = await Restaurant.findById(restaurantId).select("media.galeriaFotos");
     if (!restaurant) throw new Error("Restaurante no encontrado");
-    return restaurant.galeriaFotos;
+
+
+    return restaurant.media?.galeriaFotos ?? [];
   }
 
-  //* 📷 Agregar una foto a la galería
-  async addPhotoToGallery(restaurantId: string, photoUrl: string) {
+  async addPhotoToGallery(restaurantId: string, photoUrl: string): Promise<string[]> {
     const restaurant = await Restaurant.findByIdAndUpdate(
       restaurantId,
-      { $push: { galeriaFotos: photoUrl } },
+      { $push: { "media.galeriaFotos": photoUrl } }, 
       { new: true }
     );
     if (!restaurant) throw new Error("Restaurante no encontrado");
-    return restaurant.galeriaFotos;
+
+    return restaurant.media?.galeriaFotos ?? [];
   }
 
-  //* 📷 Eliminar una foto de la galería
-  async removePhotoFromGallery(restaurantId: string, photoUrl: string) {
+  async removePhotoFromGallery(restaurantId: string, photoUrl: string): Promise<string[]> {
     const restaurant = await Restaurant.findByIdAndUpdate(
       restaurantId,
-      { $pull: { galeriaFotos: photoUrl } },
+      { $pull: { "media.galeriaFotos": photoUrl } }, 
       { new: true }
     );
     if (!restaurant) throw new Error("Restaurante no encontrado");
-    return restaurant.galeriaFotos;
+
+    return restaurant.media?.galeriaFotos ?? [];
   }
 }

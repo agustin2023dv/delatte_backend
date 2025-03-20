@@ -1,0 +1,1 @@
+{"version":3,"file":"IRestaurantStatus.d.ts","sourceRoot":"","sources":["../../../interfaces/Restaurant/IRestaurantStatus.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,iBAAiB;IAC9B,WAAW,EAAE,OAAO,CAAC;IACrB,wBAAwB,EAAE,OAAO,CAAC;CACnC;AAED,MAAM,WAAW,4BAA4B;IAC3C,aAAa,EAAE,MAAM,CAAC;CACvB;AAED,MAAM,WAAW,uBAAuB;IACtC,YAAY,EAAE,MAAM,CAAC;IACrB,YAAY,EAAE,MAAM,CAAC;CACtB"}

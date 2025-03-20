@@ -1,12 +1,9 @@
+import { injectable } from "inversify";
 import User from "../models/User.model";
-import mongoose from "mongoose";
 
+@injectable()
 export class BaseUserRepository {
-  // 📌 Buscar usuario por ID (Evita duplicación en otros repos)
-  static async findUserById(userId: string) {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new Error("ID de usuario no válido");
-    }
+  async findUserById(userId: string) {
     return await User.findById(userId);
   }
 }

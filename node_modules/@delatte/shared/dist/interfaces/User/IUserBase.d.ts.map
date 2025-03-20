@@ -1,0 +1,1 @@
+{"version":3,"file":"IUserBase.d.ts","sourceRoot":"","sources":["../../../interfaces/User/IUserBase.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,SAAS;IACtB,MAAM,EAAE,MAAM,CAAC;IACf,QAAQ,EAAE,MAAM,CAAC;IACjB,KAAK,EAAE,MAAM,CAAC;IACd,GAAG,CAAC,EAAE,IAAI,CAAC;IACX,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,SAAS,CAAC,EAAE,MAAM,EAAE,CAAC;CACtB"}

@@ -1,26 +1,26 @@
+import { injectable } from "inversify";
 import User from "../models/User.model";
+import { IUserAuthRepository } from "../interfaces/IUserAuthRepository";
+import { IUser } from "@delatte/shared/interfaces";
 
-export class UserAuthRepository {
-  // 📌 Buscar usuario por email
-  static async findUserByEmail(email: string) {
+@injectable()
+export class UserAuthRepository implements IUserAuthRepository {
+  async findUserByEmail(email: string): Promise<IUser | null> {
     return await User.findOne({ email });
   }
 
-  // 📌 Buscar usuario por email y rol (para login)
-  static async getUserByEmailAndRole(email: string, role: string) {
+  async findUserByEmailToken(emailToken: string): Promise<IUser | null> {
+    return await User.findOne({ emailToken });
+  }
+
+  async getUserByEmailAndRole(email: string, role: string): Promise<IUser> {
     const user = await User.findOne({ email });
     if (!user) throw new Error("Usuario no encontrado");
     if (user.role !== role) throw new Error("El usuario no tiene permisos para iniciar sesión");
     return user;
   }
 
-  // 📌 Buscar usuario por token de verificación de email
-  static async findUserByEmailToken(emailToken: string) {
-    return await User.findOne({ emailToken });
-  }
-
-  // 📌 Guardar nueva contraseña en la base de datos
-  static async updateUserPassword(userId: string, hashedPassword: string) {
-    return await User.findByIdAndUpdate(userId, { password: hashedPassword });
+  async updateUserPassword(userId: string, hashedPassword: string): Promise<void> {
+    await User.findByIdAndUpdate(userId, { password: hashedPassword });
   }
 }

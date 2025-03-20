@@ -1,0 +1,1 @@
+{"version":3,"file":"IMenuDetails.d.ts","sourceRoot":"","sources":["../../../interfaces/Menu/IMenuDetails.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,SAAS,CAAC;AAEpC;;;GAGG;AACH,MAAM,WAAW,YAAY;IACzB;;;OAGG;IACH,IAAI,EAAE,QAAQ,GAAG,SAAS,GAAG,SAAS,CAAC;IAEvC;;OAEG;IACH,KAAK,EAAE,SAAS,EAAE,CAAC;CACpB"}

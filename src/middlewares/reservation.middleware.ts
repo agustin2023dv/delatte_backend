@@ -21,7 +21,8 @@ export const checkDisponibilidadMiddleware = async (
     }
 
     // Calcular la capacidad total del restaurante
-    const capacidadMesas = restauranteData.capacidadMesas.reduce(
+    
+    const capacidadMesas = restauranteData.capacity.capacidadMesas.reduce(
       (acc: { totalMesas: number; totalPersonas: number }, mesa: { cantidad: number; personasPorMesa: number }) => ({
         totalMesas: acc.totalMesas + mesa.cantidad,
         totalPersonas: acc.totalPersonas + mesa.cantidad * mesa.personasPorMesa,

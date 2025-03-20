@@ -1,35 +1,21 @@
-import { IPromotion } from "@delatte/shared/interfaces/IPromotion";
 import mongoose, { Schema, Model } from "mongoose";
+import { PromotionService } from "../services/promotion.service";
+import { IPromotion } from "@delatte/shared/interfaces/Promotion/IPromotion";
+import { BasePromotionModel } from "./PromotionBase.model";
 
 const PromotionSchema: Schema = new Schema({
-  restaurante: { type: Schema.Types.ObjectId, ref: "Restaurant", required: true },
-  titulo: { type: String, required: true },
-  descripcion: { type: String, required: true, maxlength: 500 },
-  fechaInicio: { type: Date, required: true },
-  fechaFin: { type: Date, required: true },
-  descuento: { type: Number, required: true, min: 1, max: 100 },
-  estado: { type: String, enum: ["activa", "expirada", "programada"], default: "programada" },
-  fechaCreacion: { type: Date, default: Date.now },
+  ...BasePromotionModel.baseSchema.obj,
 });
 
-// Índice para optimizar búsquedas
-PromotionSchema.index({ restaurante: 1 });
-PromotionSchema.index({ fechaInicio: 1 });
+// Aplicar índices
+BasePromotionModel.createIndexes(PromotionSchema);
 
-// Middleware para actualizar automáticamente el estado
+// Middleware para actualizar el estado antes de guardar
 PromotionSchema.pre("save", function (this: IPromotion, next) {
-    const now = new Date();
-  
-    if (this.fechaInicio && this.fechaFin) {
-      if (this.fechaInicio <= now && this.fechaFin >= now) {
-        this.estado = "activa";
-      } else if (this.fechaFin < now) {
-        this.estado = "expirada";
-      }
-    }
-  
-    next();
-  });
+  this.estado = PromotionService.calcularEstado(this.fechaInicio, this.fechaFin);
+  next();
+});
 
 const Promotion: Model<IPromotion> = mongoose.model<IPromotion>("Promocion", PromotionSchema, "promociones");
+
 export default Promotion;

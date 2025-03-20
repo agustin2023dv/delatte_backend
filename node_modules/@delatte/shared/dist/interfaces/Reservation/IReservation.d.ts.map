@@ -1,0 +1,1 @@
+{"version":3,"file":"IReservation.d.ts","sourceRoot":"","sources":["../../../interfaces/Reservation/IReservation.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,mBAAmB,EAAE,MAAM,uBAAuB,CAAC;AAC5D,OAAO,EAAE,oBAAoB,EAAE,MAAM,wBAAwB,CAAC;AAC9D,OAAO,EAAE,kBAAkB,EAAE,MAAM,sBAAsB,CAAC;AAE1D;;;GAGG;AACH,MAAM,WAAW,YAAa,SAAQ,QAAQ,EAC5C,oBAAoB,EACpB,mBAAmB,EACnB,kBAAkB;CAAG"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"IReviewStatus.d.ts","sourceRoot":"","sources":["../../../interfaces/Review/IReviewStatus.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,YAAY,GAAG,WAAW,GAAG,UAAU,GAAG,SAAS,CAAC;AAEhE,MAAM,WAAW,aAAa;IAC5B,mBAAmB,CAAC,EAAE,IAAI,CAAC;IAC3B,MAAM,EAAE,YAAY,CAAC;CACtB"}

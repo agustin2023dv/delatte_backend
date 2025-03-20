@@ -1,0 +1,1 @@
+{"version":3,"file":"IReservationStatus.d.ts","sourceRoot":"","sources":["../../../interfaces/Reservation/IReservationStatus.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,MAAM,WAAW,kBAAkB;IACjC;;;;OAIG;IACH,MAAM,EAAE,QAAQ,GAAG,YAAY,GAAG,WAAW,CAAC;IAE9C;;;OAGG;IACH,aAAa,EAAE,IAAI,CAAC;CACrB"}

@@ -1,5 +1,10 @@
-import { ReservationStatsRepository } from "../repositories/reservationStats.repository";
+import { injectable, inject } from "inversify";
+import { IReservationAnalyticsService, ITopHorarios } from "../interfaces/IReservationAnalyticsService";
+import { IReservationStatsRepository } from "../interfaces/IReservationStatsRepository";
+import { RESERVATIONS_ANAYLITICS_TYPES } from "../types/reservationAnalytics.types";
+import { IReservation } from "@delatte/shared/interfaces/Reservation/IReservation";
 
+<<<<<<< Updated upstream
 const reservationStatsRepo = new ReservationStatsRepository();
 
 //* 📊 Servicio para obtener reservas por día
@@ -41,3 +46,38 @@ export const getTopHorariosService = async () => {
 export const getPronosticoReservasService = async () => {
   return await reservationStatsRepo.getPronosticoReservas();
 };
+=======
+@injectable()
+export class ReservationAnalyticsService implements IReservationAnalyticsService {
+    
+    constructor(
+        @inject(RESERVATIONS_ANAYLITICS_TYPES.IReservationStatsRepository)
+        private reservationStatsRepo: IReservationStatsRepository
+    ) {}
+
+    async getReservasDiarias(): Promise<IReservation[]> {
+        return await this.reservationStatsRepo.getReservasDiarias();
+    }
+
+    async getReservasSemanales(): Promise<IReservation[]> {
+        return await this.reservationStatsRepo.getReservasSemanales();
+    }
+
+    async getReservasMensuales(): Promise<IReservation[]> {
+        return await this.reservationStatsRepo.getReservasMensuales();
+    }
+
+
+    async getReservasPorRestaurante(): Promise<IReservation[]> {
+        return await this.reservationStatsRepo.getReservasPorRestaurante();
+    }
+
+    async getReservasCanceladas(): Promise<IReservation[]> {
+        return await this.reservationStatsRepo.getReservasCanceladas();
+    }
+
+    async getTopHorarios(): Promise<ITopHorarios[]> {
+        return await this.reservationStatsRepo.getTopHorarios();
+    }
+}
+>>>>>>> Stashed changes

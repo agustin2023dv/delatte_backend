@@ -1,28 +1,27 @@
+import { injectable } from "inversify";
 import Restaurant from "../models/Restaurant.model";
+import { IRestaurantStatsRepository } from "../interfaces/IRestaurantStatsRepository";
 
-export class RestaurantStatsRepository {
-  //* 📊 Obtener los mejores restaurantes por reservas y calificación
+@injectable()
+export class RestaurantStatsRepository implements IRestaurantStatsRepository {
   async getTopRestaurants() {
     return await Restaurant.find()
       .sort({ totalReservas: -1, calificacion: -1 })
       .limit(10);
   }
 
-  //* 📊 Obtener los restaurantes con menor desempeño
   async getWorstPerformingRestaurants() {
     return await Restaurant.find()
       .sort({ totalReservas: 1, calificacion: 1 })
       .limit(10);
   }
 
-  //* 📊 Obtener los restaurantes más nuevos
   async getNewRestaurants() {
     return await Restaurant.find()
       .sort({ _id: -1 }) 
       .limit(10);
   }
 
-  //* 📊 Obtener restaurantes con alta ocupación y baja disponibilidad
   async getSaturatedRestaurants() {
     try {
       return await Restaurant.aggregate([
@@ -54,12 +53,8 @@ export class RestaurantStatsRepository {
             },
           },
         },
-        {
-          $sort: { saturacion: -1 },
-        },
-        {
-          $limit: 10,
-        },
+        { $sort: { saturacion: -1 } },
+        { $limit: 10 },
       ]);
     } catch (error) {
       console.error("Error al calcular restaurantes saturados:", error);

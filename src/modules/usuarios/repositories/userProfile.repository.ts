@@ -1,28 +1,30 @@
+import { IUserProfileRepository } from "../interfaces/IUserProfileRepository";
+import { IUser, IUserBase } from "@delatte/shared/interfaces";
 import User from "../models/User.model";
 import { Types } from "mongoose";
-import { IUser } from "@delatte/shared/interfaces";
+import { injectable } from "inversify";
 
-export class UserProfileRepository {
-  
+@injectable()
+export class UserProfileRepository implements IUserProfileRepository {
   // 📌 Buscar usuario por email
-  static async findUserByEmail(email: string) {
+  async findUserByEmail(email: string): Promise<IUser | null> {
     return await User.findOne({ email });
   }
 
   // 📌 Buscar usuario por ID
-  static async findUserById(userId: string) {
+  async findUserById(userId: string): Promise<IUser | null> {
     if (!Types.ObjectId.isValid(userId)) throw new Error("ID de usuario no válido");
     return await User.findById(userId);
   }
 
   // 📌 Obtener datos del usuario (sin datos sensibles)
-  static async getUserData(userId: string) {
+  async getUserData(userId: string): Promise<IUserBase | null> {
     if (!Types.ObjectId.isValid(userId)) throw new Error("ID de usuario no válido");
-    return await User.findById(userId).select("-password -emailToken -isVerified").lean();
+    return await User.findById(userId).lean();
   }
 
   // 📌 Actualizar datos del usuario
-  static async updateUserData(userData: Partial<IUser>) {
+  async updateUserData(userData: Partial<IUser>): Promise<IUser> {
     const user = await User.findOne({ email: userData.email });
     if (!user) throw new Error("Usuario no encontrado");
 

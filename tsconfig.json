@@ -1,5 +1,10 @@
 {
     "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@modules/*": ["src/modules/*"],
+        "@configs/*": ["src/configs/*"]
+      },
       "target": "ES2022",
       "module": "CommonJS",
       "rootDir": "./src",
@@ -7,9 +12,11 @@
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true
     },
-    "include": ["src"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]
   }
   

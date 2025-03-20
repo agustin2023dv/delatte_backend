@@ -1,0 +1,1 @@
+{"version":3,"file":"IReviewReport.d.ts","sourceRoot":"","sources":["../../../interfaces/Review/IReviewReport.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,UAAU,CAAC;AAGjC,MAAM,WAAW,aAAa;IAC5B,MAAM,EAAE,KAAK,CAAC,QAAQ,CAAC;IACvB,MAAM,EAAE,MAAM,CAAC;IACf,KAAK,EAAE,IAAI,CAAC;CACb;AAED,MAAM,WAAW,cAAc;IAC7B,QAAQ,CAAC,EAAE,aAAa,EAAE,CAAC;CAC5B"}
