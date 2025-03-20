@@ -37,11 +37,6 @@ const UserSchema: Schema = new Schema({
 }); 
 
 
-<<<<<<< Updated upstream
-UserSchema.index({ email: 1 }, { unique: true });
-UserSchema.index({ role: 1 });
-UserSchema.index({ favoriteRestaurants: 1 });
-=======
 
 UserSchema.index({ "profile.email": 1 }, { unique: true }); // ✔ Optimiza búsquedas por email (login, registro)
 UserSchema.index({ "profile.nombre": 1, "profile.apellido": 1 }); // ✔ Optimiza búsquedas por nombre + apellido
@@ -51,7 +46,6 @@ UserSchema.index({ "reviews.reviews": 1 }); // ✔ Optimiza consultas por review
 UserSchema.index({ "role": 1 }); // ✔ Optimiza consultas por rol (customer, manager, superadmin)
 UserSchema.index({ "profile.localidad": 1, "role": 1 }); // ✔ Optimiza búsquedas por localidad y rol
 UserSchema.index({ "security.isActive": 1, "role": 1 }); // ✔ Optimiza consultas de usuarios activos según rol
->>>>>>> Stashed changes
 
 
 const User = mongoose.model<IUser & Document>("User", UserSchema, "usuarios");

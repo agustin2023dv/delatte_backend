@@ -3,14 +3,6 @@ import { IRestaurantPermissionsService } from "../interfaces/IRestaurantPermissi
 import { IRestaurantPermissionsRepository } from "../interfaces/IRestaurantPermissionsRepository";
 import { RESTAURANT_PERMISSIONS_TYPES } from "../types/restaurantPermissions.types";
 
-<<<<<<< Updated upstream
-const rolesRepo = new RestaurantRolesRepository();
-
-//* 🔍 Servicio para verificar si un usuario es manager o co-manager de un restaurante
-export const checkUserRoleInRestaurantService = async (restaurantId: string, userId: string): Promise<boolean> => {
-  return await rolesRepo.checkUserRoleInRestaurant(restaurantId, userId);
-};
-=======
 @injectable()
 export class RestaurantPermissionsService implements IRestaurantPermissionsService {
   constructor(
@@ -22,4 +14,3 @@ export class RestaurantPermissionsService implements IRestaurantPermissionsServi
     return await this.rolesRepo.checkUserRoleInRestaurant(restaurantId, userId);
   }
 }
->>>>>>> Stashed changes

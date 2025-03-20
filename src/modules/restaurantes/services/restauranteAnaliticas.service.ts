@@ -3,29 +3,6 @@ import { IRestaurantStatsService } from "../interfaces/IRestaurantStatsService";
 import { IRestaurantStatsRepository } from "../interfaces/IRestaurantStatsRepository";
 import { RESTAURANT_STATS_TYPES } from "../types/restaurantStats.types";
 
-<<<<<<< Updated upstream
-const restaurantStatsRepo = new RestaurantStatsRepository();
-
-//* 📊 Servicio para obtener los mejores restaurantes
-export const getTopRestaurantsService = async () => {
-  return await restaurantStatsRepo.getTopRestaurants();
-};
-
-//* 📊 Servicio para obtener los peores restaurantes
-export const getWorstPerformingRestaurantsService = async () => {
-  return await restaurantStatsRepo.getWorstPerformingRestaurants();
-};
-
-//* 📊 Servicio para obtener los restaurantes más nuevos
-export const getNewRestaurantsService = async () => {
-  return await restaurantStatsRepo.getNewRestaurants();
-};
-
-//* 📊 Servicio para obtener los restaurantes más saturados
-export const getSaturatedRestaurantsService = async () => {
-  return await restaurantStatsRepo.getSaturatedRestaurants();
-};
-=======
 
 @injectable()
 export class RestaurantAnalyticsService implements IRestaurantStatsService {
@@ -50,4 +27,3 @@ export class RestaurantAnalyticsService implements IRestaurantStatsService {
     return await this.restaurantStatsRepo.getSaturatedRestaurants();
   }
 }
->>>>>>> Stashed changes

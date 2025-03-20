@@ -40,4 +40,4 @@ container.load(
   userAddressesModule, userProfileModule
 );
 
-export { container }; // Solo exportamos el contenedor
+export { container }; 

@@ -3,29 +3,6 @@ import { IUser, IUserBase } from "@delatte/shared/interfaces";
 import { USER_PROFILE_TYPES } from "../types/userProfile.types";
 import { IUserProfileRepository } from "../interfaces/IUserProfileRepository";
 
-<<<<<<< Updated upstream
-// 📌 Obtener datos del usuario
-export const getUserDataService = async (userId: string) => {
-  const user = await UserProfileRepository.getUserData(userId);
-  if (!user) throw new Error("Usuario no encontrado");
-  return user as IUser;
-};
-
-// 📌 Actualizar perfil del usuario
-export const updateUserDataService = async (userData: Partial<IUser>) => {
-  return await UserProfileRepository.updateUserData(userData);
-};
-
-// 📌 Buscar usuario por ID
-export const getUserByIDService = async (userId: string) => {
-  return await UserProfileRepository.findUserById(userId);
-};
-
-// 📌 Buscar usuario por email
-export const findUserByEmailService = async (email: string) => {
-  return await UserProfileRepository.findUserByEmail(email);
-};
-=======
 @injectable()
 export class UserProfileService {
   constructor(
@@ -55,4 +32,3 @@ export class UserProfileService {
     return await this.userProfileRepository.findUserByEmail(email);
   }
 }
->>>>>>> Stashed changes

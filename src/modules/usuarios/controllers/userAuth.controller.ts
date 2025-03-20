@@ -2,22 +2,6 @@ import { controller, httpPost, httpPut } from "inversify-express-utils";
 import { Response } from "express";
 import { inject } from "inversify";
 import { AuthRequest } from "../../../../types";
-<<<<<<< Updated upstream
-import {  changePasswordService, requestPasswordResetService, 
-    resetPasswordService } from "../services/userAuth.service";
-import User from "../models/User.model";
-import { UserAuthRepository } from "../repositories/userAuth.repository";
-
-
-
-//** Controlador para verificar el email **
-export const verificarEmailController = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const emailToken = req.query.token as string;
-    if (!emailToken) {
-      res.redirect(`http://localhost:8082/(auth)/VerifyEmail?status=error&message=TokenNoProporcionado`);
-      return;
-=======
 import { USER_ACCESS_TYPES } from "../types/userAccess.types";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { IUserAuthService } from "../interfaces/IUserAuthService";
@@ -70,35 +54,9 @@ export class UserAuthController {
         message: "Error interno del servidor",
         redirectUrl: "http://localhost:8082/(auth)/VerifyEmail?status=error&message=ServerError"
       });
->>>>>>> Stashed changes
     }
   }
 
-<<<<<<< Updated upstream
-
-
-
-
-//** Controlador para cambiar contraseña **
-export const cambiarContrasenaController = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    if (!req.user) {
-      res.status(401).json({ message: "Usuario no autenticado" });
-      return;
-    }
-
-    const { oldPassword, newPassword, confirmNewPassword } = req.body;
-    if (!oldPassword || !newPassword || !confirmNewPassword) {
-      res.status(400).json({ message: "Todos los campos son obligatorios" });
-      return;
-    }
-
-    const result = await changePasswordService(req.user.id, oldPassword, newPassword, confirmNewPassword);
-    res.status(200).json({ message: result.message });
-  } catch (error) {
-    console.error("Error al cambiar la contraseña:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
-=======
   /**
    * @swagger
    * /api/v1/users/password:
@@ -142,25 +100,8 @@ export const cambiarContrasenaController = async (req: AuthRequest, res: Respons
     } catch (error) {
       res.status(500).json({ message: "Error interno del servidor" });
     }
->>>>>>> Stashed changes
   }
 
-<<<<<<< Updated upstream
-//** Controlador para solicitar restablecimiento de contraseña **
-export const requestPasswordResetController = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const { email } = req.body;
-    if (!email) {
-      res.status(400).json({ message: "El correo es obligatorio." });
-      return;
-    }
-
-    await requestPasswordResetService(email);
-    res.status(200).json({ message: "Se ha enviado un enlace de restablecimiento a tu correo electrónico." });
-  } catch (error) {
-    console.error("Error en requestPasswordResetController:", error);
-    res.status(500).json({ message: "Error al solicitar el restablecimiento de contraseña." });
-=======
   /**
    * @swagger
    * /api/v1/users/password-reset-requests:
@@ -194,35 +135,8 @@ export const requestPasswordResetController = async (req: AuthRequest, res: Resp
     } catch (error) {
       res.status(404).json({ message: error instanceof Error ? error.message : "Usuario no encontrado" });
     }
->>>>>>> Stashed changes
   }
 
-<<<<<<< Updated upstream
-//** Controlador para restablecer la contraseña con el token **
-export const resetPasswordController = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const { token, userId, newPassword } = req.body;
-
-    if (!token || !userId || !newPassword) {
-      res.status(400).json({ message: "Faltan datos requeridos." });
-      return;
-    }
-
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(newPassword)) {
-      res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo." });
-      return;
-    }
-
-    await resetPasswordService(token, userId, newPassword);
-    res.status(200).json({ message: "Contraseña restablecida exitosamente." });
-  } catch (error) {
-    console.error("Error en resetPasswordController:", error);
-    res.status(500).json({ message: "Error al restablecer la contraseña." });
-  }
-};
-
-=======
   /**
    * @swagger
    * /api/v1/users/password-resets:
@@ -261,4 +175,3 @@ export const resetPasswordController = async (req: AuthRequest, res: Response): 
     }
   }
 }
->>>>>>> Stashed changes

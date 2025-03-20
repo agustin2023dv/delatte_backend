@@ -1,22 +1,3 @@
-<<<<<<< Updated upstream
-import { Response } from "express"; 
-import { AuthRequest } from "../../../../types";
-import { addPhotoToGalleryService, getGalleryPhotosService, 
-    removePhotoFromGalleryService } from "../services/restauranteGaleria.service";
-
-
-// Obtener las fotos de la galería de un restaurante
-export const getGalleryPhotosController = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const { id: restaurantId } = req.params;
-    const photos = await getGalleryPhotosService(restaurantId);
-
-    res.status(200).json({ success: true, photos });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error });
-  }
-};
-=======
 import { controller, httpGet, httpPost, httpDelete } from "inversify-express-utils";
 import { Request, Response } from "express";
 import { inject } from "inversify";
@@ -32,7 +13,6 @@ export class RestaurantGalleryController {
     @inject(RESTAURANT_GALLERY_TYPES.IRestaurantGalleryService)
     private restaurantGalleryService: IRestaurantGalleryService
   ) {}
->>>>>>> Stashed changes
 
   /**
    * @swagger
@@ -57,17 +37,6 @@ export class RestaurantGalleryController {
     } catch (error) {
       res.status(500).json({ success: false, message: "Error al obtener las fotos de la galería" });
     }
-<<<<<<< Updated upstream
-
-    const photoUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-    const updatedGallery = await addPhotoToGalleryService(restaurantId, photoUrl);
-
-    res.status(200).json({ success: true, gallery: updatedGallery });
-  } catch (error) {
-    console.error("Error al agregar la foto:", error);
-    res.status(500).json({ success: false, message: "Error al agregar la foto a la galería" });
-=======
->>>>>>> Stashed changes
   }
 
   /**
@@ -101,14 +70,6 @@ export class RestaurantGalleryController {
     } catch (error) {
       res.status(500).json({ success: false, message: "Error al agregar la foto a la galería" });
     }
-<<<<<<< Updated upstream
-
-    const updatedGallery = await removePhotoFromGalleryService(restaurantId, photoUrl);
-    res.status(200).json({ success: true, gallery: updatedGallery });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error });
-=======
->>>>>>> Stashed changes
   }
 
   /**
