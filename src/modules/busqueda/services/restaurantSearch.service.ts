@@ -3,6 +3,7 @@ import "reflect-metadata";
 import { IRestaurantSearchService } from "../interfaces/IRestaurantSearchService";
 import { SEARCH_RESTAURANT_TYPES } from "../types/restaurantSearch.types";
 import { IRestaurantSearchRepository } from "../interfaces/IRestaurantSearchRespository";
+import { ISearchRestaurantsByNameDTO } from "@delatte/shared/dtos";
 
 @injectable()
 export class RestaurantSearchService implements IRestaurantSearchService {
@@ -14,7 +15,8 @@ export class RestaurantSearchService implements IRestaurantSearchService {
     this.repository = repository;
   }
 
-  async searchByName(query: string, limit = 10): Promise<any> {
-    return await this.repository.searchByName(query, limit);
+  async searchRestaurantByName(params: ISearchRestaurantsByNameDTO): Promise<any> {
+    const { q, limit = 10 } = params;
+    return await this.repository.searchRestaurantByName({ q, limit });
   }
 }

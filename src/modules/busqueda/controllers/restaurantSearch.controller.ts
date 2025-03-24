@@ -17,7 +17,7 @@ export class RestaurantSearchController  {
   }
 
   @httpGet("/by-name", authMiddleware, roleMiddleware(["superadmin", "manager", "customer"]))
-  async searchByName(req: Request, res: Response): Promise<void> {
+  async searchRestaurantByName(req: Request, res: Response): Promise<void> {
     try {
       const query = req.query.q as string;
       const limit = parseInt(req.query.limit as string) || 10;
@@ -27,7 +27,8 @@ export class RestaurantSearchController  {
         return;
       }
 
-      const results = await this.restaurantSearchService.searchByName(query, limit);
+      const results = await this.restaurantSearchService.searchRestaurantByName({ q: query, limit });
+      ;
       res.status(200).json(results);
     } catch (error) {
       console.error("Error en la búsqueda:", error);

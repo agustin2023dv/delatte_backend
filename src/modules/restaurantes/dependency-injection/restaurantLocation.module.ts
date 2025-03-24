@@ -1,6 +1,6 @@
 import { ContainerModule } from "inversify";
 import { IRestaurantLocationService } from "../interfaces/IRestaurantLocationService";
-import { RestaurantLocationService } from "../services/restauranteUbicacion.service";
+import { RestaurantLocationService } from "../services/restaurantLocation.service";
 import { RESTAURANT_LOCATION_TYPES } from "../types/restaurantLocation.types";
 import { IPlacesIntegrationService } from "@modules/integrations/interfaces/IPlacesIntegrationService";
 import { PlacesIntegrationService } from "@modules/integrations/services/placesIntegration.service";

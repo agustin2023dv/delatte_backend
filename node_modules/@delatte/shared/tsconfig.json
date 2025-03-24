@@ -14,6 +14,10 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true
   },
+  "paths": {
+  "@dto/*": ["./shared/dto/*"],
+  "@interfaces/*": ["./shared/interfaces/*"]
+},
   "include": ["services","utils", "interfaces", "index.ts"],
   "exclude": ["node_modules", "dist"]
 }

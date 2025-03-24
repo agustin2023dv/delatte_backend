@@ -3,7 +3,7 @@ import { RESTAURANT_GALLERY_TYPES } from "../types/restaurantGallery.types";
 import { IRestaurantGalleryRepository } from "../interfaces/IRestaurantGalleryRepository";
 import { IRestaurantGalleryService } from "../interfaces/IRestaurantGalleryService";
 import { RestaurantGalleryRepository } from "../repositories/restaurantGallery.repository";
-import { RestaurantGalleryService } from "../services/restauranteGaleria.service";
+import { RestaurantGalleryService } from "../services/restaurantGallery.service";
 
 export const restaurantGalleryModule = new ContainerModule((bind) => {
   bind<IRestaurantGalleryRepository>(RESTAURANT_GALLERY_TYPES.IRestaurantGalleryRepository).to(RestaurantGalleryRepository);

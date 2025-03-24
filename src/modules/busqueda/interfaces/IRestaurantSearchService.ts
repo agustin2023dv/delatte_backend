@@ -1,4 +1,6 @@
+import { ISearchRestaurantsByNameDTO } from "@delatte/shared/dtos";
+
 export interface IRestaurantSearchService {
-    searchByName(query: string, limit: number): Promise<any>;
-  }
+  searchRestaurantByName(params: ISearchRestaurantsByNameDTO): Promise<any>;
+}
   
