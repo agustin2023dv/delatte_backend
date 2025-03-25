@@ -1,7 +1,13 @@
-import { IMenu, IMenuItem } from "@delatte/shared/interfaces";
-
-export interface IMenuItemRepository {
-    addMenuItem(menuId: string, itemData: IMenuItem): Promise<IMenu>;
-    removeMenuItem(menuId: string, itemId: string): Promise<IMenu>;
-    updateMenuItem(menuId: string, itemId: string, itemData: IMenuItem): Promise<IMenu>;
-}
+import {
+    IAddMenuItemDTO,
+    IRemoveMenuItemDTO,
+    IUpdateMenuItemDTO,
+    IMenuResponseDTO,
+  } from "@delatte/shared/dtos";
+  
+  export interface IMenuItemRepository {
+    addMenuItem(data: IAddMenuItemDTO): Promise<IMenuResponseDTO>;
+    removeMenuItem(data: IRemoveMenuItemDTO): Promise<IMenuResponseDTO>;
+    updateMenuItem(data: IUpdateMenuItemDTO): Promise<IMenuResponseDTO>;
+  }
+  

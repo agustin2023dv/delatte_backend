@@ -1,26 +1,30 @@
 import { injectable, inject } from "inversify";
-
-import { IMenu, IMenuItem } from "@delatte/shared/interfaces";
-import { IMenuItemService } from "../interfaces/IMenuItemService";
+import {
+  IAddMenuItemDTO,
+  IRemoveMenuItemDTO,
+  IUpdateMenuItemDTO,
+  IMenuResponseDTO,
+} from "@delatte/shared/dtos";
 import { IMenuItemRepository } from "../interfaces/IMenuItemRepository";
 import { MENUS_ITEM_TYPES } from "../types/menuItem.types";
+import { IMenuItemService } from "../interfaces/IMenuItemService";
 
 @injectable()
 export class MenuItemService implements IMenuItemService {
-    constructor(
-        @inject(MENUS_ITEM_TYPES.IMenuItemRepository)
-        private menuItemRepository: IMenuItemRepository
-    ) {}
+  constructor(
+    @inject(MENUS_ITEM_TYPES.IMenuItemRepository)
+    private menuItemRepository: IMenuItemRepository
+  ) {}
 
-    async updateMenuItem(menuId: string, itemId: string,itemData: IMenuItem): Promise<IMenu> {
-        return await this.menuItemRepository.updateMenuItem(menuId, itemId, itemData);
-    }
+  async addMenuItem(data: IAddMenuItemDTO): Promise<IMenuResponseDTO> {
+    return await this.menuItemRepository.addMenuItem(data);
+  }
 
-    async addMenuItem(menuId: string, itemData: IMenuItem): Promise<IMenu> {
-        return await this.menuItemRepository.addMenuItem(menuId, itemData);
-    }
+  async removeMenuItem(data: IRemoveMenuItemDTO): Promise<IMenuResponseDTO> {
+    return await this.menuItemRepository.removeMenuItem(data);
+  }
 
-    async removeMenuItem(menuId: string, itemId: string): Promise<IMenu> {
-        return await this.menuItemRepository.removeMenuItem(menuId, itemId);
-    }
+  async updateMenuItem(data: IUpdateMenuItemDTO): Promise<IMenuResponseDTO> {
+    return await this.menuItemRepository.updateMenuItem(data);
+  }
 }

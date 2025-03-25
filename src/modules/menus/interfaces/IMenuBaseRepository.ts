@@ -1,8 +1,8 @@
-import { IMenu } from "@delatte/shared/interfaces";
+import { IMenuResponseDTO, ICreateMenuDTO, IUpdateMenuDTO } from "@delatte/shared/dtos";
 
 export interface IMenuBaseRepository {
-    getMenusByRestaurant(restaurantId: string): Promise<IMenu[]>;
-    createMenu(menuData: Partial<IMenu>): Promise<IMenu>;
-    updateMenu(menuId: string, updatedData: Partial<IMenu>): Promise<IMenu>;
-    deleteMenu(menuId: string): Promise<IMenu>;
+  getMenusByRestaurant(restaurantId: string): Promise<IMenuResponseDTO[]>;
+  createMenu(menuData: ICreateMenuDTO): Promise<IMenuResponseDTO>;
+  updateMenu(menuId: string, updatedData: IUpdateMenuDTO): Promise<IMenuResponseDTO>;
+  deleteMenu(menuId: string): Promise<IMenuResponseDTO>;
 }

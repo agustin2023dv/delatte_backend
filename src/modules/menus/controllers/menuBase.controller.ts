@@ -5,6 +5,8 @@ import { MENUS_BASE_TYPES } from "../types/menuBase.types";
 import { IMenuBaseService } from "../interfaces/IMenuBaseService";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { managerOfRestaurantMiddleware } from "../../../middlewares/restaurant.middleware";
+import { CreateMenuSchema } from "src/validators/menus/create-menu.schema";
+import { UpdateMenuSchema } from "src/validators/menus/update-menu.schema";
 
 @controller("/api/v1/menus")
 export class MenuBaseController extends BaseHttpController {
@@ -27,24 +29,40 @@ export class MenuBaseController extends BaseHttpController {
     
     @httpPost("/", authMiddleware, managerOfRestaurantMiddleware)
     async createMenu(req: Request, res: Response) {
-        try {
-            const newMenu = await this.menuBaseService.createMenu(req.body);
-            res.status(201).json(newMenu);
-        } catch (error) {
-            const errMessage = error instanceof Error ? error.message : "Error desconocido";
-            res.status(500).json({ message: "Error al crear menú", error: errMessage });
+      try {
+        const parsed = CreateMenuSchema.safeParse(req.body);
+        if (!parsed.success) {
+          return res.status(400).json({
+            message: "Datos inválidos",
+            errors: parsed.error.flatten(),
+          });
         }
+    
+        const newMenu = await this.menuBaseService.createMenu(parsed.data);
+        res.status(201).json(newMenu);
+      } catch (error) {
+        const errMessage = error instanceof Error ? error.message : "Error desconocido";
+        res.status(500).json({ message: "Error al crear menú", error: errMessage });
+      }
     }
     
     @httpPut("/:menuId", authMiddleware, managerOfRestaurantMiddleware)
     async updateMenu(req: Request, res: Response) {
-        try {
-            const updatedMenu = await this.menuBaseService.updateMenu(req.params.menuId, req.body);
-            res.status(200).json(updatedMenu);
-        } catch (error) {
-            const errMessage = error instanceof Error ? error.message : "Error desconocido";
-            res.status(404).json({ message: "Menú no encontrado", error: errMessage });
+      try {
+        const parsed = UpdateMenuSchema.safeParse(req.body);
+        if (!parsed.success) {
+          return res.status(400).json({
+            message: "Datos inválidos",
+            errors: parsed.error.flatten(),
+          });
         }
+    
+        const updatedMenu = await this.menuBaseService.updateMenu(req.params.menuId, parsed.data);
+        res.status(200).json(updatedMenu);
+      } catch (error) {
+        const errMessage = error instanceof Error ? error.message : "Error desconocido";
+        res.status(404).json({ message: "Menú no encontrado", error: errMessage });
+      }
     }
     
     @httpDelete("/:menuId", authMiddleware, managerOfRestaurantMiddleware)

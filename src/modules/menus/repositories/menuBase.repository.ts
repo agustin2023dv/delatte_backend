@@ -1,31 +1,44 @@
 import { injectable } from "inversify";
-import { IMenu } from "@delatte/shared/interfaces";
 import MenuModel from "../models/Menu.model";
+import {
+  ICreateMenuDTO,
+  IMenuResponseDTO,
+  IUpdateMenuDTO,
+} from "@delatte/shared/dtos";
 import { IMenuBaseRepository } from "../interfaces/IMenuBaseRepository";
+import { MenuTransformer } from "src/transformers/menu.transformer";
 
 @injectable()
 export class MenuBaseRepository implements IMenuBaseRepository {
-    async getMenusByRestaurant(restaurantId: string): Promise<IMenu[]> {
-        return await MenuModel.find({ restaurant: restaurantId });
-    }
+  async getMenusByRestaurant(restaurantId: string): Promise<IMenuResponseDTO[]> {
+    const menus = await MenuModel.find({ restaurante: restaurantId }).populate("restaurante", "nombre direccion");
+    return menus.map(MenuTransformer.toMenuResponseDTO);
+  }
 
-    async createMenu(menuData: Partial<IMenu>): Promise<IMenu> {
-        return await MenuModel.create(menuData);
-    }
+  async createMenu(menuData: ICreateMenuDTO): Promise<IMenuResponseDTO> {
+    const newMenu = await MenuModel.create({
+      tipo: menuData.tipo,
+      items: menuData.items,
+      restaurante: menuData.restauranteId,
+    });
 
-    async updateMenu(menuId: string, updatedData: Partial<IMenu>): Promise<IMenu> {
-        const updatedMenu = await MenuModel.findByIdAndUpdate(menuId, updatedData, { new: true });
-        if (!updatedMenu) {
-            throw new Error("Menú no encontrado");
-        }
-        return updatedMenu;
-    }
+    const populatedMenu = await newMenu.populate("restaurante", "nombre direccion");
+    return MenuTransformer.toMenuResponseDTO(populatedMenu);
+  }
 
-    async deleteMenu(menuId: string): Promise<IMenu> {
-        const deletedMenu = await MenuModel.findByIdAndDelete(menuId);
-        if (!deletedMenu) {
-            throw new Error("Menú no encontrado");
-        }
-        return deletedMenu;
-    }
+  async updateMenu(menuId: string, updatedData: IUpdateMenuDTO): Promise<IMenuResponseDTO> {
+    const updatedMenu = await MenuModel.findByIdAndUpdate(menuId, updatedData, {
+      new: true,
+    }).populate("restaurante", "nombre direccion");
+
+    if (!updatedMenu) throw new Error("Menú no encontrado");
+    return MenuTransformer.toMenuResponseDTO(updatedMenu);
+  }
+
+  async deleteMenu(menuId: string): Promise<IMenuResponseDTO> {
+    const deletedMenu = await MenuModel.findByIdAndDelete(menuId).populate("restaurante", "nombre direccion");
+
+    if (!deletedMenu) throw new Error("Menú no encontrado");
+    return MenuTransformer.toMenuResponseDTO(deletedMenu);
+  }
 }
