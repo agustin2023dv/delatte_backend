@@ -5,8 +5,7 @@ import { MENUS_BASE_TYPES } from "../types/menuBase.types";
 import { IMenuBaseService } from "../interfaces/IMenuBaseService";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { managerOfRestaurantMiddleware } from "../../../middlewares/restaurant.middleware";
-import { CreateMenuSchema } from "src/validators/menus/create-menu.schema";
-import { UpdateMenuSchema } from "src/validators/menus/update-menu.schema";
+import {CreateMenuSchema, UpdateMenuSchema} from '@delatte/shared/validators'
 
 @controller("/api/v1/menus")
 export class MenuBaseController extends BaseHttpController {

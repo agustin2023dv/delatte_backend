@@ -1,24 +1,24 @@
+import { ICreatePromotionDTO, IUpdatePromotionDTO } from "@delatte/shared/dtos"; 
 import { injectable } from "inversify";
-import Promocion from "../models/Promocion.model";
+import Promotion from "../models/Promocion.model";
+import { IPromotion } from "@delatte/shared/interfaces";
 import { IPromotionBaseRepository } from "../interfaces/IPromotionBaseRepository";
-import { IPromotion } from "@delatte/shared/interfaces/Promotion/IPromotion";
 
 @injectable()
 export class PromotionBaseRepository implements IPromotionBaseRepository {
+  async createPromotion(promotionData: ICreatePromotionDTO): Promise<IPromotion> {
+    return await Promotion.create(promotionData);
+  }
 
-    async createPromotion(promotionData: Partial<IPromotion>): Promise<IPromotion> {
-        return await Promocion.create(promotionData);
-    }
+  async getPromotionsByRestaurant(restaurantId: string): Promise<IPromotion[]> {
+    return await Promotion.find({ restaurante: restaurantId, estado: "activa" }).sort({ fechaInicio: 1 });
+  }
 
-    async getPromotionsByRestaurant(restaurantId: string): Promise<IPromotion[]> {
-        return await Promocion.find({ restaurante: restaurantId, estado: "activa" }).sort({ fechaInicio: 1 });
-    }
+  async updatePromotion(promoId: string, updateData: IUpdatePromotionDTO): Promise<IPromotion | null> {
+    return await Promotion.findByIdAndUpdate(promoId, updateData, { new: true });
+  }
 
-    async updatePromotion(promoId: string, updateData: Partial<IPromotion>): Promise<IPromotion | null> {
-        return await Promocion.findByIdAndUpdate(promoId, updateData, { new: true });
-    }
-
-    async deletePromotion(promoId: string): Promise<IPromotion | null> {
-        return await Promocion.findByIdAndDelete(promoId);
-    }
+  async deletePromotion(promoId: string): Promise<IPromotion | null> {
+    return await Promotion.findByIdAndDelete(promoId);
+  }
 }

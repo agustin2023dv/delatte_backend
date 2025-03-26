@@ -12,9 +12,8 @@
     "./interfaces/*": "./dist/interfaces/*.js",
     "./utils": "./dist/utils/index.js",
     "./utils/*": "./dist/utils/*.js",
-      "./services": "./dist/services/index.js",
+    "./services": "./dist/services/index.js",
     "./services/*": "./dist/services/*.js"
-    
   },
   "scripts": {
     "build": "tsc",
@@ -44,6 +43,7 @@
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
     "mongoose": "^8.10.1",
-    "sanitize-html": "^2.14.0"
+    "sanitize-html": "^2.14.0",
+    "zod": "^3.24.2"
   }
 }

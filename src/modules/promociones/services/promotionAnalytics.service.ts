@@ -1,26 +1,35 @@
 import { injectable, inject } from "inversify";
 import { IPromotionAnalyticsService } from "../interfaces/IPromotionAnalyticsService";
-import { IPromotionStatsRepository } from "../interfaces/IPromotionStatsRepository";
 import { PROMOTIONS_ANALYTICS_TYPES } from "../types/promotionAnalytics.types";
+import {
+  IPromotionCountByStatusDTO,
+  ITopRestaurantsByPromotionsDTO,
+  IPromotionImpactDTO,
+  IIneffectivePromotionDTO,
+} from "@delatte/shared/dtos";
+import { IPromotionAnalyticsRepository } from "../interfaces/IPromotionAnalyticsRepository";
 
 @injectable()
 export class PromotionAnalyticsService implements IPromotionAnalyticsService {
 
-    constructor(@inject(PROMOTIONS_ANALYTICS_TYPES.IPromotionStatsRepository) private promotionStatsRepo: IPromotionStatsRepository) {}
+  constructor(
+    @inject(PROMOTIONS_ANALYTICS_TYPES.IPromotionStatsRepository)
+    private promotionStatsRepo: IPromotionAnalyticsRepository
+  ) {}
 
-    async getPromotionCount() {
-        return await this.promotionStatsRepo.getPromotionCount();
-    }
+  async getPromotionCount(): Promise<IPromotionCountByStatusDTO[]> {
+    return await this.promotionStatsRepo.getPromotionCount();
+  }
 
-    async getTopRestaurantsByPromotions() {
-        return await this.promotionStatsRepo.getTopRestaurantsByPromotions();
-    }
+  async getTopRestaurantsByPromotions(): Promise<ITopRestaurantsByPromotionsDTO[]> {
+    return await this.promotionStatsRepo.getTopRestaurantsByPromotions();
+  }
 
-    async getPromotionImpact() {
-        return await this.promotionStatsRepo.getPromotionImpact();
-    }
+  async getPromotionImpact(): Promise<IPromotionImpactDTO[]> {
+    return await this.promotionStatsRepo.getPromotionImpact();
+  }
 
-    async getIneffectivePromotions() {
-        return await this.promotionStatsRepo.getIneffectivePromotions();
-    }
+  async getIneffectivePromotions(): Promise<IIneffectivePromotionDTO[]> {
+    return await this.promotionStatsRepo.getIneffectivePromotions();
+  }
 }
