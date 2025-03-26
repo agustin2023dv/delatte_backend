@@ -13,7 +13,7 @@ import { IPromotionAnalyticsRepository } from "../interfaces/IPromotionAnalytics
 export class PromotionAnalyticsService implements IPromotionAnalyticsService {
 
   constructor(
-    @inject(PROMOTIONS_ANALYTICS_TYPES.IPromotionStatsRepository)
+    @inject(PROMOTIONS_ANALYTICS_TYPES.IPromotionAnalyticsRepository)
     private promotionStatsRepo: IPromotionAnalyticsRepository
   ) {}
 

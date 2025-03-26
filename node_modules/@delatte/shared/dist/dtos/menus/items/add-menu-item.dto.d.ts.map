@@ -1,0 +1,1 @@
+{"version":3,"file":"add-menu-item.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/menus/items/add-menu-item.dto.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,eAAe;IAC5B;;OAEG;IACH,MAAM,EAAE,MAAM,CAAC;IAEf;;OAEG;IACH,IAAI,EAAE;QACJ,MAAM,EAAE,MAAM,CAAC;QACf,WAAW,EAAE,MAAM,CAAC;QACpB,MAAM,EAAE,MAAM,CAAC;KAChB,CAAC;CACH"}

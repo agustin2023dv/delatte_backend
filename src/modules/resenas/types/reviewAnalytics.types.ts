@@ -1,4 +1,4 @@
 export const REVIEWS_ANALYTICS_TYPES = {
-    IReviewStatsRepository: Symbol.for("IReviewStatsRepository"),
+    IReviewAnalyticsRepository: Symbol.for("IReviewAnalyticsRepository"),
     IReviewAnalyticsService: Symbol.for("IReviewAnalyticsService"),
     ReviewAnalyticsController: Symbol.for("ReviewAnalyticsController"),}

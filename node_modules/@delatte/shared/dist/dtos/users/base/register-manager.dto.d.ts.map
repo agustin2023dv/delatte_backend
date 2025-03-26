@@ -1,0 +1,1 @@
+{"version":3,"file":"register-manager.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/users/base/register-manager.dto.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,uBAAuB;IACpC,MAAM,EAAE,MAAM,CAAC;IACf,QAAQ,EAAE,MAAM,CAAC;IACjB,KAAK,EAAE,MAAM,CAAC;IACd,QAAQ,EAAC,MAAM,CAAC;IAChB,QAAQ,EAAE,MAAM,CAAC;CAClB"}

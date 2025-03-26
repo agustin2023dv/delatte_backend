@@ -1,8 +1,12 @@
-import { IReview } from "@delatte/shared/interfaces/Review/IReview";
-
-
-export interface IReviewAnalyticsService {
-    getReviewSentimentStats(): Promise<any>;
-    getAverageReview(groupBy?: string): Promise<any>;
-    getReportedReviews(): Promise<IReview[]>;
-}
+import {
+    IReviewSentimentStatsDTO,
+    IAverageReviewRatingDTO,
+    IReportedReviewDTO,
+  } from "@delatte/shared/dtos";
+  
+  export interface IReviewAnalyticsService {
+    getReviewSentimentStats(): Promise<IReviewSentimentStatsDTO[]>;
+    getAverageReview(groupBy?: string): Promise<IAverageReviewRatingDTO[]>;
+    getReportedReviews(): Promise<IReportedReviewDTO[]>;
+  }
+  

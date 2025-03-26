@@ -1,0 +1,1 @@
+{"version":3,"file":"create-menu.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/menus/base/create-menu.dto.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,cAAc;IAC3B,aAAa,EAAE,MAAM,CAAC;IACtB,IAAI,EAAE,QAAQ,GAAG,SAAS,GAAG,SAAS,CAAC;IACvC,KAAK,EAAE;QACL,MAAM,EAAE,MAAM,CAAC;QACf,WAAW,EAAE,MAAM,CAAC;QACpB,MAAM,EAAE,MAAM,CAAC;KAChB,EAAE,CAAC;CACL"}

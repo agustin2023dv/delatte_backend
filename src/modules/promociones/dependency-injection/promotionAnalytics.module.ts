@@ -8,6 +8,6 @@ import { IPromotionAnalyticsRepository } from "../interfaces/IPromotionAnalytics
 
 
 export const promotionsAnalyticsModule = new ContainerModule((bind) => {
-bind<IPromotionAnalyticsRepository>(PROMOTIONS_ANALYTICS_TYPES.IPromotionStatsRepository).to(PromotionAnalyticsRepository);
+bind<IPromotionAnalyticsRepository>(PROMOTIONS_ANALYTICS_TYPES.IPromotionAnalyticsRepository).to(PromotionAnalyticsRepository);
 bind<IPromotionAnalyticsService>(PROMOTIONS_ANALYTICS_TYPES.IPromotionAnalyticsService).to(PromotionAnalyticsService);
 })

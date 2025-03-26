@@ -1,0 +1,1 @@
+{"version":3,"file":"top-restaurants.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/restaurants/stats/top-restaurants.dto.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,sBAAsB;IACnC,GAAG,EAAE,MAAM,CAAC;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,aAAa,EAAE,MAAM,CAAC;IACtB,YAAY,EAAE,MAAM,CAAC;CACtB"}

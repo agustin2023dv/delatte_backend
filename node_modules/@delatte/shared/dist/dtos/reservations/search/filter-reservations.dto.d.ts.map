@@ -1,0 +1,1 @@
+{"version":3,"file":"filter-reservations.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/reservations/search/filter-reservations.dto.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,sBAAsB;IACnC,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,aAAa,CAAC,EAAE,MAAM,CAAC;IACvB,MAAM,CAAC,EAAE,WAAW,GAAG,YAAY,GAAG,WAAW,CAAC;IAClD,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,KAAK,CAAC,EAAE,MAAM,CAAC;CAChB"}

@@ -1,6 +1,6 @@
 {
   "name": "@delatte/shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "commonjs",
   "description": "Interfaces y módulos reutilizables para el proyecto Delatte",
   "main": "dist/index.js",
@@ -13,7 +13,11 @@
     "./utils": "./dist/utils/index.js",
     "./utils/*": "./dist/utils/*.js",
     "./services": "./dist/services/index.js",
-    "./services/*": "./dist/services/*.js"
+    "./services/*": "./dist/services/*.js",
+        "./dtos": "./dist/dtos/index.js",
+    "./dtos/*": "./dist/dtos/*.js",
+            "./validators": "./dist/validators/index.js",
+    "./validators/*": "./dist/validators/*.js"
   },
   "scripts": {
     "build": "tsc",

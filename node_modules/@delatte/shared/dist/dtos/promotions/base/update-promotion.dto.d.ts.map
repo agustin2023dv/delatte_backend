@@ -1,0 +1,1 @@
+{"version":3,"file":"update-promotion.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/promotions/base/update-promotion.dto.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,mBAAmB;IAChC,MAAM,CAAC,EAAE,MAAM,CAAC;IAChB,WAAW,CAAC,EAAE,MAAM,CAAC;IACrB,WAAW,CAAC,EAAE,MAAM,CAAC;IACrB,QAAQ,CAAC,EAAE,MAAM,CAAC;IAClB,SAAS,CAAC,EAAE,MAAM,CAAC;CACpB"}

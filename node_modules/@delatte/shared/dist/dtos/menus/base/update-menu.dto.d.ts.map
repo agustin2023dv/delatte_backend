@@ -1,0 +1,1 @@
+{"version":3,"file":"update-menu.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/menus/base/update-menu.dto.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,cAAc;IAC3B,IAAI,CAAC,EAAE,QAAQ,GAAG,SAAS,GAAG,SAAS,CAAC;IACxC,KAAK,CAAC,EAAE;QACN,MAAM,EAAE,MAAM,CAAC;QACf,WAAW,EAAE,MAAM,CAAC;QACpB,MAAM,EAAE,MAAM,CAAC;KAChB,EAAE,CAAC;CACL"}

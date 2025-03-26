@@ -1,4 +1,4 @@
 export const PROMOTIONS_ANALYTICS_TYPES = {        
-    IPromotionStatsRepository: Symbol.for("IPromotionStatsRepository"),
+    IPromotionAnalyticsRepository: Symbol.for("IPromotionAnalyticsRepository"),
     IPromotionAnalyticsService: Symbol.for("IPromotionAnalyticsService"),
     PromotionAnalyticsController: Symbol.for("PromotionAnalyticsController"),}

@@ -16,8 +16,10 @@
   },
   "paths": {
   "@dto/*": ["./shared/dto/*"],
-  "@interfaces/*": ["./shared/interfaces/*"]
+  "@interfaces/*": ["./shared/interfaces/*"],
+  "@validators/*": ["./shared/validators/*"],
+  "@utils/*": ["./shared/utils/*"]
 },
-  "include": ["services","utils", "interfaces", "index.ts"],
+  "include": ["services","utils", "interfaces", "index.ts", "dtos", "validators"],
   "exclude": ["node_modules", "dist"]
 }

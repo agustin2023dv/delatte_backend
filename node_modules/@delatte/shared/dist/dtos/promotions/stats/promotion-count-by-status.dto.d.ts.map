@@ -1,0 +1,1 @@
+{"version":3,"file":"promotion-count-by-status.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/promotions/stats/promotion-count-by-status.dto.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,0BAA0B;IACvC,GAAG,EAAE,QAAQ,GAAG,UAAU,GAAG,YAAY,CAAC;IAC1C,QAAQ,EAAE,MAAM,CAAC;CAClB"}

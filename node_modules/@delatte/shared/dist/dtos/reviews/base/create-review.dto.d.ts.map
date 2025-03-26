@@ -1,0 +1,1 @@
+{"version":3,"file":"create-review.dto.d.ts","sourceRoot":"","sources":["../../../../dtos/reviews/base/create-review.dto.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,gBAAgB;IAC7B;;;OAGG;IACH,aAAa,CAAC,EAAE,MAAM,CAAC;IAEvB;;;OAGG;IACH,SAAS,CAAC,EAAE,MAAM,CAAC;IAEnB;;OAEG;IACH,YAAY,EAAE,MAAM,CAAC;IAErB;;OAEG;IACH,UAAU,EAAE,MAAM,CAAC;CACpB"}
