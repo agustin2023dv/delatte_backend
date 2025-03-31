@@ -1,10 +1,10 @@
 import { ContainerModule } from "inversify";
 import { IReservationBaseService } from "../interfaces/IReservationBaseService";
 import { IReservationBaseRepository } from "../interfaces/IReservationBaseRepository";
-import { ReservationBaseService } from "../services/reservasBase.service";
+import { ReservationBaseService } from "../services/reservationBase.service";
 import { RESERVATIONS_BASE_TYPES } from "../types/reservationBase.types";
 import { IReservationRegisterService } from "../interfaces/IReservationRegisterService";
-import { ReservationRegistrationService } from "../services/reservasRegistration.service";
+import { ReservationRegistrationService } from "../services/reservationRegister.service";
 import { ReservationBaseRepository } from "../repositories/reservationBase.repository";
 
 

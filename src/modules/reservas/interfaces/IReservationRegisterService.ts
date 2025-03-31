@@ -1,35 +1,15 @@
-import { IReservation } from "@delatte/shared/interfaces/Reservation/IReservation";
-
+import { ICreateReservationDTO } from "@delatte/shared/dtos";
+import { IReservation } from "@delatte/shared/interfaces";
 
 export interface IReservationRegisterService {
-    createCustomerReservation(
-        userId: string,
-        restauranteId: string,
-        fecha: Date,
-        horario: string,
-        numAdultos: number,
-        numNinos: number,
-        pedidosEspeciales?: string
-    ): Promise<IReservation>;
+  createCustomerReservation(dto: ICreateReservationDTO): Promise<IReservation>;
 
-    createManagerReservation(
-        managerId: string,
-        clienteId: string,
-        restauranteId: string,
-        fecha: Date,
-        horario: string,
-        numAdultos: number,
-        numNinos: number,
-        pedidosEspeciales?: string
-    ): Promise<IReservation>;
+  createManagerReservation(
+    managerId: string,
+    dto: ICreateReservationDTO
+  ): Promise<IReservation>;
 
-    createSuperadminReservation(
-        clienteId: string,
-        restauranteId: string,
-        fecha: Date,
-        horario: string,
-        numAdultos: number,
-        numNinos: number,
-        pedidosEspeciales?: string
-    ): Promise<IReservation>;
+  createSuperadminReservation(
+    dto: ICreateReservationDTO
+  ): Promise<IReservation>;
 }

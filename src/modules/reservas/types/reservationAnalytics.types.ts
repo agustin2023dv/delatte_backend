@@ -1,5 +1,5 @@
-export const RESERVATIONS_ANAYLITICS_TYPES = {
-    IReservationStatsRepository: Symbol.for("IReservationStatsRepository"),
+export const RESERVATIONS_ANALYTICS_TYPES = {
+    IReservationAnalyticsRepository: Symbol.for("IReservationAnalyticsRepository"),
     IReservationAnalyticsService: Symbol.for("IReservationAnalyticsService"),
     ReservationAnalyticsController: Symbol.for("ReservationAnalyticsController"),
 }

@@ -7,7 +7,7 @@ import {
     ITopReservationHoursDTO
   } from "@delatte/shared/dtos";
   
-  export interface IReservationAnalyticsService {
+  export interface IReservationAnalyticsRepository {
     getReservasDiarias(): Promise<IDailyReservationsDTO[]>;
     getReservasSemanales(): Promise<IWeeklyReservationsDTO[]>;
     getReservasMensuales(): Promise<IMonthlyReservationsDTO[]>;

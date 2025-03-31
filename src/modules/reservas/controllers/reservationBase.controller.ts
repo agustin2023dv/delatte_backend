@@ -8,6 +8,7 @@ import { checkDisponibilidadMiddleware, validateReservationData } from "../../..
 import { IReservationBaseService } from "../interfaces/IReservationBaseService";
 import { IReservationRegisterService } from "../interfaces/IReservationRegisterService";
 import { AuthRequest } from "../../../../types";
+import { ICreateReservationDTO } from "@delatte/shared/dtos";
 
 @controller("/api/v1/reservations")
 export class ReservationBaseController extends BaseHttpController {
@@ -23,39 +24,53 @@ export class ReservationBaseController extends BaseHttpController {
 
     // 📌 Crear una nueva reserva
     @httpPost("/", authMiddleware, validateReservationData, checkDisponibilidadMiddleware)
-    async createReservation(req: AuthRequest, res: Response): Promise<void> {
-        try {
-            const userId = req.user.id;
-            const { restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales, clienteId } = req.body;
-            const userRole = req.user.role;
-
-            if (!restauranteId || !fecha || !horario || numAdultos < 1) {
-                res.status(400).json({ message: "Datos insuficientes para crear la reserva" });
-                return;
-            }
-
-            let reserva;
-            if (userRole === "customer") {
-                if (clienteId && clienteId !== userId) {
-                    res.status(403).json({ message: "No puedes reservar en nombre de otro usuario" });
-                    return;
-                }
-                reserva = await this.reservationRegisterService.createCustomerReservation(userId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
-            } else if (userRole === "manager") {
-                reserva = await this.reservationRegisterService.createManagerReservation(userId, clienteId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
-            } else if (userRole === "superadmin") {
-                reserva = await this.reservationRegisterService.createSuperadminReservation(clienteId, restauranteId, fecha, horario, numAdultos, numNinos, pedidosEspeciales);
-            } else {
-                res.status(403).json({ message: "No tienes permisos para crear una reserva" });
-                return;
-            }
-
-            res.status(201).json(reserva);
-        } catch (error) {
-            console.error("Error al crear reserva:", error);
-            res.status(500).json({ message: "Error interno al crear la reserva", error });
+    async createReservation(req: AuthRequest, res: Response) {
+      try {
+        const userId = req.user.id;
+        const userRole = req.user.role;
+    
+        const {
+          restauranteId,
+          fecha,
+          horario,
+          cantidadAdultos,
+          cantidadNinios,
+          notas,
+          clienteId
+        } = req.body;
+    
+        const dto: ICreateReservationDTO = {
+          restauranteId,
+          usuarioId: clienteId ?? userId,
+          fecha,
+          horario,
+          cantidadAdultos,
+          cantidadNinios,
+          notas
+        };
+    
+        let reserva;
+    
+        if (userRole === "customer") {
+          if (clienteId && clienteId !== userId) {
+            return res.status(403).json({ message: "No puedes reservar en nombre de otro usuario" });
+          }
+          reserva = await this.reservationRegisterService.createCustomerReservation(dto);
+        } else if (userRole === "manager") {
+          reserva = await this.reservationRegisterService.createManagerReservation(userId, dto);
+        } else if (userRole === "superadmin") {
+          reserva = await this.reservationRegisterService.createSuperadminReservation(dto);
+        } else {
+          return res.status(403).json({ message: "No tienes permisos para crear una reserva" });
         }
+    
+        res.status(201).json(reserva);
+      } catch (error) {
+        console.error("Error al crear reserva:", error);
+        res.status(500).json({ message: "Error interno al crear la reserva", error });
+      }
     }
+    
 
     // 📌 Obtener reservas del usuario autenticado
     @httpGet("/", authMiddleware, roleMiddleware(["customer", "manager"]))

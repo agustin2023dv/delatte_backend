@@ -1,12 +1,12 @@
 import { ContainerModule } from "inversify";
 import { IReservationAnalyticsService } from "../interfaces/IReservationAnalyticsService";
-import { ReservationAnalyticsService } from "../services/reservasAnaliticas.service";
-import { ReservationStatsRepository } from "../repositories/reservationStats.repository";
-import { RESERVATIONS_ANAYLITICS_TYPES } from "../types/reservationAnalytics.types";
-import { IReservationStatsRepository } from "../interfaces/IReservationStatsRepository";
+import { IReservationAnalyticsRepository } from "../interfaces/IReservationAnalyticsRepository";
+import { ReservationAnalyticsRepository } from "../repositories/reservationAnalytics.repository";
+import { ReservationAnalyticsService } from "../services/reservationAnalytics.service";
+import { RESERVATIONS_ANALYTICS_TYPES } from "../types/reservationAnalytics.types";
 
 export const reservationAnalyticsModule = new ContainerModule((bind) => {
-bind<IReservationStatsRepository>(RESERVATIONS_ANAYLITICS_TYPES.IReservationStatsRepository).to(ReservationStatsRepository);
-bind<IReservationAnalyticsService>(RESERVATIONS_ANAYLITICS_TYPES.IReservationAnalyticsService).to(ReservationAnalyticsService);
+bind<IReservationAnalyticsRepository>(RESERVATIONS_ANALYTICS_TYPES.IReservationAnalyticsRepository).to(ReservationAnalyticsRepository);
+bind<IReservationAnalyticsService>(RESERVATIONS_ANALYTICS_TYPES.IReservationAnalyticsService).to(ReservationAnalyticsService);
 }
 );
