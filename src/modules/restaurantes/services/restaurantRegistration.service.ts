@@ -7,65 +7,60 @@ import { IRestaurantRegisterService } from "../interfaces/IRestaurantRegisterSer
 import { IRestaurant } from "@delatte/shared/interfaces";
 import { Types } from "mongoose";
 import { getCoordinatesFromAddress } from "../../integrations/services/geolocation.service";
+import { IRestaurantRegistrationDTO, IManagerRegistrationDTO } from "@delatte/shared/dtos";
+import { IRestaurantRegisterRepository } from "../interfaces/IRestaurantRegisterRepository";
 
 @injectable()
 export class RestaurantRegistrationService implements IRestaurantRegisterService {
-    constructor(
+  constructor(
+    @inject(RESTAURANT_BASE_TYPES.IRestaurantRegisterRepository)
+    private restaurantRepo: IRestaurantRegisterRepository,
 
-        @inject(RESTAURANT_BASE_TYPES.IRestaurantService)
-        private restaurantRegisterService: IRestaurantRegisterService,
+    @inject(USER_ACCESS_TYPES.IUserRegisterService)
+    private userRegisterService: IUserRegisterService,
 
-        @inject(USER_ACCESS_TYPES.IUserRegisterService)
-        private userRegisterService: IUserRegisterService,
+    @inject(USER_ACCESS_TYPES.PasswordHasher)
+    private passwordHasher: IPasswordHasher
+  ) {}
 
-        @inject(USER_ACCESS_TYPES.PasswordHasher)
-        private passwordHasher: IPasswordHasher
-    ) {}
-    async registerRestaurant(restaurantData: Partial<IRestaurant>): Promise<IRestaurant> {
-        try {
-            // Verificar si location existe
-            if (!restaurantData.location) {
-                throw new Error("La ubicación del restaurante no fue proporcionada.");
-            }
-    
-            const direccionCompleta = `${restaurantData.location.direccion}, Montevideo, ${restaurantData.location.codigoPostal || ""}, Uruguay`;
-            const coordenadas = await getCoordinatesFromAddress(direccionCompleta);
-    
-            if (!coordenadas) throw new Error("No se encontraron coordenadas para la dirección proporcionada.");
-    
-            restaurantData.location.ubicacion = {
-                type: "Point",
-                coordinates: [coordenadas.longitude, coordenadas.latitude],
-            };
-    
-            return await this.restaurantRegisterService.registerRestaurant(restaurantData);
-        } catch (error) {
-            console.error("Error al registrar restaurante:", error);
-            throw error;
-        }
+  async registerRestaurant(restaurantData: IRestaurantRegistrationDTO): Promise<IRestaurant> {
+    try {
+      const direccionCompleta = `${restaurantData.direccion}, Montevideo, ${restaurantData.codigoPostal || ""}, Uruguay`;
+      const coordenadas = await getCoordinatesFromAddress(direccionCompleta);
+
+      if (!coordenadas) throw new Error("No se encontraron coordenadas para la dirección proporcionada.");
+
+      return await this.restaurantRepo.create({
+        ...restaurantData,
+        ubicacion: {
+          type: "Point",
+          coordinates: [coordenadas.longitude, coordenadas.latitude],
+        },
+      });
+    } catch (error) {
+      console.error("Error al registrar restaurante:", error);
+      throw error;
     }
+  }
 
-    async registerRestaurantAndManager(restaurantData: Partial<IRestaurant>, managerData: any) {
-        try {
-            console.log("Restaurant details: ", restaurantData);
-            console.log("Manager details: ", managerData);
+  async registerRestaurantAndManager(
+    restaurantData: IRestaurantRegistrationDTO,
+    managerData: IManagerRegistrationDTO
+  ): Promise<{ savedRestaurant: IRestaurant; savedManager: any }> {
+    try {
+      managerData.password = await this.passwordHasher.hash(managerData.password);
 
-            // 🔹 Hashear contraseña del manager
-            managerData.password = await this.passwordHasher.hash(managerData.password);
+      const [savedManager, savedRestaurant] = await Promise.all([
+        this.userRegisterService.registerManager(managerData),
+        this.registerRestaurant(restaurantData),
+      ]);
 
-            // 🔹 Ejecutar ambas funciones en paralelo para mejorar rendimiento
-            const [savedManager, savedRestaurant] = await Promise.all([
-                this.userRegisterService.registerManager(managerData),
-                this.registerRestaurant(restaurantData),
-            ]);
+      savedRestaurant.management.managerPrincipal = new Types.ObjectId(savedManager._id.toString());
 
-            // 🔹 Asociar el manager al restaurante
-            savedRestaurant.management.managerPrincipal = new Types.ObjectId(savedManager._id.toString());
-
-            return { savedRestaurant, savedManager };
-        } catch (error) {
-            console.error("Error al registrar el restaurante y manager:", error);
-            throw error;
-        }
+      return { savedRestaurant, savedManager };
+    } catch (error) {
+      console.error("Error al registrar el restaurante y manager:", error);
+      throw error;
     }
+  }
 }

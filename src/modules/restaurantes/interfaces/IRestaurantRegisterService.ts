@@ -1,12 +1,13 @@
 import { IRestaurant } from "@delatte/shared/interfaces";
+import { IRestaurantRegistrationDTO, IManagerRegistrationDTO } from "@delatte/shared/dtos";
 
 export interface IRestaurantRegisterService {
-    registerRestaurant(
-        restaurantData: Partial<IRestaurant>
-    ): Promise<IRestaurant>;
+  registerRestaurant(
+    restaurantData: IRestaurantRegistrationDTO
+  ): Promise<IRestaurant>;
 
-    registerRestaurantAndManager(
-        restaurantData: Partial<IRestaurant>, 
-        managerData: { nombre: string; apellido: string; email: string; password: string }
-    ): Promise<{ savedRestaurant: IRestaurant; savedManager: any }>;
+  registerRestaurantAndManager(
+    restaurantData: IRestaurantRegistrationDTO,
+    managerData: IManagerRegistrationDTO
+  ): Promise<{ savedRestaurant: IRestaurant; savedManager: any }>;
 }

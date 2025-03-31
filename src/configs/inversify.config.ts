@@ -8,7 +8,7 @@ import { userFavoritesModule } from "../modules/usuarios/dependency-injection/us
 import { userAddressesModule } from "../modules/usuarios/dependency-injection/userAddresses.module";
 import { userProfileModule } from "../modules/usuarios/dependency-injection/userProfile.module";
 import { restaurantBaseModule } from "../modules/restaurantes/dependency-injection/restaurantBase.module";
-import { restaurantStatsModule } from "../modules/restaurantes/dependency-injection/restaurantStats.module";
+import { restaurantAnalyticsModule } from "../modules/restaurantes/dependency-injection/restaurantAnalytics.module";
 import { restaurantGalleryModule } from "../modules/restaurantes/dependency-injection/restaurantGallery.module";
 import { restaurantPermissionsModule } from "../modules/restaurantes/dependency-injection/restaurantPermissions.module";
 import { reservationBaseModule } from "../modules/reservas/dependency-injection/reservationBase.module";
@@ -33,7 +33,7 @@ container.load(
   menusItemModule, menuBaseModule,
   promotionsBaseModule, promotionsAnalyticsModule,
   reservationBaseModule, reservationAnalyticsModule,
-  restaurantSearchModule, restaurantBaseModule, restaurantStatsModule, restaurantLocationModule,
+  restaurantSearchModule, restaurantBaseModule, restaurantAnalyticsModule, restaurantLocationModule,
   restaurantGalleryModule, restaurantPermissionsModule,
   reviewsAnalyticsModule, reviewsBaseModule,
   userManagementModule, userAcessModule, userFavoritesModule,

@@ -1,29 +1,34 @@
+import { IRestaurantAnalyticsService } from "../interfaces/IRestaurantAnalyticsService";
+import { IRestaurantAnalyticsRepository } from "../interfaces/IRestaurantAnalyticsRepository";
+import { RESTAURANT_ANALYTICS_TYPES } from "../types/restaurantAnalytics.types";
+import {
+  INewRestaurantStatsDTO,
+  ISaturatedRestaurantStatsDTO,
+  ITopRestaurantStatsDTO,
+  IWorstRestaurantStatsDTO,
+} from "@delatte/shared/dtos";
 import { inject, injectable } from "inversify";
-import { IRestaurantStatsService } from "../interfaces/IRestaurantStatsService";
-import { IRestaurantStatsRepository } from "../interfaces/IRestaurantStatsRepository";
-import { RESTAURANT_STATS_TYPES } from "../types/restaurantStats.types";
-
 
 @injectable()
-export class RestaurantAnalyticsService implements IRestaurantStatsService {
+export class RestaurantAnalyticsService implements IRestaurantAnalyticsService {
   constructor(
-    @inject(RESTAURANT_STATS_TYPES.IRestaurantStatsRepository) 
-    private restaurantStatsRepo: IRestaurantStatsRepository
+    @inject(RESTAURANT_ANALYTICS_TYPES.IRestaurantAnalyticsRepository)
+    private restaurantStatsRepo: IRestaurantAnalyticsRepository
   ) {}
 
-  async getTopRestaurants() {
+  async getTopRestaurants(): Promise<ITopRestaurantStatsDTO[]> {
     return await this.restaurantStatsRepo.getTopRestaurants();
   }
 
-  async getWorstPerformingRestaurants() {
+  async getWorstPerformingRestaurants(): Promise<IWorstRestaurantStatsDTO[]> {
     return await this.restaurantStatsRepo.getWorstPerformingRestaurants();
   }
 
-  async getNewRestaurants() {
+  async getNewRestaurants(): Promise<INewRestaurantStatsDTO[]> {
     return await this.restaurantStatsRepo.getNewRestaurants();
   }
 
-  async getSaturatedRestaurants() {
+  async getSaturatedRestaurants(): Promise<ISaturatedRestaurantStatsDTO[]> {
     return await this.restaurantStatsRepo.getSaturatedRestaurants();
   }
 }

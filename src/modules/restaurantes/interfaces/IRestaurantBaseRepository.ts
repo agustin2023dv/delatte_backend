@@ -1,7 +1,7 @@
 import { IRestaurant } from "@delatte/shared/interfaces/Restaurant/IRestaurant";
 
 
-export interface IRestaurantRepository {
+export interface IRestaurantBaseRepository {
     getAll(): Promise<IRestaurant[]>;
     findById(id: string): Promise<IRestaurant>;
     findByManagerId(managerId: string): Promise<IRestaurant[]>;

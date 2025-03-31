@@ -1,16 +1,16 @@
 import { controller, httpGet } from "inversify-express-utils";
 import { Request, Response } from "express";
 import { inject } from "inversify";
-import { IRestaurantStatsService } from "../interfaces/IRestaurantStatsService";
-import { RESTAURANT_STATS_TYPES } from "../types/restaurantStats.types";
 import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { roleMiddleware } from "../../../middlewares/role.middleware";
+import { RESTAURANT_ANALYTICS_TYPES } from "../types/restaurantAnalytics.types";
+import { IRestaurantAnalyticsService } from "../interfaces/IRestaurantAnalyticsService";
 
 @controller("/api/v1/restaurants/analytics")
 export class RestaurantAnalyticsController {
   constructor(
-    @inject(RESTAURANT_STATS_TYPES.IRestaurantStatsService) 
-    private restaurantStatsService: IRestaurantStatsService
+    @inject(RESTAURANT_ANALYTICS_TYPES.IRestaurantAnalyticsService) 
+    private restaurantStatsService: IRestaurantAnalyticsService
   ) {}
 
   /**

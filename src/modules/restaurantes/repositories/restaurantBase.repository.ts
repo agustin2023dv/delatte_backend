@@ -1,10 +1,10 @@
 import { injectable } from "inversify";
 import Restaurant from "../models/Restaurant.model";
 import { IRestaurant } from "@delatte/shared/interfaces";
-import { IRestaurantRepository } from "../interfaces/IRestaurantRepository";
+import { IRestaurantBaseRepository } from "../interfaces/IRestaurantBaseRepository";
 
 @injectable()
-export class RestaurantBaseRepository implements IRestaurantRepository {
+export class RestaurantBaseRepository implements IRestaurantBaseRepository {
     async getAll(): Promise<IRestaurant[]> {
         return await Restaurant.find().lean();
     }

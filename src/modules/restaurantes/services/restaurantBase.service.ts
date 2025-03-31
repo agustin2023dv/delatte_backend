@@ -1,15 +1,15 @@
 import { inject, injectable } from "inversify";
 import { RESTAURANT_BASE_TYPES } from "../types/restaurantBase.types";
-import { IRestaurantRepository } from "../interfaces/IRestaurantRepository";
 import { IRestaurant } from "@delatte/shared/interfaces";
 import { getCoordinatesFromAddress } from "../../integrations/services/geolocation.service";
 import { IRestaurantBaseService } from "../interfaces/IRestaurantBaseService";
+import { IRestaurantBaseRepository } from "../interfaces/IRestaurantBaseRepository";
 
 @injectable()
 export class RestaurantBaseService implements IRestaurantBaseService {
     constructor(
         @inject(RESTAURANT_BASE_TYPES.IRestaurantRepository)
-        private restaurantRepo: IRestaurantRepository,
+        private restaurantRepo: IRestaurantBaseRepository,
     ) {}
 
     async getAllRestaurants(): Promise<IRestaurant[]> {
