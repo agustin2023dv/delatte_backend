@@ -14,22 +14,22 @@ import { IUserManagementRepository } from "../interfaces/IUserManagementReposito
 @injectable()
 export class UserAuthService implements IUserAuthService {
   constructor(
-    @inject(USER_ACCESS_TYPES.UserAuthRepository) 
+    @inject(USER_ACCESS_TYPES.UserAuthRepository)
     private userAuthRepository: IUserAuthRepository,
 
-    @inject(USER_MANAGEMENT_TYPES.UserManagementRepository) 
+    @inject(USER_MANAGEMENT_TYPES.UserManagementRepository)
     private userManagementRepository: IUserManagementRepository,
 
-    @inject(USER_PROFILE_TYPES.UserProfileRepository) 
+    @inject(USER_PROFILE_TYPES.UserProfileRepository)
     private userProfileRepository: IUserProfileRepository,
 
-    @inject(USER_ACCESS_TYPES.UserTokenRepository) 
+    @inject(USER_ACCESS_TYPES.UserTokenRepository)
     private userTokenRepository: IUserTokenRepository,
 
-    @inject(USER_ACCESS_TYPES.EmailService) 
+    @inject(USER_ACCESS_TYPES.EmailService)
     private emailService: EmailService,
 
-    @inject(USER_ACCESS_TYPES.PasswordHasher) 
+    @inject(USER_ACCESS_TYPES.PasswordHasher)
     private passwordHasher: IPasswordHasher
   ) {}
 
@@ -41,10 +41,10 @@ export class UserAuthService implements IUserAuthService {
         message: "Token inválido",
         redirectUrl: "http://localhost:8082/(auth)/VerifyEmail?status=error&message=TokenInvalido",
       };
-    } 
+    }
 
     await this.userManagementRepository.verifyUserEmail(user._id.toString());
-  
+
     return {
       success: true,
       message: "Email verificado correctamente",
@@ -60,14 +60,16 @@ export class UserAuthService implements IUserAuthService {
 
     const resetToken = crypto.randomBytes(64).toString("hex");
     const hashedToken = await this.passwordHasher.hash(resetToken);
+
     await this.userTokenRepository.createResetToken(user._id.toString(), hashedToken);
 
     const resetLink = `http://localhost:8082/screens/auth/forgotPassword/ResetPassword?token=${resetToken}&id=${user._id}`;
+
     await this.emailService.sendEmail({
-      to: user.email,
+      to: user.profile.email,
       subject: "Restablecimiento de contraseña",
-      text: `Hola ${user.nombre},\n\nPuedes restablecer tu contraseña aquí: ${resetLink}`,
-      html: `<h1>Hola ${user.nombre}!</h1><p>Puedes restablecer tu contraseña aquí:</p><a href="${resetLink}">Restablecer contraseña</a>`,
+      text: `Hola ${user.profile.nombre},\n\nPuedes restablecer tu contraseña aquí: ${resetLink}`,
+      html: `<h1>Hola ${user.profile.nombre}!</h1><p>Puedes restablecer tu contraseña aquí:</p><a href="${resetLink}">Restablecer contraseña</a>`,
     });
   }
 
@@ -75,14 +77,13 @@ export class UserAuthService implements IUserAuthService {
     const resetTokenEntry = await this.userTokenRepository.findResetTokenByToken(token);
     if (!resetTokenEntry) throw new Error("Token inválido o expirado");
 
-    const userId = resetTokenEntry.userId.toString(); 
-
+    const userId = resetTokenEntry.userId.toString();
     const user = await this.userManagementRepository.getUserById(userId);
     if (!user) throw new Error("Usuario no encontrado");
 
-    user.password = await this.passwordHasher.hash(newPassword);
-    await this.userAuthRepository.updateUserPassword(user._id.toString(), user.password);
-    await this.userTokenRepository.deleteResetToken(user._id.toString());
+    const hashedPassword = await this.passwordHasher.hash(newPassword);
+    await this.userAuthRepository.updateUserPassword(userId, hashedPassword);
+    await this.userTokenRepository.deleteResetToken(userId);
   }
 
   async changePassword(userId: string, oldPassword: string, newPassword: string, confirmNewPassword: string) {
@@ -93,7 +94,7 @@ export class UserAuthService implements IUserAuthService {
     const user = await this.userProfileRepository.findUserById(userId);
     if (!user) throw new Error("Usuario no encontrado");
 
-    const isMatch = await this.passwordHasher.compare(oldPassword, user.password);
+    const isMatch = await this.passwordHasher.compare(oldPassword, user.security.password);
     if (!isMatch) throw new Error("La contraseña actual es incorrecta");
 
     const hashedPassword = await this.passwordHasher.hash(newPassword);

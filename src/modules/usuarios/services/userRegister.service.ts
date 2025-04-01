@@ -6,40 +6,77 @@ import { USER_ACCESS_TYPES } from "../types/userAccess.types";
 import { IPasswordHasher } from "../interfaces/IPasswordHasher";
 import { IUserRegisterService } from "../interfaces/IUserRegisterService";
 import { IUser } from "@delatte/shared/interfaces/User/IUser";
+import { ICustomerRegistrationDTO, IManagerRegistrationDTO } from "@delatte/shared/dtos";
 
 @injectable()
 export class UserRegisterService implements IUserRegisterService {
   constructor(
-    @inject(USER_ACCESS_TYPES.UserRegisterRepository) private userRegisterRepository: UserRegisterRepository,
-    @inject(USER_ACCESS_TYPES.EmailService) private emailService: EmailService,
-    @inject(USER_ACCESS_TYPES.PasswordHasher) private passwordHasher: IPasswordHasher 
+    @inject(USER_ACCESS_TYPES.UserRegisterRepository)
+    private userRegisterRepository: UserRegisterRepository,
+
+    @inject(USER_ACCESS_TYPES.EmailService)
+    private emailService: EmailService,
+
+    @inject(USER_ACCESS_TYPES.PasswordHasher)
+    private passwordHasher: IPasswordHasher
   ) {}
 
-  async registerUser(nombre: string, apellido: string, email: string, password: string): Promise<IUser> {
-    return await this.createUserWithRole(nombre, apellido, email, password, "customer");
+  async registerUser(data: ICustomerRegistrationDTO): Promise<IUser> {
+    return this.register({
+      nombre: data.nombre,
+      apellido: data.apellido,
+      email: data.email,
+      password: data.password,
+    }, "customer");
   }
 
-  async registerManager(managerData: { nombre: string; apellido: string; email: string; password: string }): Promise<IUser> {
-    return await this.createUserWithRole(managerData.nombre, managerData.apellido, managerData.email, managerData.password, "manager");
+  async registerManager(data: IManagerRegistrationDTO): Promise<IUser> {
+    return this.register({
+      nombre: data.nombre,
+      apellido: data.apellido,
+      email: data.email,
+      telefono: data.telefono,
+      password: data.password,
+    }, "manager");
   }
 
-  private async createUserWithRole(nombre: string, apellido: string, email: string, password: string, role: "customer" | "manager" | "superadmin"): Promise<IUser> {
-    const existingUser = await this.userRegisterRepository.findUserByEmail(email);
+  private async register(
+    data: {
+      nombre: string;
+      apellido: string;
+      email: string;
+      password: string;
+      telefono?: string;
+    },
+    role: "customer" | "manager"
+  ): Promise<IUser> {
+    const existingUser = await this.userRegisterRepository.findUserByEmail(data.email);
     if (existingUser) throw new Error("El correo ya está en uso.");
 
-    const hashedPassword = await this.passwordHasher.hash(password); 
+    const hashedPassword = await this.passwordHasher.hash(data.password);
 
     const newUser = await this.userRegisterRepository.createUser({
-      nombre,
-      apellido,
-      email,
-      password: hashedPassword,
+      profile: {
+        nombre: data.nombre,
+        apellido: data.apellido,
+        email: data.email,
+        phone: data.telefono,
+        addresses: [],
+      },
+      security: {
+        password: hashedPassword,
+        emailToken: crypto.randomBytes(64).toString("hex"),
+        isVerified: false,
+      },
       role,
-      emailToken: crypto.randomBytes(64).toString("hex"),
-      isVerified: false,
     });
 
-    await this.emailService.sendVerificationEmail(newUser.nombre, newUser.email, newUser.emailToken || "");
+    await this.emailService.sendVerificationEmail(
+      newUser.profile.nombre,
+      newUser.profile.email,
+      newUser.security.emailToken || ""
+    );
+
     return newUser;
   }
 }

@@ -1,7 +1,8 @@
 import { inject, injectable } from "inversify";
-import { IUser, IUserBase } from "@delatte/shared/interfaces";
-import { USER_PROFILE_TYPES } from "../types/userProfile.types";
+import { IUser } from "@delatte/shared/interfaces";
 import { IUserProfileRepository } from "../interfaces/IUserProfileRepository";
+import { USER_PROFILE_TYPES } from "../types/userProfile.types";
+import { IUpdateUserProfileDTO } from "@delatte/shared/dtos";
 
 @injectable()
 export class UserProfileService {
@@ -10,24 +11,20 @@ export class UserProfileService {
     private userProfileRepository: IUserProfileRepository
   ) {}
 
-  // 📌 Obtener datos del usuario
-  async getUserData(userId: string): Promise<IUserBase> {
+  async getUserData(userId: string) {
     const user = await this.userProfileRepository.getUserData(userId);
     if (!user) throw new Error("Usuario no encontrado");
     return user;
   }
 
-  // 📌 Actualizar perfil del usuario
-  async updateUserData(userData: Partial<IUser>) {
-    return await this.userProfileRepository.updateUserData(userData);
+  async updateUserData(userId: string, data: IUpdateUserProfileDTO) {
+    return await this.userProfileRepository.updateUserData(userId, data);
   }
 
-  // 📌 Buscar usuario por ID
   async getUserByID(userId: string) {
     return await this.userProfileRepository.findUserById(userId);
   }
 
-  // 📌 Buscar usuario por email
   async findUserByEmail(email: string) {
     return await this.userProfileRepository.findUserByEmail(email);
   }
