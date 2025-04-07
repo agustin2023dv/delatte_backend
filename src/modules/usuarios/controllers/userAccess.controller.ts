@@ -36,6 +36,22 @@ export class UserAccessController {
     }
   }
 
+  @httpPost("/auth/google")
+async loginOrRegisterWithGoogle(req: Request, res: Response): Promise<void> {
+  try {
+    const { accessToken } = req.body;
+
+    const { token, user } = await this.userLoginService.loginOrRegisterWithGoogle(accessToken);
+    res.status(200).json({ token, user });
+  } catch (error) {
+    res.status(400).json({
+      message: error instanceof Error ? error.message : "Error en autenticación con Google",
+    });
+  }
+}
+
+
+  
   @httpPost("/users")
   async registrarUsuario(req: Request, res: Response): Promise<void> {
     try {
