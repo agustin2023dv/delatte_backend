@@ -1,3 +1,5 @@
+// src/modules/integrations/services/email.service.ts
+
 import { injectable } from "inversify";
 import { EmailOptions } from "@delatte/shared/interfaces";
 import nodemailer from "nodemailer";
@@ -20,9 +22,9 @@ export class EmailService {
   constructor() {
     this.transporter.verify((error, success) => {
       if (error) {
-        console.error("Error al configurar el transporter de Nodemailer:", error);
+        console.error("Error al configurar Nodemailer:", error);
       } else {
-        console.log("El transporter de Nodemailer está listo para enviar correos", success);
+        console.log("Nodemailer listo para enviar correos:", success);
       }
     });
   }
@@ -38,27 +40,28 @@ export class EmailService {
 
     try {
       const info = await this.transporter.sendMail(mailOptions);
-      console.log("Correo enviado: %s", info.messageId);
+      console.log("Correo enviado:", info.messageId);
       return info;
     } catch (error) {
-      console.error("Error al enviar correo:", error);
+      console.error("Error al enviar el correo:", error);
       throw error;
     }
   }
 
   async sendVerificationEmail(nombre: string, email: string, emailToken: string) {
-    const verificationLink = `http://localhost:8081/api/users/verify-email?token=${emailToken}`;
+    const backendBaseUrl = process.env.BACKEND_PUBLIC_URL || "http://localhost:8081";
+    const verificationLink = `${backendBaseUrl}/api/v1/users/email-verification?token=${emailToken}`;
 
     try {
       await this.sendEmail({
         to: email,
         subject: "Verifica tu email",
-        text: `Hola ${nombre},\n\nPor favor verifica tu cuenta haciendo clic en el siguiente enlace: ${verificationLink}`,
-        html: `<h1>Hola ${nombre}!</h1><p>Por favor verifica tu cuenta haciendo clic en el siguiente enlace:</p><a href="${verificationLink}">Verificar Email</a>`,
+        text: `Hola ${nombre},\n\nVerificá tu cuenta haciendo clic en: ${verificationLink}`,
+        html: `<h1>Hola ${nombre}!</h1><p>Verificá tu cuenta haciendo clic en el siguiente enlace:</p><a href="${verificationLink}">Verificar Email</a>`,
       });
     } catch (error) {
-      console.error("Error al enviar el correo de verificación:", error);
-      throw new Error("Error al enviar el correo de verificación");
+      console.error("Error al enviar verificación:", error);
+      throw new Error("No se pudo enviar el correo de verificación");
     }
   }
 }

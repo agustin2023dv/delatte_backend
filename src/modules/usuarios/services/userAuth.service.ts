@@ -1,3 +1,5 @@
+// ✅ src/modules/users/services/userAuth.service.ts
+
 import { inject, injectable } from "inversify";
 import crypto from "crypto";
 import { IUserAuthRepository } from "../interfaces/IUserAuthRepository";
@@ -33,13 +35,12 @@ export class UserAuthService implements IUserAuthService {
     private passwordHasher: IPasswordHasher
   ) {}
 
-  async verifyEmailToken(emailToken: string): Promise<{ success: boolean; message: string; redirectUrl: string }> {
+  async verifyEmailToken(emailToken: string): Promise<{ success: boolean; message: string }> {
     const user = await this.userAuthRepository.findUserByEmailToken(emailToken);
     if (!user) {
       return {
         success: false,
         message: "Token inválido",
-        redirectUrl: "http://localhost:8082/(auth)/VerifyEmail?status=error&message=TokenInvalido",
       };
     }
 
@@ -48,7 +49,6 @@ export class UserAuthService implements IUserAuthService {
     return {
       success: true,
       message: "Email verificado correctamente",
-      redirectUrl: "http://localhost:8082/(auth)/VerifyEmail?status=success&message=EmailVerificado",
     };
   }
 

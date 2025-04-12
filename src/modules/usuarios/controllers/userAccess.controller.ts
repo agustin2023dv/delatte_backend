@@ -71,23 +71,26 @@ export class UserAccessController {
     }
   }
 
-  @httpPost("/users")
-  async registrarUsuario(req: Request, res: Response): Promise<void> {
-    try {
-      const userData: ICustomerRegistrationDTO = req.body;
-      const newUser = await this.userRegisterService.registerUser(userData);
+@httpPost("/users")
+async registrarUsuario(req: Request, res: Response): Promise<void> {
+  try {
+    const userData: ICustomerRegistrationDTO = req.body;
 
-      res.status(201).json({
-        message: "Usuario registrado con éxito. Por favor verifica tu email.",
-        user: newUser,
-      });
-    } catch (error) {
-      res.status(400).json({
-        message:
-          error instanceof Error
-            ? error.message
-            : "Error al registrar el usuario",
-      });
-    }
+    const newUser = await this.userRegisterService.registerUser(userData);
+
+    res.status(201).json({
+      message: "Usuario registrado con éxito. Por favor verifica tu email.",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("[REGISTER ERROR]", error);
+    res.status(400).json({
+      message:
+        error instanceof Error
+          ? error.message
+          : "Error al registrar el usuario",
+    });
   }
+}
+
 }
