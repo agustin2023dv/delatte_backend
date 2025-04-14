@@ -1,5 +1,11 @@
+// src/modules/restaurantes/interfaces/IRestaurantRegisterService.ts
+
 import { IRestaurant } from "@delatte/shared/interfaces";
-import { IRestaurantRegistrationDTO, IManagerRegistrationDTO } from "@delatte/shared/dtos";
+import {
+  IRestaurantRegistrationDTO,
+  IRestaurantRegistrationInitialDTO,
+  IManagerRegistrationDTO,
+} from "@delatte/shared/dtos";
 
 export interface IRestaurantRegisterService {
   registerRestaurant(
@@ -7,7 +13,7 @@ export interface IRestaurantRegisterService {
   ): Promise<IRestaurant>;
 
   registerRestaurantAndManager(
-    restaurantData: IRestaurantRegistrationDTO,
+    restaurantData: IRestaurantRegistrationInitialDTO,
     managerData: IManagerRegistrationDTO
   ): Promise<{ savedRestaurant: IRestaurant; savedManager: any }>;
 }

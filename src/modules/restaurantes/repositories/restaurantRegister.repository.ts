@@ -1,3 +1,5 @@
+// src/modules/restaurantes/repositories/RestaurantRegisterRepository.ts
+
 import { injectable } from "inversify";
 import Restaurant from "../models/Restaurant.model";
 import { IRestaurant } from "@delatte/shared/interfaces";
@@ -7,12 +9,10 @@ import { RestaurantBaseTransformer } from "src/transformers/restaurant.base.tran
 
 @injectable()
 export class RestaurantRegisterRepository implements IRestaurantRegisterRepository {
-  async create(
-    data: IRestaurantRegistrationDTO & {
-      ubicacion: { type: "Point"; coordinates: [number, number] };
-    }
-  ): Promise<IRestaurant> {
-    const restaurantObject = RestaurantBaseTransformer.fromDTO(data, data.ubicacion);
+  async create(data: IRestaurantRegistrationDTO): Promise<IRestaurant> {
+    // Ya no es necesario extraer ubicación por separado
+    const restaurantObject = RestaurantBaseTransformer.fromDTO(data);
+
     const newRestaurant = new Restaurant(restaurantObject);
     return await newRestaurant.save();
   }

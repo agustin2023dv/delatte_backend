@@ -37,19 +37,27 @@ export class UserAccessController {
   @httpPost("/auth/manager", loginRateLimiter)
   async loginManager(req: Request, res: Response): Promise<void> {
     try {
+      console.log("📥 Body recibido en loginManager:", req.body);
+  
       const credentials: ILoginDTO = req.body;
+  
       const { token, user } = await this.userLoginService.loginManager(
         credentials.email,
         credentials.password
       );
+  
+      console.log("✅ Login manager exitoso:");
+  
       res.status(200).json({ token, user });
     } catch (error) {
+      console.error("❌ Error login manager:", error);
       res.status(400).json({
         message:
           error instanceof Error ? error.message : "Error al iniciar sesión",
       });
     }
   }
+  
 
   @httpPost("/auth/google")
   async loginOrRegisterWithGoogle(

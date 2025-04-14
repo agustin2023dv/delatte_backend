@@ -1,24 +1,22 @@
-import { IRestaurantRegistrationDTO } from "@delatte/shared/dtos";
+// src/transformers/restaurant.base.transformer.ts
 
+import { IRestaurantRegistrationDTO } from "@delatte/shared/dtos";
+import { Types } from "mongoose";
+
+/**
+ * Transforma un DTO de registro de restaurante en un objeto persistible por Mongoose.
+ */
 export class RestaurantBaseTransformer {
-  static fromDTO(
-    dto: IRestaurantRegistrationDTO,
-    ubicacion: { type: "Point"; coordinates: [number, number] }
-  ) {
+  static fromDTO(dto: IRestaurantRegistrationDTO) {
     return {
-      identity: {
-        nombre: dto.nombre,
-      },
+      identity: dto.identity,
+      contact: dto.contact,
       location: {
-        direccion: dto.direccion,
-        codigoPostal: dto.codigoPostal,
-        pais: "Uruguay",       
-        localidad: "Montevideo",
-        ubicacion,
+        ...dto.location,
       },
-      media: {
-        galeriaFotos: [],
-      },
+      tradingHours: dto.tradingHours,
+      capacity: dto.capacity,
+      media: dto.media ?? { galeriaFotos: [] },
       status: {
         estaAbierto: false,
         estaTemporalmenteCerrado: false,
@@ -29,9 +27,10 @@ export class RestaurantBaseTransformer {
         totalReviews: 0,
       },
       management: {
-        coManagers: [],
+        managerPrincipal: new Types.ObjectId(dto.management.managerPrincipal),
+        coManagers: (dto.management.coManagers ?? []).map(id => new Types.ObjectId(id)),
       },
-      tags: [],
+      tags: dto.tags ?? [],
       menus: [],
     };
   }

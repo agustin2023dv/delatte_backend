@@ -1,3 +1,3 @@
 "use strict";
-// @delatte/shared/dtos/IRestaurantRegistrationDTO.ts
+// @delatte/shared/dtos/IRestaurantRegistrationInitialDTO.ts
 Object.defineProperty(exports, "__esModule", { value: true });

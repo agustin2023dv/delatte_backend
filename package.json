@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "scripts": {
         "start": "nodemon --exec ts-node -r tsconfig-paths/register src/app/index.ts",
-  "dev": "ts-node-dev --respawn -r tsconfig-paths/register src/app/index.ts"
+        "dev": "ts-node-dev --respawn -r tsconfig-paths/register src/app/index.ts"
     },
     "dependencies": {
         "@delatte/shared": "github:agustin2023dv/delatte_shared",

@@ -3,7 +3,7 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 // Limitar a 5 intentos de login fallidos por IP en 15 minutos
 const rateLimiter = new RateLimiterMemory({
-  points: 5, // 5 intentos
+  points: 50, // 5 intentos
   duration: 900, // por 900 segundos (15 minutos)
 });
 
