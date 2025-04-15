@@ -74,8 +74,6 @@ export class RestaurantRegistrationService implements IRestaurantRegisterService
     managerData: IManagerRegistrationDTO
   ): Promise<{ savedRestaurant: IRestaurant; savedManager: any }> {
     try {
-      // 🔐 Hashear contraseña
-      managerData.password = await this.passwordHasher.hash(managerData.password);
 
       // ✅ Registrar primero al manager
       const savedManager = await this.userRegisterService.registerManager(managerData);
