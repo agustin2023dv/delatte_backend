@@ -84,10 +84,15 @@ export class UserLoginService {
    */
   async loginOrRegisterWithGoogle(accessToken: string): Promise<{ token: string; user: IUser }> {
     const googleUser = await this.googleApiService.verifyAccessToken(accessToken);
-
+  
     // 🔍 Busca si el usuario ya existe por email
     let user = await this.userRegisterRepository.findUserByEmail(googleUser.email);
-
+  
+    // ❌ Si existe pero tiene contraseña (cuenta manual), bloqueamos login por Google
+    if (user && user.security.password) {
+      throw new Error("Este email ya está registrado con una cuenta manual. Iniciá sesión con tu contraseña.");
+    }
+  
     // 🆕 Si no existe, lo crea como 'customer'
     if (!user) {
       user = await this.userRegisterRepository.createUser({
@@ -98,17 +103,46 @@ export class UserLoginService {
           addresses: [],
         },
         security: {
-          password: "", // no se requiere contraseña con OAuth
+          password: "", // sin contraseña = login por OAuth
           emailToken: null,
-          isVerified: true, // ya verificado por Google
+          isVerified: true,
         },
         role: "customer",
       });
     }
-
+  
     const token = this.generateToken(user);
     return { token, user };
   }
+
+
+  /**
+ * Autentica a un usuario que ya se registró mediante Google OAuth.
+ *
+ * ✔️ Verifica el access token con Google
+ * ✔️ Devuelve JWT si el usuario existe y no tiene contraseña
+ * ❌ Lanza error si el usuario no existe o tiene cuenta manual
+ * 
+ * @param accessToken Token válido de Google
+ * @returns Token JWT + datos del usuario
+ */
+async loginWithGoogle(accessToken: string): Promise<{ token: string; user: IUser }> {
+  const googleUser = await this.googleApiService.verifyAccessToken(accessToken);
+
+  const user = await this.userRegisterRepository.findUserByEmail(googleUser.email);
+
+  if (!user) {
+    throw new Error("No encontramos una cuenta con ese correo. Registrate primero.");
+  }
+
+  if (user.security.password) {
+    throw new Error("Este email ya está registrado como cuenta manual. Usá tu contraseña.");
+  }
+
+  const token = this.generateToken(user);
+  return { token, user };
+}
+
 
   /**
    * Genera un token JWT válido para el usuario autenticado
