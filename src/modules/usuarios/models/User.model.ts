@@ -38,14 +38,14 @@ const UserSchema: Schema = new Schema({
 
 
 
-UserSchema.index({ "profile.email": 1 }, { unique: true }); // ✔ Optimiza búsquedas por email (login, registro)
-UserSchema.index({ "profile.nombre": 1, "profile.apellido": 1 }); // ✔ Optimiza búsquedas por nombre + apellido
-UserSchema.index({ "security.isVerified": 1 }); // ✔ Optimiza consultas de usuarios verificados
-UserSchema.index({ "favorites.favoriteRestaurants": 1 }); // ✔ Optimiza consultas por favoritos
-UserSchema.index({ "reviews.reviews": 1 }); // ✔ Optimiza consultas por reviews escritas
-UserSchema.index({ "role": 1 }); // ✔ Optimiza consultas por rol (customer, manager, superadmin)
-UserSchema.index({ "profile.localidad": 1, "role": 1 }); // ✔ Optimiza búsquedas por localidad y rol
-UserSchema.index({ "security.isActive": 1, "role": 1 }); // ✔ Optimiza consultas de usuarios activos según rol
+UserSchema.index({ "profile.nombre": 1, "profile.apellido": 1 });
+UserSchema.index({ "security.isVerified": 1 });
+UserSchema.index({ "favorites.favoriteRestaurants": 1 });
+UserSchema.index({ "reviews.reviews": 1 });
+UserSchema.index({ "role": 1 });
+UserSchema.index({ "security.isActive": 1, "role": 1 });
+
+
 
 
 const User = mongoose.model<IUser & Document>("User", UserSchema, "usuarios");
