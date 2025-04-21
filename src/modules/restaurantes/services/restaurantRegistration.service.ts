@@ -110,6 +110,21 @@ export class RestaurantRegistrationService implements IRestaurantRegisterService
             },
           ],
         },
+        operationalData: {
+          status: {
+            estaAbierto: false,
+            estaTemporalmenteCerrado: false,
+          },
+          stats: {
+            reservas: {
+              totalReservas: 0,
+            },
+            reviews: {
+              calificacion: 0,
+              totalReviews: 0,
+            },
+          },
+        },
         media: {
           logo: "",
           galeriaFotos: [],
@@ -120,6 +135,7 @@ export class RestaurantRegistrationService implements IRestaurantRegisterService
           coManagers: [],
         },
       };
+      
 
       // 🧾 Registrar restaurante con manager incluido
       const savedRestaurant = await this.registerRestaurant(restaurantData);

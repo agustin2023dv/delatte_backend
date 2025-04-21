@@ -8,6 +8,23 @@ const RestaurantSchema: Schema = new Schema({
   ...BaseRestaurantModel.baseSchema.obj,
   capacity: RestaurantCapacitySchema.obj,
   tradingHours: RestaurantTradingHoursSchema.obj,
+
+  operationalData: {
+    status: {
+      estaAbierto: { type: Boolean, required: true, default: false },
+      estaTemporalmenteCerrado: { type: Boolean, required: true, default: false },
+    },
+    stats: {
+      reservas: {
+        totalReservas: { type: Number, required: true, default: 0 },
+      },
+      reviews: {
+        calificacion: { type: Number, required: true, default: 0 },
+        totalReviews: { type: Number, required: true, default: 0 },
+      },
+    },
+  },
+
   menus: [{ type: Types.ObjectId, ref: 'Menu', required: true }],
   management: {
     managerPrincipal: { type: Types.ObjectId, ref: 'User', required: true },
@@ -19,6 +36,7 @@ const RestaurantSchema: Schema = new Schema({
   },
   tags: [{ type: String, default: [] }],
 });
+
 
 const Restaurant: Model<IRestaurant> = mongoose.model<IRestaurant>(
   'Restaurant',

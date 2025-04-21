@@ -34,18 +34,30 @@ export interface IRestaurantRegistrationDTO {
       personasPorMesa: number;
     }[];
   };
+
+  operationalData: {
+    status: {
+      estaAbierto: boolean;
+      estaTemporalmenteCerrado: boolean;
+    };
+    stats: {
+      reservas: {
+        totalReservas: number;
+      };
+      reviews: {
+        calificacion: number;
+        totalReviews: number;
+      };
+    };
+  };
+
   media?: {
     logo?: string;
     galeriaFotos?: string[];
   };
   tags?: string[];
-
-  /** Datos de gestión del restaurante */
   management: {
-    /** ID del usuario manager principal */
     managerPrincipal: string;
-
-    /** IDs de co-managers (opcional) */
     coManagers?: string[];
   };
 }
