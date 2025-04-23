@@ -25,4 +25,10 @@ export class PromotionBaseService implements IPromotionBaseService {
   async deletePromotion(promoId: string): Promise<IPromotion | null> {
     return await this.promotionRepo.deletePromotion(promoId);
   }
+
+  async getActivePromotions(page = 1, limit = 10): Promise<IPromotion[]> {
+    return await this.promotionRepo.getActivePromotions(page, limit);
+  }
+  
+  
 }

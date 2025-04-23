@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { injectable, inject } from "inversify";
+import { inject } from "inversify";
 import { BaseHttpController, controller, httpGet } from "inversify-express-utils";
 import { PROMOTIONS_ANALYTICS_TYPES } from "../types/promotionAnalytics.types";
 import { IPromotionAnalyticsService } from "../interfaces/IPromotionAnalyticsService";

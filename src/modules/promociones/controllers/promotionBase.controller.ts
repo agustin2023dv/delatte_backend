@@ -44,6 +44,13 @@ export class PromotionBaseController extends BaseHttpController {
     }
   }
 
+  @httpGet("/active")
+async getActivePromotions(req: Request, res: Response) {
+  const { page = 1, limit = 10 } = req.query;
+  const promotions = await this.promotionService.getActivePromotions(Number(page), Number(limit));
+  res.status(200).json(promotions);
+}
+
   @httpGet("/:id")
   async getPromotions(req: Request, res: Response) {
     try {

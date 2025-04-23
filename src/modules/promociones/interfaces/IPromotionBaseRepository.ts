@@ -6,4 +6,5 @@ export interface IPromotionBaseRepository {
   getPromotionsByRestaurant(restaurantId: string): Promise<IPromotion[]>;
   updatePromotion(promoId: string, updateData: IUpdatePromotionDTO): Promise<IPromotion | null>;
   deletePromotion(promoId: string): Promise<IPromotion | null>;
+  getActivePromotions(page?: number, limit?: number): Promise<IPromotion[]>;
 }

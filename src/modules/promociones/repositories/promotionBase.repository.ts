@@ -21,4 +21,14 @@ export class PromotionBaseRepository implements IPromotionBaseRepository {
   async deletePromotion(promoId: string): Promise<IPromotion | null> {
     return await Promotion.findByIdAndDelete(promoId);
   }
+
+  async getActivePromotions(page = 1, limit = 10): Promise<IPromotion[]> {
+    const skip = (page - 1) * limit;
+    return await Promotion.find({ estado: 'activa' })
+      .sort({ fechaInicio: 1 })
+      .skip(skip)
+      .limit(limit);
+  }
+  
+  
 }
