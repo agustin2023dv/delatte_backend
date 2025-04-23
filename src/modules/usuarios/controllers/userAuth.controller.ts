@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 import { inject } from "inversify";
 import { AuthRequest } from "../../../../types";
 import { USER_ACCESS_TYPES } from "../types/userAccess.types";
-import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { IUserAuthService } from "../interfaces/IUserAuthService";
 
 @controller("/api/v1/users")
@@ -69,7 +68,7 @@ export class UserAuthController {
     }
   }
 
-  @httpPut("/password", authMiddleware)
+  @httpPut("/password")
   async cambiarContrasena(req: AuthRequest, res: Response): Promise<void> {
     try {
       if (!req.user) {

@@ -5,7 +5,7 @@ import { controller, httpGet, httpPost, httpDelete } from "inversify-express-uti
 import { UserAddressService } from "../services/userAddresses.service";
 import { USER_ADDRESSES_TYPES } from "../types/userAddresses.types";
 
-@controller("/user/addresses")
+@controller("/api/v1/user/addresses")
 export class UserAddressController {
   private userAddressService: UserAddressService;
 
