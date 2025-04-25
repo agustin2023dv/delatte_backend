@@ -74,7 +74,7 @@ export class RestaurantBaseController {
     }
   }
 
-  @httpPut("/:id", authMiddleware, managerOfRestaurantMiddleware)
+  @httpPut("/:id", managerOfRestaurantMiddleware)
   async updateRestaurant(req: Request, res: Response): Promise<void> {
     try {
       const updatedRestaurant = await this.restaurantService.updateRestaurant(req.params.id, req.body);

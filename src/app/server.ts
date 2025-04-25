@@ -13,7 +13,7 @@ import '@/modules/resenas/controllers/reviewBase.controller';
 import '@/modules/resenas/controllers/reviewAnalytics.controller';
 import '@/modules/reservas/controllers/reservationBase.controller';
 import '@/modules/reservas/controllers/reservationAnalytics.controller';
-import '@/modules/restaurantes/controllers/restaurantAnalyticscontroller';
+import '@/modules/restaurantes/controllers/restaurantAnalytics.controller';
 import '@/modules/restaurantes/controllers/restaurantBase.controller';
 import '@/modules/restaurantes/controllers/restaurantGallery.controller';
 import '@/modules/restaurantes/controllers/restaurantPermissions.controller';
