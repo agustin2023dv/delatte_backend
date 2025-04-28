@@ -17,11 +17,10 @@ export const checkDisponibilidadMiddleware = async (
     // Verificar si el restaurante existe
     const restauranteData = await Restaurant.findById(restaurante);
     if (!restauranteData) {
-      return next(new Error("El restaurante no existe.")); // ← Usar next() en lugar de return res.json()
+      return next(new Error("El restaurante no existe."));
     }
 
     // Calcular la capacidad total del restaurante
-    
     const capacidadMesas = restauranteData.capacity.capacidadMesas.reduce(
       (acc: { totalMesas: number; totalPersonas: number }, mesa: { cantidad: number; personasPorMesa: number }) => ({
         totalMesas: acc.totalMesas + mesa.cantidad,
@@ -32,15 +31,15 @@ export const checkDisponibilidadMiddleware = async (
 
     // Consultar reservas existentes en el mismo horario
     const reservasExistentes = await Reservation.find({
-      restaurante,
-      fecha,
-      horario,
+      "restaurantInfo.restaurante": restaurante,
+      "reservationData.fecha": fecha,
+      "reservationData.horario": horario,
     });
 
     const totalReservas = reservasExistentes.reduce(
-      (acc: { totalAdultos: number; totalNinos: number }, reserva: { numAdultos: number; numNinos: number }) => ({
-        totalAdultos: acc.totalAdultos + reserva.numAdultos,
-        totalNinos: acc.totalNinos + reserva.numNinos,
+      (acc, reserva) => ({
+        totalAdultos: acc.totalAdultos + (reserva.reservationData?.cantidadAdultos ?? 0),
+        totalNinos: acc.totalNinos + (reserva.reservationData?.cantidadNinios ?? 0),
       }),
       { totalAdultos: 0, totalNinos: 0 }
     );
@@ -50,19 +49,18 @@ export const checkDisponibilidadMiddleware = async (
     const personasEnReservaActual = numAdultos + numNinos;
 
     if (reservasExistentes.length >= capacidadMesas.totalMesas) {
-      return next(new Error("No hay disponibilidad de mesas en el horario seleccionado.")); // ← Usar next()
+      return next(new Error("No hay disponibilidad de mesas en el horario seleccionado."));
     }
 
     if (totalPersonasActual + personasEnReservaActual > capacidadMesas.totalPersonas) {
-      return next(new Error("No hay capacidad suficiente para la cantidad de personas en el horario seleccionado.")); // ← Usar next()
+      return next(new Error("No hay capacidad suficiente para la cantidad de personas en el horario seleccionado."));
     }
 
-    next(); // Pasar al siguiente middleware
+    next();
   } catch (error) {
-    next(error); // ← Usar next(error) para manejar errores
+    next(error);
   }
 };
-
 
 /**
  * Middleware para validar los datos de la reserva antes de procesarla
@@ -78,7 +76,7 @@ export const validateReservationData = (req: AuthRequest, res: Response, next: N
 
     // Validar que la fecha no sea en el pasado
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Resetear la hora para comparar solo la fecha
+    today.setHours(0, 0, 0, 0);
     const fechaReserva = new Date(dia);
 
     if (fechaReserva < today) {
@@ -105,7 +103,7 @@ export const validateReservationData = (req: AuthRequest, res: Response, next: N
       return;
     }
 
-    next(); // Si todo está bien, continuar con el siguiente middleware o controlador
+    next();
   } catch (error) {
     console.error("❌ Error en validateReservationData:", error);
     res.status(500).json({ message: "Error en la validación de la reserva.", error });
