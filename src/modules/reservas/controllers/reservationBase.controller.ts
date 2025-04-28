@@ -71,16 +71,26 @@ export class ReservationBaseController extends BaseHttpController {
     }
     
 
-    // 📌 Obtener reservas del usuario autenticado
-    @httpGet("/",  roleMiddleware(["customer", "manager"]))
-    async getUserReservations(req: AuthRequest, res: Response): Promise<void> {
-        try {
-            const result = await this.reservationBaseService.getReservationsById(req.user.id, req.user.role);
-            res.status(200).json(result.length ? result : { message: "No hay reservas disponibles." });
-        } catch (error) {
-            res.status(500).json({ message: "Error interno del servidor", error });
-        }
+
+// 📌 Obtener reservas del usuario autenticado
+@httpGet("/", roleMiddleware(["customer", "manager"]))
+async getUserReservations(req: AuthRequest, res: Response): Promise<void> {
+  try {
+    const result = await this.reservationBaseService.getReservationsByUser(req.user.id);
+
+    if (!result.length) {
+      res.status(200).json({ message: "No hay reservas disponibles." });
+      return;
     }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error obteniendo reservas del usuario:", error);
+    res.status(500).json({ message: "Error interno del servidor", error });
+  }
+}
+
+
 
     // 📌 Obtener reservas de un restaurante
     @httpGet("/restaurant/:id", roleMiddleware(["superadmin", "manager"]))
