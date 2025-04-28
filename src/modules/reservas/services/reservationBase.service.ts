@@ -3,7 +3,7 @@ import { IReservationBaseService } from "../interfaces/IReservationBaseService";
 import { IReservationBaseRepository } from "../interfaces/IReservationBaseRepository";
 import { RESERVATIONS_BASE_TYPES } from "../types/reservationBase.types";
 import { IReservation } from "@delatte/shared/interfaces";
-import { IUpdateReservationDTO } from "@delatte/shared/dtos";
+import { IReservationResponseDTO, IUpdateReservationDTO } from "@delatte/shared/dtos";
 
 @injectable()
 export class ReservationBaseService implements IReservationBaseService {
@@ -11,6 +11,7 @@ export class ReservationBaseService implements IReservationBaseService {
     @inject(RESERVATIONS_BASE_TYPES.IReservationBaseRepository)
     private reservationRepo: IReservationBaseRepository
   ) {}
+
 
   async getReservationById(id: string): Promise<IReservation | null> {
     return await this.reservationRepo.getReservationById(id);
@@ -41,5 +42,13 @@ export class ReservationBaseService implements IReservationBaseService {
 
   async cancelReservation(reservationId: string): Promise<IReservation | null> {
     return await this.reservationRepo.cancelReservation(reservationId);
+  }
+
+  async getFutureReservations(userId: string): Promise<IReservationResponseDTO[]> {
+    return this.reservationRepo.findFutureByUser(userId);
+  }
+  
+  async getPastReservations(userId: string): Promise<IReservationResponseDTO[]> {
+    return this.reservationRepo.findPastByUser(userId);
   }
 }

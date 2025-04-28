@@ -9,14 +9,23 @@ export class ReservationTransformer {
     }
 
     return {
-      usuario: new Types.ObjectId(dto.usuarioId),
-      restaurante: new Types.ObjectId(dto.restauranteId),
-      fecha: new Date(dto.fecha),
-      horario: dto.horario,
-      cantidadAdultos: dto.cantidadAdultos,
-      cantidadNinios: dto.cantidadNinios,
-      notas: dto.notas,
-      estado: "Confirmada",
+      restaurantInfo: {
+        restaurante: new Types.ObjectId(dto.restauranteId),
+      },
+      userInfo: {
+        usuario: new Types.ObjectId(dto.usuarioId),
+      },
+      reservationData: {
+        fecha: new Date(dto.fecha),
+        horario: dto.horario,
+        cantidadAdultos: dto.cantidadAdultos,
+        cantidadNinios: dto.cantidadNinios,
+        notas: dto.notas,
+      },
+      reservationStatus: {
+        estado: "Confirmada",
+        fechaCreacion: new Date(),
+      },
     };
   }
 }

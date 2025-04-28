@@ -1,4 +1,4 @@
-import { IUpdateReservationDTO } from "@delatte/shared/dtos";
+import { IReservationResponseDTO, IUpdateReservationDTO } from "@delatte/shared/dtos";
 import { IReservation, IRestaurant } from "@delatte/shared/interfaces";
 import { ReservationMongoInput } from "../types/reservation.types";
 
@@ -12,4 +12,8 @@ export interface IReservationBaseRepository {
   updateReservation(reservationId: string, updatedData: IUpdateReservationDTO): Promise<IReservation | null>;
   cancelReservation(reservationId: string): Promise<IReservation | null>;
   restaurantExists(restaurantId: string): Promise<IRestaurant | null>;
+
+  findFutureByUser(userId: string): Promise<IReservationResponseDTO[]>;
+  findPastByUser(userId: string): Promise<IReservationResponseDTO[]>;
 }
+

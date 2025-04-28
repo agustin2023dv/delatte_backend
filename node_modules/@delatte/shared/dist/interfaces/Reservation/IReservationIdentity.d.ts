@@ -1,18 +1,14 @@
 import { Types } from "mongoose";
 /**
- * Interfaz que representa la identidad de una reserva.
- * Contiene referencias a los documentos relacionados con el restaurante y el usuario.
+ * Identidad del restaurante referenciado.
  */
-export interface IReservationIdentity {
-    /**
-     * ID del restaurante asociado a la reserva.
-     * @example new Types.ObjectId("64b8f5c2e4b0f5c2e4b0f5c2")
-     */
+export interface IRestaurantInfo {
     restaurante: Types.ObjectId;
-    /**
-     * ID del usuario que realizó la reserva.
-     * @example new Types.ObjectId("64b8f5c2e4b0f5c2e4b0f5c3")
-     */
+}
+/**
+ * Identidad del usuario referenciado.
+ */
+export interface IUserInfo {
     usuario: Types.ObjectId;
 }
 //# sourceMappingURL=IReservationIdentity.d.ts.map

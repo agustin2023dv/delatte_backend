@@ -2,7 +2,6 @@ import { BaseHttpController, controller, httpGet, httpPost, httpPut } from "inve
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import { RESERVATIONS_BASE_TYPES } from "../types/reservationBase.types";
-import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { roleMiddleware } from "../../../middlewares/role.middleware";
 import { checkDisponibilidadMiddleware, validateReservationData } from "../../../middlewares/reservation.middleware";
 import { IReservationBaseService } from "../interfaces/IReservationBaseService";
@@ -23,7 +22,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Crear una nueva reserva
-    @httpPost("/", authMiddleware, validateReservationData, checkDisponibilidadMiddleware)
+    @httpPost("/", validateReservationData, checkDisponibilidadMiddleware)
     async createReservation(req: AuthRequest, res: Response) {
       try {
         const userId = req.user.id;
@@ -73,7 +72,7 @@ export class ReservationBaseController extends BaseHttpController {
     
 
     // 📌 Obtener reservas del usuario autenticado
-    @httpGet("/", authMiddleware, roleMiddleware(["customer", "manager"]))
+    @httpGet("/",  roleMiddleware(["customer", "manager"]))
     async getUserReservations(req: AuthRequest, res: Response): Promise<void> {
         try {
             const result = await this.reservationBaseService.getReservationsById(req.user.id, req.user.role);
@@ -84,7 +83,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Obtener reservas de un restaurante
-    @httpGet("/restaurant/:id", authMiddleware, roleMiddleware(["superadmin", "manager"]))
+    @httpGet("/restaurant/:id", roleMiddleware(["superadmin", "manager"]))
     async getReservationsByRestaurant(req: Request, res: Response): Promise<void> {
         try {
             const { id: restaurantId } = req.params;
@@ -96,7 +95,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Obtener reservas de un usuario
-    @httpGet("/user/:id", authMiddleware, roleMiddleware(["superadmin"]))
+    @httpGet("/user/:id",  roleMiddleware(["superadmin"]))
     async getReservationsByUser(req: Request, res: Response): Promise<void> {
         try {
             const { id: userId } = req.params;
@@ -108,7 +107,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Obtener detalles de una reserva por ID
-    @httpGet("/:id", authMiddleware)
+    @httpGet("/:id")
     async getReservationById(req: Request, res: Response): Promise<void> {
         try {
             const { id: reservationId } = req.params;
@@ -126,7 +125,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Cancelar una reserva
-    @httpPut("/:id/cancel", authMiddleware)
+    @httpPut("/:id/cancel")
     async cancelReservation(req: AuthRequest, res: Response): Promise<void> {
         try {
             const reservation = await this.reservationBaseService.cancelReservation(req.params.id);
@@ -137,7 +136,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Modificar una reserva
-    @httpPut("/:id", authMiddleware, validateReservationData)
+    @httpPut("/:id", validateReservationData)
     async updateReservation(req: AuthRequest, res: Response): Promise<void> {
         try {
             const updatedReservation = await this.reservationBaseService.updateReservation(req.params.id, req.body);
@@ -148,7 +147,7 @@ export class ReservationBaseController extends BaseHttpController {
     }
 
     // 📌 Obtener todas las reservas (solo superadmins)
-    @httpGet("/all", authMiddleware, roleMiddleware(["superadmin"]))
+    @httpGet("/all", roleMiddleware(["superadmin"]))
     async getAllReservations(req: Request, res: Response): Promise<void> {
         try {
             const reservations = await this.reservationBaseService.getAllReservations();
