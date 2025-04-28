@@ -69,4 +69,21 @@ export class UserFavoritesController {
       res.status(500).json({ message: error instanceof Error ? error.message : "Error interno del servidor" });
     }
   }
+
+  @httpPost("/restaurants")
+  async getFavoriteRestaurantsDetails(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const { restaurantIds } = req.body;
+
+      if (!Array.isArray(restaurantIds) || restaurantIds.length === 0) {
+        res.status(400).json({ message: "Se requiere un array de IDs de restaurantes" });
+        return;
+      }
+
+      const restaurants = await this.userFavoritesService.getFavoriteRestaurantsDetails(restaurantIds);
+      res.status(200).json({ restaurants });
+    } catch (error) {
+      res.status(500).json({ message: error instanceof Error ? error.message : "Error interno del servidor" });
+    }
+  }
 }

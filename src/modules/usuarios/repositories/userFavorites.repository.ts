@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import { Types } from "mongoose";
 import User from "../models/User.model";
+import Restaurant from "@/modules/restaurantes/models/Restaurant.model";
 
 @injectable()
 export class UserFavoritesRepository {
@@ -23,7 +24,6 @@ export class UserFavoritesRepository {
       user.favorites = { favoriteRestaurants: [] };
     }
 
-    // 🛡️ Protección adicional para TypeScript
     if (!user.favorites.favoriteRestaurants) {
       user.favorites.favoriteRestaurants = [];
     }
@@ -46,7 +46,6 @@ export class UserFavoritesRepository {
     const user = await User.findById(userId);
     if (!user || !user.favorites) throw new Error("Usuario no encontrado");
 
-    // 🛡️ Protección adicional
     if (!user.favorites.favoriteRestaurants) {
       user.favorites.favoriteRestaurants = [];
     }
@@ -58,5 +57,12 @@ export class UserFavoritesRepository {
 
     await user.save();
     return user.favorites.favoriteRestaurants;
+  }
+
+  /**
+   * 🛎️ Obtiene los restaurantes a partir de una lista de IDs
+   */
+  async getRestaurantsByIds(restaurantIds: string[]) {
+    return await Restaurant.find({ _id: { $in: restaurantIds } }).lean();
   }
 }

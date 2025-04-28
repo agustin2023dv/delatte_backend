@@ -4,7 +4,6 @@ import { controller, httpGet, httpPost, httpPut } from "inversify-express-utils"
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import { RESTAURANT_BASE_TYPES } from "../types/restaurantBase.types";
-import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { managerOfRestaurantMiddleware } from "../../../middlewares/restaurant.middleware";
 import { IRestaurantBaseService } from "../interfaces/IRestaurantBaseService";
 import { RestaurantRegistrationService } from "../services/restaurantRegistration.service";

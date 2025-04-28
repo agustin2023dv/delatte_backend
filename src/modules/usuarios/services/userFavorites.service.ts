@@ -22,7 +22,6 @@ export class UserFavoritesService {
     }
   }
 
-
   async removeFavoriteRestaurant(userId: string, restaurantId: string) {
     try {
       const favorites = await this.userFavoritesRepository.removeFavoriteRestaurant(userId, restaurantId);
@@ -31,4 +30,15 @@ export class UserFavoritesService {
       throw new Error(error instanceof Error ? error.message : "Error desconocido");
     }
   }
-};
+
+  /**
+   * 🛎️ Obtiene los detalles de los restaurantes favoritos a partir de sus IDs
+   */
+  async getFavoriteRestaurantsDetails(restaurantIds: string[]) {
+    try {
+      return await this.userFavoritesRepository.getRestaurantsByIds(restaurantIds);
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Error desconocido");
+    }
+  }
+}
