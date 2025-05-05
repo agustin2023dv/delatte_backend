@@ -46,10 +46,14 @@ export class UserLoginService {
    */
   async loginCustomer(email: string, password: string) {
     const user = await this.userAuthRepository.getUserByEmailAndRole(email, "customer");
-
+  
+    if (!user.security.isVerified) {
+      throw new Error("Debes verificar tu correo electrónico antes de iniciar sesión.");
+    }
+  
     const isMatch = await bcrypt.compare(password, user.security.password);
     if (!isMatch) throw new Error("Contraseña incorrecta");
-
+  
     const token = this.generateToken(user);
     return { token, user };
   }
@@ -64,10 +68,14 @@ export class UserLoginService {
    */
   async loginManager(email: string, password: string) {
     const user = await this.userAuthRepository.getUserByEmailAndRole(email, "manager");
-
+  
+    if (!user.security.isVerified) {
+      throw new Error("Debes verificar tu correo electrónico antes de iniciar sesión.");
+    }
+  
     const isMatch = await bcrypt.compare(password, user.security.password);
     if (!isMatch) throw new Error("Contraseña incorrecta");
-
+  
     const token = this.generateToken(user);
     return { token, user };
   }

@@ -25,12 +25,22 @@ export class UserAccessController {
   async loginCustomer(req: Request, res: Response): Promise<void> {
     try {
       const credentials: ILoginDTO = req.body;
+      console.log("🔐 [LOGIN CUSTOMER] Credenciales recibidas:", credentials);
+
       const { token, user } = await this.userLoginService.loginCustomer(
         credentials.email,
         credentials.password
       );
+
+      console.log("✅ [LOGIN CUSTOMER] Login exitoso:", {
+        userId: user._id,
+        email: user.profile.email,
+        role: user.role,
+      });
+
       res.status(200).json({ token, user });
     } catch (error) {
+      console.error("❌ [LOGIN CUSTOMER] Error:", error);
       res.status(400).json({
         message:
           error instanceof Error ? error.message : "Error al iniciar sesión",
@@ -46,13 +56,22 @@ export class UserAccessController {
   async loginManager(req: Request, res: Response): Promise<void> {
     try {
       const credentials: ILoginDTO = req.body;
+      console.log("🔐 [LOGIN MANAGER] Credenciales recibidas:", credentials);
+
       const { token, user } = await this.userLoginService.loginManager(
         credentials.email,
         credentials.password
       );
+
+      console.log("✅ [LOGIN MANAGER] Login exitoso:", {
+        userId: user._id,
+        email: user.profile.email,
+        role: user.role,
+      });
+
       res.status(200).json({ token, user });
     } catch (error) {
-      console.error("❌ Error login manager:", error);
+      console.error("❌ [LOGIN MANAGER] Error:", error);
       res.status(400).json({
         message:
           error instanceof Error ? error.message : "Error al iniciar sesión",

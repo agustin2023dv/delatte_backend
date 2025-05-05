@@ -10,13 +10,14 @@ import { AuthRequest } from '../../types';
  */
 export const authMiddleware = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   const publicRoutes = [
-    '/auth/login',
-    '/auth/google',
-    '/auth/register',
-    '/users',
-    '/users/email-verification',
-    '/users/password-reset-requests',
-    '/users/password-resets',
+    '/api/v1/auth',
+    '/api/v1/auth/manager',
+    '/api/v1/auth/google/login',
+    '/api/v1/auth/google/register',
+    '/api/v1/users',
+    '/api/v1/users/email-verification',
+    '/api/v1/users/password-reset-requests',
+    '/api/v1/users/password-resets',
   ];
 
   const isPublic = publicRoutes.some((route) => req.path.startsWith(route));
