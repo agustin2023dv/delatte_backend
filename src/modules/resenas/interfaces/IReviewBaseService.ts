@@ -1,11 +1,15 @@
-import { ICreateReviewDTO, IUpdateReviewDTO } from "@delatte/shared/dtos";
-import { IReview } from "@delatte/shared/interfaces";
-
-export interface IReviewBaseService {
-    createReview(userId: string, reviewData: ICreateReviewDTO): Promise<IReview>;
-    updateReview(reviewId: string, reviewData: IUpdateReviewDTO): Promise<IReview | null>;
-    getAllReviews(page?: number, limit?: number): Promise<IReview[]>;
-    getReviewsByRestaurant(restaurantId: string): Promise<IReview[]>;
-    getReviewsByUser(userId: string): Promise<IReview[]>;
+import {
+    ICreateReviewDTO,
+    IUpdateReviewDTO,
+    IReviewResponseDTO,
+  } from "@delatte/shared/dtos";
+  
+  export interface IReviewBaseService {
+    createReview(userId: string, reviewData: ICreateReviewDTO): Promise<IReviewResponseDTO>;
+    updateReview(reviewId: string, reviewData: IUpdateReviewDTO): Promise<IReviewResponseDTO | null>;
+    getAllReviews(page?: number, limit?: number): Promise<IReviewResponseDTO[]>;
+    getReviewsByRestaurant(restaurantId: string): Promise<IReviewResponseDTO[]>;
+    getReviewsByUser(userId: string): Promise<IReviewResponseDTO[]>;
     deleteReview(reviewId: string): Promise<void>;
-}
+  }
+  
