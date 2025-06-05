@@ -3,7 +3,6 @@ import { inject } from "inversify";
 import { controller, httpGet, httpPost, httpPut, httpDelete, BaseHttpController } from "inversify-express-utils";
 import { MENUS_BASE_TYPES } from "../types/menuBase.types";
 import { IMenuBaseService } from "../interfaces/IMenuBaseService";
-import { authMiddleware } from "../../../middlewares/auth.middleware";
 import { managerOfRestaurantMiddleware } from "../../../middlewares/restaurant.middleware";
 import {CreateMenuSchema, UpdateMenuSchema} from '@delatte/shared/validators'
 
@@ -26,7 +25,7 @@ export class MenuBaseController extends BaseHttpController {
         }
     }
     
-    @httpPost("/", authMiddleware, managerOfRestaurantMiddleware)
+    @httpPost("/",  managerOfRestaurantMiddleware)
     async createMenu(req: Request, res: Response) {
       try {
         const parsed = CreateMenuSchema.safeParse(req.body);
@@ -45,7 +44,7 @@ export class MenuBaseController extends BaseHttpController {
       }
     }
     
-    @httpPut("/:menuId", authMiddleware, managerOfRestaurantMiddleware)
+    @httpPut("/:menuId",managerOfRestaurantMiddleware)
     async updateMenu(req: Request, res: Response) {
       try {
         const parsed = UpdateMenuSchema.safeParse(req.body);
@@ -64,7 +63,7 @@ export class MenuBaseController extends BaseHttpController {
       }
     }
     
-    @httpDelete("/:menuId", authMiddleware, managerOfRestaurantMiddleware)
+    @httpDelete("/:menuId", managerOfRestaurantMiddleware)
     async deleteMenu(req: Request, res: Response) {
         try {
             await this.menuBaseService.deleteMenu(req.params.menuId);

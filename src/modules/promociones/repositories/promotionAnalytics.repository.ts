@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { IPromotionAnalyticsRepository } from "../interfaces/IPromotionAnalyticsRepository";
-import Promotion from "../models/Promocion.model";
+import Promotion from "../models/Promotion.model";
 import Reservation from "../../reservas/models/Reservation.model";
 import {
   IPromotionCountByStatusDTO,

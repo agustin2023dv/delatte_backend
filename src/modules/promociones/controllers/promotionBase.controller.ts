@@ -25,7 +25,7 @@ export class PromotionBaseController extends BaseHttpController {
     super();
   }
 
-  @httpPost("/:id", authMiddleware, managerOfRestaurantMiddleware)
+  @httpPost("/:id",  managerOfRestaurantMiddleware)
   async createPromotion(req: Request, res: Response) {
     try {
       const parsed = CreatePromotionSchema.safeParse(req.body);

@@ -1,6 +1,6 @@
 import { ICreatePromotionDTO, IUpdatePromotionDTO } from "@delatte/shared/dtos"; 
 import { injectable } from "inversify";
-import Promotion from "../models/Promocion.model";
+import Promotion from "../models/Promotion.model";
 import { IPromotion } from "@delatte/shared/interfaces";
 import { IPromotionBaseRepository } from "../interfaces/IPromotionBaseRepository";
 
