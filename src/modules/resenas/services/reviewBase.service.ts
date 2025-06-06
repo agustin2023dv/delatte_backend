@@ -45,4 +45,15 @@ export class ReviewBaseService implements IReviewBaseService {
   async deleteReview(reviewId: string): Promise<void> {
     await this.reviewRepo.deleteReview(reviewId);
   }
+
+  async responderReview(reviewId: string, userId: string, mensaje: string): Promise<void> {
+  const nuevaRespuesta = {
+    usuario: userId,
+    mensaje,
+    fecha: new Date(),
+  };
+
+  await this.reviewRepo.responderReview(reviewId, nuevaRespuesta);
+}
+
 }

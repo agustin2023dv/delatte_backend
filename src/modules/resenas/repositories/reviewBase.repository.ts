@@ -2,7 +2,7 @@ import { injectable } from "inversify";
 import { IReviewBaseRepository } from "../interfaces/IReviewBaseRepository";
 import { Review } from "../models/Review.model";
 import { ICreateReviewDTO, IUpdateReviewDTO } from "@delatte/shared/dtos";
-import { IReview } from "@delatte/shared/interfaces";
+import { IReview, IReviewResponse } from "@delatte/shared/interfaces";
 
 @injectable()
 export class ReviewBaseRepository implements IReviewBaseRepository {
@@ -30,4 +30,17 @@ export class ReviewBaseRepository implements IReviewBaseRepository {
     async deleteReview(reviewId: string) {
         await Review.findByIdAndDelete(reviewId);
     }
+
+async responderReview(
+  reviewId: string,
+  respuesta: { usuario: string; mensaje: string; fecha: Date }
+): Promise<void> {
+  await Review.findByIdAndUpdate(
+    reviewId,
+    { $push: { respuestas: respuesta } },
+    { new: true }
+  );
+}
+
+
 }

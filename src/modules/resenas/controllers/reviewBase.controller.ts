@@ -111,4 +111,29 @@ export class ReviewBaseController extends BaseHttpController {
       res.status(500).json({ message: "Error al eliminar la reseña." });
     }
   }
+
+  
+  @httpPost("/:id/replies", roleMiddleware(["manager", "superadmin"]))
+async addReply(req: AuthRequest, res: Response): Promise<void> {
+  try {
+    const { mensaje } = req.body;
+    const reviewId = req.params.id;
+
+    if (!req.user) {
+       res.status(401).json({ message: "Usuario no autenticado." });
+    }
+
+    if (!mensaje || typeof mensaje !== "string") {
+      res.status(400).json({ message: "El mensaje de respuesta es requerido." });
+    }
+
+    await this.reviewService.responderReview(reviewId, req.user._id, mensaje);
+
+    res.status(200).json({ message: "Respuesta agregada correctamente." });
+  } catch (error) {
+    console.error("Error al responder la reseña:", error);
+    res.status(500).json({ message: "Ocurrió un error al responder la reseña." });
+  }
+}
+
 }

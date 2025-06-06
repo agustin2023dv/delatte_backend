@@ -11,5 +11,7 @@ import {
     getReviewsByRestaurant(restaurantId: string): Promise<IReviewResponseDTO[]>;
     getReviewsByUser(userId: string): Promise<IReviewResponseDTO[]>;
     deleteReview(reviewId: string): Promise<void>;
+    responderReview(reviewId: string, userId: string, mensaje: string): Promise<void>;
+
   }
   

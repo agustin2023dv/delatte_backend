@@ -1,4 +1,5 @@
 import { ICreateReviewDTO, IUpdateReviewDTO } from "@delatte/shared/dtos";
+import { IReviewResponse } from "@delatte/shared/interfaces";
 import { IReview } from "@delatte/shared/interfaces/Review/IReview";
 
 export interface IReviewBaseRepository {
@@ -8,4 +9,10 @@ export interface IReviewBaseRepository {
     getReviewsByRestaurant(restaurantId: string): Promise<IReview[]>;
     getReviewsByUser(userId: string): Promise<IReview[]>;
     deleteReview(reviewId: string): Promise<void>;
+responderReview(
+  reviewId: string,
+  respuesta: { usuario: string; mensaje: string; fecha: Date }
+): Promise<void>;
+
+
 }

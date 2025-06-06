@@ -1,5 +1,5 @@
 import { IReview } from "@delatte/shared/interfaces";
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema} from "mongoose";
 
 // 🟢 Submodelo de Reportes
 const ReportSchema = new Schema({
