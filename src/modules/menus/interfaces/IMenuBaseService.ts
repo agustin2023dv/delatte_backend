@@ -5,4 +5,6 @@ export interface IMenuBaseService {
   createMenu(menuData: ICreateMenuDTO): Promise<IMenuResponseDTO>;
   updateMenu(menuId: string, updatedData: IUpdateMenuDTO): Promise<IMenuResponseDTO>;
   deleteMenu(menuId: string): Promise<IMenuResponseDTO>;
+  getMenuById(menuId: string): Promise<IMenuResponseDTO>;
+
 }

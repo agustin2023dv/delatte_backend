@@ -30,4 +30,8 @@ export class MenuBaseService implements IMenuBaseService {
   async deleteMenu(menuId: string): Promise<IMenuResponseDTO> {
     return await this.menuBaseRepository.deleteMenu(menuId);
   }
+
+async getMenuById(menuId: string): Promise<IMenuResponseDTO> {
+    return await this.menuBaseRepository.getMenuById(menuId);
+ }
 }

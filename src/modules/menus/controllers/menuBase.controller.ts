@@ -14,6 +14,22 @@ export class MenuBaseController extends BaseHttpController {
     ) {
         super();
     }
+
+    @httpGet("/:menuId")
+    async getMenuById(req: Request, res: Response) {
+    try {
+        const menu = await this.menuBaseService.getMenuById(req.params.menuId);
+        if (!menu) {
+            return res.status(404).json({ message: "Menú no encontrado" });
+        }
+        res.status(200).json(menu);
+    } catch (error) {
+        const errMessage = error instanceof Error ? error.message : "Error desconocido";
+        res.status(500).json({ message: "Error al obtener el menú", error: errMessage });
+    }
+}
+
+
     @httpGet("/restaurant/:restaurantId")
     async getMenusByRestaurant(req: Request, res: Response) {
         try {

@@ -41,4 +41,12 @@ export class MenuBaseRepository implements IMenuBaseRepository {
     if (!deletedMenu) throw new Error("Menú no encontrado");
     return MenuTransformer.toMenuResponseDTO(deletedMenu);
   }
+
+  async getMenuById(menuId: string): Promise<IMenuResponseDTO>{
+        
+    const menu = await MenuModel.findById(menuId);
+        if (!menu) throw new Error("Menu no encontrado");
+        return MenuTransformer.toMenuResponseDTO(menu);
+  };
+  
 }
